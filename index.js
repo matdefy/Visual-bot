@@ -16,12 +16,10 @@ fs.readdir('./commands', (err, files) => {
         client.commands.set(file.split(".")[0], command)
     })
 })
- 
-client.on('message', message => {
-if(message.channel.type === 'dm') return;
-})
+
 
 client.on('message', message => {
+    if(message.channel.type === 'dm') return;
     if (message.type !== 'DEFAULT' || message.author.bot) return
     
     const args = message.content.trim().split(/ +/g)
@@ -49,5 +47,7 @@ client.on('guildMemberAdd', member => {
 
 client.on('guildMemberRemove', member => {
     member.guild.channels.cache.get(config.greeting.channel).send(`${member.user.tag} a quitté. ${member.guild.memberCount} Membre`)
-    member.roles.add(config.greeting.role)
+    if (db.has(member.user.id)) {
+        db.delete(member.user.id)
+    }
 })

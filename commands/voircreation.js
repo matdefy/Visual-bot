@@ -1,4 +1,5 @@
 const Discord = require('discord.js')
+config = require('C:/Users/matte/montage_video/bot/Graph-bot/config.json'),
 
 module.exports = {
     run: (db, message, args) => {
@@ -8,16 +9,15 @@ module.exports = {
             message.channel.send(db.get(user.id))
         } else {
             message.channel.send(new Discord.MessageEmbed()
-            .setTitle('⚠️ Erreur ! ⚠️')
-            .setDescription('Ce membre n\'est pas enregistré dans la base de donnée !')
+            .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de donnée ! ⚠️')
             .setColor('#FF0000')
-            .setFooter('Eddroid', 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+            .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
         }
     } else {
         message.channel.send(new Discord.MessageEmbed()
-        .setTitle('❌ Veuillez entrer 1 utilisateur ❌')
+        .setDescription('❌ Veuillez entrer 1 utilisateur ❌')
         .setColor('#FF0000')
-        .setFooter('Eddroid', 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+        .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
     }
     },
 
