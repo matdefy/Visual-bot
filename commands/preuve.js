@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const config = require('C:/Users/matte/montage_video/bot/Graph-bot/config.json')
+const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args, client) => {
@@ -16,18 +16,18 @@ module.exports = {
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('✅ Preuve enregistrée ✅')
                             .setColor('#00FF00')
-                            .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+                            .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('❌ Création introuvable ❌')
                             .setColor('#00FF00')
-                            .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+                            .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('❌ Veuillez entrer 1 preuve ❌')
                         .setColor('#FF0000')
-                        .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+                        .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
 
@@ -36,7 +36,7 @@ module.exports = {
             message.channel.send(new Discord.MessageEmbed()
                 .setDescription('❌ Veuillez entrer cette commande dans les channels de tickets sur ce [serveur](https://discord.gg/Xs4kThY) ❌')
                 .setColor('#FF0000')
-                .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+                .setFooter(config.version, message.client.user.avatarURL()))
         }
     }
 }

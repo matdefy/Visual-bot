@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const config = require('C:/Users/matte/montage_video/bot/Graph-bot/config.json')
+const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args) => {
@@ -15,7 +15,7 @@ module.exports = {
             message.channel.send(new Discord.MessageEmbed()
                 .setDescription('✅ Création ' + idcrea + ' validée ! ✅')
                 .setColor('#FF0000')
-                .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
+                .setFooter(config.version, message.client.user.avatarURL()))
         }
     }
 }
