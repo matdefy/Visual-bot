@@ -43,22 +43,16 @@ client.on('message', message => {
 })
 
 client.on('message', message => {
-    if (message.author.id === '557628352828014614') {
+    if (message.guild.id === '747834737527226542' && message.author.id === '557628352828014614') {
         client.commands.get('regle').run(db, message, null, client)
     }
 })
 
-client.on('guildMemberAdd', member => {
-    member.guild.channels.cache.get(config.greeting.channel).send(`${member} a rejoint. ${member.guild.memberCount} Membre`)
-    member.roles.add(config.greeting.role)
-})
-
-client.on('guildMemberRemove', member => {
-    member.guild.channels.cache.get(config.greeting.channel).send(`${member.user.tag} a quitté. ${member.guild.memberCount} Membre`)
+/* client.on('guildMemberRemove', member => {
     if (db.has(member.user.id)) {
         db.delete(member.user.id)
     }
-})
+}) */
 
 console.log('commande : "creation" activé ✅')
 console.log('commande : "supp" activé ✅')
