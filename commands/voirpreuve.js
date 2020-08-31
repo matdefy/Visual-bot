@@ -22,7 +22,7 @@ module.exports = {
                 })
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de donnée ! ⚠️')
+                    .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️')
                     .setColor('#FF0000')
                     .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
             }
@@ -44,7 +44,7 @@ module.exports = {
                 })
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de donnée ! ⚠️')
+                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️')
                     .setColor('#FF0000')
                     .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
             }

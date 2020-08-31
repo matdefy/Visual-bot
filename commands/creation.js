@@ -15,7 +15,7 @@ module.exports = {
             })
 
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('✅ Création enregistré ✅')
+                .setDescription('✅ Création enregistrée ✅')
                 .setColor('#00FF00')
                 .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
         } else {
