@@ -30,7 +30,10 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
-
+                message.channel.send(new Discord.MessageEmbed()
+                    .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️')
+                    .setColor('#FF0000')
+                    .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
