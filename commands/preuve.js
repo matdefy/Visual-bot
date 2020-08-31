@@ -13,7 +13,7 @@ module.exports = {
                         url: message.attachments.first().url
                     })
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Preuve enregistré ✅')
+                        .setDescription('✅ Preuve enregistrée ✅')
                         .setColor('#00FF00')
                         .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
                 } else {

@@ -8,7 +8,7 @@ module.exports = {
             db.delete('pr_' + user.id)
             db.delete(user.id)
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('✅ ' + user.id + ' n\'est plus enregistré dans la basse de donnée ! ✅')
+                .setDescription('✅ ' + user.id + ' n\'est plus enregistré dans la base de données ! ✅')
                 .setColor('#00FF00')
                 .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
         } else {
@@ -16,12 +16,12 @@ module.exports = {
                 db.delete('pr_' + message.member.id)
                 db.delete(message.member.id)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Vous n\'êtes plus enregistré dans la basse de donnée ! ✅')
+                    .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅')
                     .setColor('#00FF00')
                     .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de donnée ! ⚠️')
+                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la bse de données ! ⚠️')
                     .setColor('#FF0000')
                     .setFooter(config.version, 'https://cdn.discordapp.com/attachments/577866353030201355/749204835982770206/logo2_8.png'))
             }
