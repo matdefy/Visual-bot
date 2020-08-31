@@ -1,15 +1,17 @@
 module.exports = {
-    "env": {
-        "commonjs": true,
-        "es2020": true,
-        "node": true
+    env: {
+        commonjs: true,
+        es2020: true,
+        node: true
     },
-    "extends": [
-        "standard"
+    extends: [
+        'standard'
     ],
-    "parserOptions": {
-        "ecmaVersion": 12
+    parserOptions: {
+        ecmaVersion: 12
     },
-    "rules": {
+    rules: {
+        indent: ['error', 4],
+        'no-useless-escape': 0
     }
-};
+}
