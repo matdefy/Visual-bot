@@ -19,13 +19,13 @@ fs.readdir('./commands', (err, files) => {
     })
 })
 
-client.on('ready', () => {
+/* client.on('ready', () => {
     client.channels.cache.get('749226677292499035').send(new Discord.MessageEmbed()
         .setTitle('📩 Ticket pour l\'enregistrement 📩')
         .setDescription('Pour pouvoir démarrer la phase d\'enregistrement, veuillez cliquer sur 📩')
         .setColor('#FF0000')
         .setFooter(config.version, 'https://cdn.discordapp.com/attachments/749269193425158205/750004928348422254/graph_bot_3.png'))
-})
+}) */
 
 const statuses = [
     'créer un 📩 tickets 📩 dans le salon',
