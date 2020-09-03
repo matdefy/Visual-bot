@@ -29,6 +29,13 @@ module.exports = {
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
+            if (db.has('pr_' + message.author.id)) {
+                /* const nouveauTableauPr = db.get('pr_' + message.author.id).filter((element) => element.id !== parseInt(creationId))
+                db.set('pr_' + message.author.id, nouveauTableauPr) */
+                if (db.get('pr_' + message.author.id).length === 0) {
+                    db.delete('pr_' + message.author.id)
+                }
+            }
         } else {
             message.channel.send(new Discord.MessageEmbed()
                 .setDescription('❌ Veuillez entrer cette commande dans les channels de tickets sur ce [serveur](https://discord.gg/Xs4kThY) ❌')

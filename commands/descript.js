@@ -1,32 +1,19 @@
-/* const Discord = require('discord.js')
+const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args) => {
         if (message.guild.id === '747834737527226542' && message.channel.name.startsWith('ticket')) {
-            var creationId = 1
-            if (db.has('descript_' + message.author.id)) {
-                if (args[0]) {
-                    db.push('descript_' + message.author.id, {
-                        id: creationId,
-                        url: message.attachments.first().url,
-                        verif: '❌'
-                    })
-            }
-            if (message.attachments.size === 1) {
-                db.push(message.author.id, {
-                    id: creationId,
-                    url: message.attachments.first().url,
-                    verif: '❌'
-                })
-
+            var descript = args.join(' ')
+            if (descript.length !== 0) {
+                db.set('descript_' + message.author.id, descript)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Création enregistrée ✅')
-                    .setColor('#00FF00')
+                    .setDescription('✅ Description ajouté ✅')
+                    .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('❌ Veuillez entrer 1 création ❌')
+                    .setDescription('❌ Veuillez entrer une description ❌')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
@@ -38,4 +25,3 @@ module.exports = {
         }
     }
 }
-*/

@@ -20,6 +20,11 @@ module.exports = {
                         }
                     })
                 })
+                message.channel.send(new Discord.MessageEmbed()
+                    .setTitle('Description :')
+                    .setDescription(db.get('descript_' + user.id))
+                    .setColor('#FF0000')
+                    .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
                     .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️')
@@ -42,6 +47,11 @@ module.exports = {
                         }
                     })
                 })
+                message.channel.send(new Discord.MessageEmbed()
+                    .setTitle('Description :')
+                    .setDescription(db.get('descript_' + message.author.id))
+                    .setColor('#FF0000')
+                    .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
                     .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️')
