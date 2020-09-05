@@ -19,14 +19,6 @@ fs.readdir('./commands', (err, files) => {
     })
 })
 
-/* client.on('ready', () => {
-    client.channels.cache.get('749226677292499035').send(new Discord.MessageEmbed()
-        .setTitle('📩 Ticket pour l\'enregistrement 📩')
-        .setDescription('Pour pouvoir démarrer la phase d\'enregistrement, veuillez cliquer sur 📩')
-        .setColor('#FF0000')
-        .setFooter(config.version, 'https://cdn.discordapp.com/attachments/749269193425158205/750004928348422254/graph_bot_3.png'))
-}) */
-
 const statuses = [
     'créer un 📩 tickets 📩 dans le salon',
     '#demande-enregistrement',
@@ -49,24 +41,6 @@ client.on('message', message => {
     if (!command) return
     command.run(db, message, args, client)
 })
-
-client.on('message', message => {
-    if (message.guild.id === '747834737527226542' && message.author.id === '557628352828014614') {
-        client.commands.get('regle').run(db, message, null, client)
-    }
-})
-
-/* client.on('channelCreate', (channel) => {
-    if (channel.guild.id === '747834737527226542' && channel.name.startsWith('ticket')) {
-        channel.edit({ name: 'ticket-' + })
-    }
-}) */
-
-/* client.on('guildMemberRemove', member => {
-    if (db.has(member.user.id)) {
-        db.delete(member.user.id)
-    }
-}) */
 
 client.on('guildCreate', (guild) => {
     client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name} avec ${guild.memberCount}`)
@@ -102,6 +76,16 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 .setFooter(config.version, client.user.avatarURL()))
         })
     }
+})
+
+client.on('guildMemberAdd', member => {
+    member.createDM().then(channel => {
+        channel.send(new Discord.MessageEmbed()
+            .setTitle('Bienvenue sur le serveur de Graph Bot ! ')
+            .setDescription('Pour ✅ enregistrer ✅ des créations, il vous suffit de vous rendre dans le salon `#📮demande-enregistrement📮`, et de créé un ticket ! \n \nSi vous voulez voir les créations des gens, rendez vous dans le salon `#🤖commande-bot🤖` , puis taper la commande `*viewcrea [@user]` \n \n(plus d\'informations sur les commandes en tapant `*help` dans le salon `#🤖commande-bot🤖` !')
+            .setColor('#00FF00')
+            .setFooter(config.version, 'https://cdn.discordapp.com/attachments/749269193425158205/750004928348422254/graph_bot_3.png'))
+    })
 })
 
 console.log('commande : "creation" activé ✅')

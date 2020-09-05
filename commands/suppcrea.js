@@ -30,8 +30,9 @@ module.exports = {
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
             if (db.has('pr_' + message.author.id)) {
-                /* const nouveauTableauPr = db.get('pr_' + message.author.id).filter((element) => element.id !== parseInt(creationId))
-                db.set('pr_' + message.author.id, nouveauTableauPr) */
+                const nouveauTableauPr = db.get('pr_' + message.author.id).filter((element2) => element2.id !== parseInt(creationId))
+                db.set('pr_' + message.author.id, nouveauTableauPr)
+                console.log('test')
                 if (db.get('pr_' + message.author.id).length === 0) {
                     db.delete('pr_' + message.author.id)
                 }

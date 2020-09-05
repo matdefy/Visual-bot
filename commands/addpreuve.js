@@ -10,7 +10,7 @@ module.exports = {
                 if (message.attachments.size === 1) {
                     if (creationIdverif) {
                         db.push('pr_' + message.author.id, {
-                            id: creationIdPr,
+                            id: parseInt(creationIdPr),
                             url: message.attachments.first().url
                         })
                         message.channel.send(new Discord.MessageEmbed()
