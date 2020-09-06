@@ -15,7 +15,7 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()),
                     files: creations.map((crea) => {
                         return {
-                            name: crea.id + '.png',
+                            name: crea.id + '.' + crea.url.split('.').pop(),
                             attachment: crea.url
                         }
                     })
@@ -42,7 +42,7 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()),
                     files: creations2.map((crea) => {
                         return {
-                            name: crea.id + '.png',
+                            name: crea.id + '.' + crea.url.split('.').pop(),
                             attachment: crea.url
                         }
                     })

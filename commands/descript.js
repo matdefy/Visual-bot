@@ -8,7 +8,7 @@ module.exports = {
             if (descript.length !== 0) {
                 db.set('descript_' + message.author.id, descript)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Description ajouté ✅')
+                    .setDescription('✅ Description modifiée ✅')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
