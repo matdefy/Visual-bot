@@ -31,7 +31,8 @@ module.exports = {
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
-        } else {
+        }
+        if (message.mentions.users.size === 0) {
             if (db.has(message.author.id)) {
                 var creations2 = db.get(message.author.id)
                 var text2 = creations2.map((crea) => 'Création numéro ' + crea.id + '\n' + 'vérification ' + crea.verif + '\n')
@@ -60,5 +61,4 @@ module.exports = {
             }
         }
     }
-
 }

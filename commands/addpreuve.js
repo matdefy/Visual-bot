@@ -19,7 +19,7 @@ module.exports = {
                             .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('❌ Création introuvable ❌')
+                            .setDescription('⚠️ Création introuvable ⚠️')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
@@ -37,7 +37,7 @@ module.exports = {
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('❌ Veuillez entrer cette commande dans les channels de tickets sur ce [serveur](https://discord.gg/Xs4kThY) ❌')
+                .setDescription('🛑 Veuillez entrer cette commande dans les channels de tickets sur ce [serveur](https://discord.gg/Xs4kThY) 🛑')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
