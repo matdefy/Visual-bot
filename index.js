@@ -78,7 +78,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 })
 
-client.on('guildMemberAdd', member => {
+/* client.on('guildMemberAdd', member => {
     member.createDM().then(channel => {
         channel.send(new Discord.MessageEmbed()
             .setTitle('Bienvenue sur le serveur de Graph Bot ! ')
@@ -86,7 +86,7 @@ client.on('guildMemberAdd', member => {
             .setColor('#00FF00')
             .setFooter(config.version, 'https://cdn.discordapp.com/attachments/749269193425158205/750004928348422254/graph_bot_3.png'))
     })
-})
+}) */
 
 console.log('commande : "creation" activé ✅')
 console.log('commande : "supp" activé ✅')

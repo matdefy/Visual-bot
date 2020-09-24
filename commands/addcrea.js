@@ -26,7 +26,7 @@ module.exports = {
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Veuillez entrer cette commande dans les channels de tickets sur ce [serveur](https://discord.gg/Xs4kThY) 🛑')
+                .setDescription('🛑 Veuillez entrer cette commande dans les channels de tickets sur ce **[serveur](https://discord.gg/Xs4kThY)** 🛑')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
