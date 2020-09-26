@@ -89,6 +89,14 @@ client.on('messageReactionAdd', async (reaction, user) => {
     })
 }) */
 
+const CronJob = require('cron').CronJob
+const job = new CronJob('0 0 0 * * *', function () {
+    const date = new Date()
+
+    fs.writeFileSync('./backupdatabase/' + date.getDate() + '-' + (date.getMonth() + 1) + '.json', JSON.stringify(db.data, null, 2), 'utf-8')
+}, null, true, 'Europe/Paris')
+job.start()
+
 console.log('commande : "creation" activé ✅')
 console.log('commande : "supp" activé ✅')
 console.log('commande : "help" activé ✅')
