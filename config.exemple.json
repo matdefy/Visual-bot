@@ -1,7 +1,7 @@
 {
     "token": "XXX",
     "prefix": "*",
-    "version": "1.2.0",
+    "version": "1.6.0",
     "greeting": {
         "channel": "749193976937971803",
         "role": "749194353359978587"
