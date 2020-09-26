@@ -18,7 +18,7 @@ module.exports = {
                         .setDescription('✅ Création ' + idcrea + ' validée ! ✅')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
-                    // message.channels.cache.get('751369171849314346').send('création validé pour l\'utilisateur ' + user.id + ' Par ' + message.author.id)
+                    message.client.channels.cache.get('751369171849314346').send('création validé pour l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️')
