@@ -5,7 +5,7 @@ module.exports = {
     run: (db, message, args) => {
         if (message.mentions.users.size === 1) {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('❌ Vous ne pouvez pas voir les preuves d\'une personne ! ❌')
+                .setDescription('❌ Vous ne pouvez pas voir les preuves d\'une personne ! ❌\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
             return
@@ -49,7 +49,7 @@ module.exports = {
             })
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️')
+                .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
