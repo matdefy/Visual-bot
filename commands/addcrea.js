@@ -4,7 +4,7 @@ const config = require('../config.json')
 module.exports = {
     run: (db, message, args) => {
         if (message.guild.id === '747834737527226542' && message.channel.name.startsWith('ticket')) {
-            var creationId = 1
+            const creationId = 1
             if (db.has(message.author.id)) {
                 creationId = db.get(message.author.id).length + 1
             }

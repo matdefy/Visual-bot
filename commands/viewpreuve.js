@@ -11,8 +11,8 @@ module.exports = {
             return
         }
         /* if (db.has('pr_' + user.id)) {
-                var preuves = db.get('pr_' + user.id)
-                var text = preuves.map((crea) => 'Preuve pour la création numéro ' + crea.id + '\n' + crea.url + '\n')
+                const preuves = db.get('pr_' + user.id)
+                const text = preuves.map((crea) => 'Preuve pour la création numéro ' + crea.id + '\n' + crea.url + '\n')
                 message.channel.send({
                     embed: new Discord.MessageEmbed()
                         .setDescription(text)
@@ -33,8 +33,8 @@ module.exports = {
             }
         } else { */
         if (db.has('pr_' + message.author.id)) {
-            var preuve2 = db.get('pr_' + message.author.id)
-            var text2 = preuve2.map((crea) => 'Preuve pour la création numéro ' + crea.id)
+            const preuve2 = db.get('pr_' + message.author.id)
+            const text2 = preuve2.map((crea) => 'Preuve pour la création numéro ' + crea.id)
             message.channel.send({
                 embed: new Discord.MessageEmbed()
                     .setDescription(text2)

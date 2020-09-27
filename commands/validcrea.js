@@ -8,8 +8,8 @@ module.exports = {
         if (message.member.hasPermission('KICK_MEMBERS')) {
             if (message.mentions.users.size === 1) {
                 if (db.has(user.id)) {
-                    var creations = db.get(user.id)
-                    var idcrea = args[0]
+                    const creations = db.get(user.id)
+                    const idcrea = args[0]
                     // Récupérer et modifier une creation
                     creations.find((creation) => creation.id === parseInt(idcrea)).verif = '✅'
                     // Écrire les modifications dans la base de données

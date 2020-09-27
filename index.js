@@ -24,7 +24,7 @@ const statuses = [
     '#demande-enregistrement',
     'pour enregistrer des 🎨 créations 🎨 !'
 ]
-var i = 0
+let i = 0
 setInterval(() => {
     client.user.setActivity(statuses[i], { type: 'PLAYING' })
     i = ++i % statuses.length

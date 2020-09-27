@@ -4,7 +4,7 @@ const config = require('../config.json')
 module.exports = {
     run: (db, message, args) => {
         if (message.guild.id === '747834737527226542' && message.channel.name.startsWith('ticket')) {
-            var descript = args.join(' ')
+            const descript = args.join(' ')
             if (descript.length !== 0) {
                 db.set('descript_' + message.author.id, descript)
                 message.channel.send(new Discord.MessageEmbed()
