@@ -24,11 +24,11 @@ const statuses = [
     '#demande-enregistrement',
     'pour enregistrer des 🎨 créations 🎨 !'
 ]
-let i = 0
+let i = 5
 setInterval(() => {
     client.user.setActivity(statuses[i], { type: 'PLAYING' })
     i = ++i % statuses.length
-}, 1e4)
+}, 20 * 1000)
 
 client.on('message', message => {
     if (message.channel.type === 'dm') return
