@@ -21,7 +21,7 @@ module.exports = {
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️')
+                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }

@@ -14,30 +14,30 @@ module.exports = {
                             url: message.attachments.first().url
                         })
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('✅ Preuve enregistrée pour la création num\éro : ' + creationIdPr + ' ✅\nTaper `*viewpreuve` pour voir toutes les preuves des créations !')
+                            .setDescription('✅ Preuve enregistrée pour la création num\éro : ' + creationIdPr + ' ✅\nTaper `*viewpreuve` pour voir toutes les preuves des créations !\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ Création introuvable ⚠️')
+                            .setDescription('⚠️ Création introuvable ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('❌ Veuillez entrer 1 preuve ❌')
+                        .setDescription('❌ Veuillez entrer 1 preuve ❌\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️')
+                    .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Veuillez entrer cette commande dans les channels de tickets sur ce **[serveur](https://discord.gg/Xs4kThY)** 🛑')
+                .setDescription('🛑 Veuillez entrer cette commande dans les channels de tickets sur ce **[serveur](https://discord.gg/Xs4kThY)** 🛑\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
