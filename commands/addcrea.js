@@ -15,7 +15,7 @@ module.exports = {
                     verif: '❌'
                 })
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Création enregistrée au num\éro : ' + creationId + ' ✅\nTaper `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !')
+                    .setDescription('✅ Création enregistrée au num\éro : ' + creationId + ' ✅\nTapez `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !')
                     .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {

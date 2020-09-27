@@ -14,7 +14,7 @@ module.exports = {
                             url: message.attachments.first().url
                         })
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('✅ Preuve enregistrée pour la création num\éro : ' + creationIdPr + ' ✅\nTaper `*viewpreuve` pour voir toutes les preuves des créations !')
+                            .setDescription('✅ Preuve enregistrée pour la création num\éro : ' + creationIdPr + ' ✅\nTapez `*viewpreuve` pour voir toutes les preuves des créations !')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
