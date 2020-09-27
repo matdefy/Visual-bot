@@ -48,11 +48,13 @@ module.exports = {
                         }
                     })
                 })
-                message.channel.send(new Discord.MessageEmbed()
-                    .setTitle('Description :')
-                    .setDescription(db.get('descript_' + message.author.id))
-                    .setColor('#FF0000')
-                    .setFooter(config.version, message.client.user.avatarURL()))
+                if (db.has('descript_' + message.author.id)) {
+                    message.channel.send(new Discord.MessageEmbed()
+                        .setTitle('Description :')
+                        .setDescription(db.get('descript_' + message.author.id))
+                        .setColor('#FF0000')
+                        .setFooter(config.version, message.client.user.avatarURL()))
+                }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
                     .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
