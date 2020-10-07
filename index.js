@@ -43,7 +43,7 @@ client.on('message', message => {
 })
 
 client.on('guildCreate', (guild) => {
-    client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name} avec ${guild.memberCount}`)
+    client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**`)
 })
 
 client.on('messageReactionAdd', async (reaction, user) => {
@@ -78,16 +78,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
         })
     }
 })
-
-/* client.on('guildMemberAdd', member => {
-    member.createDM().then(channel => {
-        channel.send(new Discord.MessageEmbed()
-            .setTitle('Bienvenue sur le serveur de Graph Bot ! ')
-            .setDescription('Pour ✅ enregistrer ✅ des créations, il vous suffit de vous rendre dans le salon `#📮demande-enregistrement📮`, et de créé un ticket ! \n \nSi vous voulez voir les créations des gens, rendez vous dans le salon `#🤖commande-bot🤖` , puis taper la commande `*viewcrea [@user]` \n \n(plus d\'informations sur les commandes en tapant `*help` dans le salon `#🤖commande-bot🤖` !')
-            .setColor('#00FF00')
-            .setFooter(config.version, 'https://cdn.discordapp.com/attachments/749269193425158205/750004928348422254/graph_bot_3.png'))
-    })
-}) */
 
 const CronJob = require('cron').CronJob
 const job = new CronJob('0 0 0 * * *', function () {
