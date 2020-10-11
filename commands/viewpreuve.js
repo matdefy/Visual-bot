@@ -10,28 +10,6 @@ module.exports = {
                 .setFooter(config.version, message.client.user.avatarURL()))
             return
         }
-        /* if (db.has('pr_' + user.id)) {
-                const preuves = db.get('pr_' + user.id)
-                const text = preuves.map((crea) => 'Preuve pour la création numéro ' + crea.id + '\n' + crea.url + '\n')
-                message.channel.send({
-                    embed: new Discord.MessageEmbed()
-                        .setDescription(text)
-                        .setColor('#FF0000')
-                        .setFooter(config.version, message.client.user.avatarURL()),
-                    files: preuves.map((crea) => {
-                        return {
-                            name: crea.id + '.png',
-                            attachment: crea.url
-                        }
-                    })
-                })
-            } else {
-                message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️')
-                    .setColor('#FF0000')
-                    .setFooter(config.version, message.client.user.avatarURL()))
-            }
-        } else { */
         if (db.has('pr_' + message.author.id)) {
             const preuve2 = db.get('pr_' + message.author.id)
             const text2 = preuve2.map((crea) => 'Preuve pour la création numéro ' + crea.id)

@@ -4,6 +4,22 @@ const config = require('../config.json')
 module.exports = {
     run: (db, message, args) => {
         const user = message.mentions.users.first()
+        if (message.channel.type === 'dm') {
+            if (db.has('pr_' + message.author.id) || db.has(message.author.id)) {
+                db.delete('pr_' + message.author.id)
+                db.delete(message.author.id)
+                message.channel.send(new Discord.MessageEmbed()
+                    .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅')
+                    .setColor('#00FF00')
+                    .setFooter(config.version, message.client.user.avatarURL()))
+            } else {
+                message.channel.send(new Discord.MessageEmbed()
+                    .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#FF0000')
+                    .setFooter(config.version, message.client.user.avatarURL()))
+            }
+            return
+        }
         if (message.member.hasPermission('KICK_MEMBERS') && message.mentions.users.size === 1) {
             db.delete('pr_' + user.id)
             db.delete(user.id)

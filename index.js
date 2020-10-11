@@ -31,7 +31,6 @@ setInterval(() => {
 }, 20 * 1000)
 
 client.on('message', message => {
-    if (message.channel.type === 'dm') return
     if (message.type !== 'DEFAULT' || message.author.bot) return
 
     const args = message.content.trim().split(/ +/g)
