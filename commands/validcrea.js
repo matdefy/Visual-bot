@@ -3,13 +3,12 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args) => {
-        console.log('commande : "confircreation" activée ✅')
         const user = message.mentions.users.first()
         if (message.member.hasPermission('KICK_MEMBERS')) {
             if (message.mentions.users.size === 1) {
                 if (db.has(user.id)) {
                     const creations = db.get(user.id)
-                    const idcrea = args[0]
+                    const idcrea = args[1]
                     // Récupérer et modifier une creation
                     creations.find((creation) => creation.id === parseInt(idcrea)).verif = '✅'
                     // Écrire les modifications dans la base de données

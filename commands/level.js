@@ -6,8 +6,8 @@ module.exports = {
         const user = message.mentions.users.first()
         if (message.member.hasPermission('KICK_MEMBERS')) {
             if (message.mentions.users.size === 1) {
-                if (parseInt(args[0]) < 6) {
-                    const numlevel = args[0]
+                if (parseInt(args[1]) < 6) {
+                    const numlevel = args[1]
                     db.set('level_' + user.id, parseInt(numlevel))
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('✅ Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' ✅')
