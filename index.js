@@ -6,9 +6,12 @@ const config = require('./config.json')
 const fs = require('fs')
 const Database = require('easy-json-database')
 const db = new Database('./database.json')
+const dbLogs = new Database('./database_logs.json')
 
 client.login(config.token)
 client.commands = new Discord.Collection()
+
+// Système qui gère les commandes
 
 fs.readdir('./commands', (err, files) => {
     if (err) throw err
@@ -18,6 +21,10 @@ fs.readdir('./commands', (err, files) => {
         client.commands.set(file.split('.')[0], command)
     })
 })
+
+// Système qui gère les commandes
+
+// Système qui gère à quoi joue le bot
 
 const statuses = [
     'créer un 📩 tickets 📩 dans le salon',
@@ -30,6 +37,10 @@ setInterval(() => {
     i = ++i % statuses.length
 }, 20 * 1000)
 
+// Système qui gère à quoi joue le bot
+
+// Système qui enregistre les commandes tapées
+
 client.on('message', message => {
     if (message.type !== 'DEFAULT' || message.author.bot) return
 
@@ -38,12 +49,24 @@ client.on('message', message => {
     if (!commandName.startsWith(config.prefix)) return
     const command = client.commands.get(commandName.slice(config.prefix.length))
     if (!command) return
-    command.run(db, message, args, client)
+    command.run(db, message, args, client, dbLogs)
+    dbLogs.push('logs', {
+        date: Date.now(),
+        cmd: commandName,
+        userId: message.author.id
+    })
 })
 
+// Système qui enregistre les commandes tapées
+
+// Système qui envoie un message quand le bot est ajouté sur un serveur
 client.on('guildCreate', (guild) => {
     client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**`)
 })
+
+// Système qui envoie un message quand le bot est ajouté sur un serveur
+
+// Système qui gère la création des tickets pour l'enregistrement des créations (à supp)
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.message.guild.channels.cache.some((channel) => channel.name === 'ticket-' + user.username.toLowerCase())) {
@@ -78,6 +101,112 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 })
 
+// Système qui gère la création des tickets pour l'enregistrement des créations (à supp)
+
+// Système qui gère la création des tickets pour le système de commande
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (!user.bot) {
+    } else { return }
+    await reaction.fetch()
+    if (reaction.message.channel.id === '766663058369413130') {
+        const description = reaction.message.embeds[0].description
+        const userID = description.substring(
+            description.lastIndexOf('(') + 1,
+            description.lastIndexOf(')')
+        )
+        const commandID = description.substring(
+            description.lastIndexOf('[') + 1,
+            description.lastIndexOf(']')
+        )
+        reaction.message.guild.channels.create('ticket-' + userID, {
+            parent: '766677454344683520',
+            permissionOverwrites: [
+                {
+                    id: reaction.message.guild.id,
+                    deny: [
+                        'VIEW_CHANNEL'
+                    ]
+                },
+                {
+                    id: reaction.message.author.id,
+                    allow: [
+                        'VIEW_CHANNEL'
+                    ]
+                }
+            ]
+        }).then((channel) => {
+            channel.send('<@' + userID + '>')
+            channel.send(new Discord.MessageEmbed()
+                .setTitle('🔽 Comment passer commande ? 🔽')
+                .setDescription('Merci d\'avoir créé un ticket de commande sur ce serveur ! Veuillez maintenant décrire précisément votre commande !')
+                .setColor('#00FF00')
+                .setFooter(config.version, client.user.avatarURL()))
+        })
+        client.users.cache.get(userID).send(new Discord.MessageEmbed()
+            .setTitle('🎉 Bonne nouvelle 🎉')
+            .setDescription('Un graphiste a accepté votre commande au numéro `' + commandID + '`, un ticket vous a été créé !')
+            .setColor('#00FF00')
+            .setFooter(config.version, client.user.avatarURL()))
+        client.channels.cache.get('766934052174430218').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)')
+        reaction.message.delete()
+    }
+})
+
+// Système qui gère la création des tickets pour le système de commande
+
+// Système qui gère la validation des créations
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot) {
+        return
+    }
+    await reaction.fetch()
+    if (reaction.message.channel.id === '764886091295358996') {
+        const description = reaction.message.embeds[0].description
+        const userID = description.substring(
+            description.lastIndexOf('(') + 1,
+            description.lastIndexOf(')')
+        )
+        const creationID = description.substring(
+            description.lastIndexOf('[') + 1,
+            description.lastIndexOf(']')
+        )
+        if (reaction.emoji.name === '✅') {
+            const creations = db.get(userID)
+            creations.find((creation) => creation.id === parseInt(creationID)).verif = '✅'
+            db.set(userID, creations)
+            client.users.cache.get(userID).send(new Discord.MessageEmbed()
+                .setTitle('🎉 Bonne nouvelle 🎉')
+                .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !')
+                .setColor('#00FF00')
+                .setFooter(config.version, client.user.avatarURL()))
+        } else {
+            client.users.cache.get(userID).send(new Discord.MessageEmbed()
+                .setTitle('❌ Preuve invalide ❌')
+                .setDescription('Votre preuve n\'a pas permi de confirmer que la création à l\'id : `' + creationID + '` vous appartenez ! Veuillez donc revoir vos preuves !')
+                .setColor('#00FF00')
+                .setFooter(config.version, client.user.avatarURL()))
+        }
+        reaction.message.channel.messages.cache.filter(message => {
+            const description2 = message.embeds[0].description
+            const userID2 = description2.substring(
+                description2.lastIndexOf('(') + 1,
+                description2.lastIndexOf(')')
+            )
+            const creationID2 = description2.substring(
+                description2.lastIndexOf('[') + 1,
+                description2.lastIndexOf(']')
+            )
+            return userID2 === userID && creationID2 === creationID
+        }).forEach(message => message.delete())
+    }
+})
+
+// Système qui gère la validation des créations
+
+// Système qui gère les sauvegardes de la base de données
+
 const CronJob = require('cron').CronJob
 const job = new CronJob('0 0 0 * * *', function () {
     const date = new Date()
@@ -86,11 +215,8 @@ const job = new CronJob('0 0 0 * * *', function () {
 }, null, true, 'Europe/Paris')
 job.start()
 
-console.log('commande : "creation" activé ✅')
-console.log('commande : "supp" activé ✅')
-console.log('commande : "help" activé ✅')
-console.log('commande : "voircreation" activé ✅')
-console.log('commande : "preuve" activé ✅')
-console.log('commande : "confircreation" activé ✅')
-console.log('commande : "voirpreuve" activé ✅')
-console.log('commande : bot connecté ✅')
+// Système qui gère les sauvegardes de la base de données
+client.on('ready', async () => {
+    client.channels.cache.get('764886091295358996').messages.fetch()
+    console.log('✅ bot connecté ✅')
+})

@@ -14,12 +14,12 @@ module.exports = {
                 verif: '❌'
             })
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('✅ Création enregistrée au num\éro : ' + creationId + ' ✅\nTapez `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('✅ Création enregistrée au num\éro : `' + creationId + '` ✅\nTapez `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#00FF00')
                 .setFooter(config.version, message.client.user.avatarURL()))
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('❌ Veuillez entrer 1 création ❌\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('❌ Veuillez entrer 1 pièce jointe ❌\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
