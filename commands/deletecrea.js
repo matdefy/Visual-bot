@@ -10,7 +10,7 @@ module.exports = {
                 const nouveauTableau = db.get(message.author.id).filter((element) => element.id !== parseInt(creationId))
                 db.set(message.author.id, nouveauTableau)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Création et preuve(s) numéro ' + creationId + ' supprimées ✅')
+                    .setDescription('✅ Création et preuve(s) numéro `' + creationId + '` supprimées ✅')
                     .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()))
                 if (db.get(message.author.id).length === 0) {

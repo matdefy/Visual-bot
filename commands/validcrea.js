@@ -14,7 +14,7 @@ module.exports = {
                     // Écrire les modifications dans la base de données
                     db.set(user.id, creations)
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Création ' + idcrea + ' validée ! ✅')
+                        .setDescription('✅ Création `' + idcrea + '` validée ! ✅')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     message.client.channels.cache.get('751369171849314346').send('création validée pour l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')

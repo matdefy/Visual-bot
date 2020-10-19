@@ -12,7 +12,7 @@ module.exports = {
         }
         if (db.has('pr_' + message.author.id)) {
             const preuve2 = db.get('pr_' + message.author.id)
-            const text2 = preuve2.map((crea) => 'Preuve pour la création numéro ' + crea.id)
+            const text2 = preuve2.map((crea) => 'Preuve pour la création numéro : `' + crea.id + '`')
             message.channel.send({
                 embed: new Discord.MessageEmbed()
                     .setDescription(text2)
