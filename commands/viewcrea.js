@@ -28,9 +28,10 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
                 if (db.has('level_' + user.id)) {
+                    const level = db.get('level_' + user.id)
                     message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Level :')
-                        .setDescription(db.get('level_' + user.id))
+                        .setDescription('`' + level + '`')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
@@ -65,9 +66,10 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
                 if (db.has('level_' + message.author.id)) {
+                    const level = db.get('level_' + message.author.id)
                     message.channel.send(new Discord.MessageEmbed()
                         .setTitle('Level :')
-                        .setDescription(db.get('level_' + message.author.id))
+                        .setDescription('`' + level + '`')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
