@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args) => {
+    run: (db, message, args, client, dbLogs) => {
         let creationId = 1
         if (db.has(message.author.id)) {
             creationId = db.get(message.author.id).length + 1
@@ -13,6 +13,7 @@ module.exports = {
                 url: message.attachments.first().url,
                 verif: '❌'
             })
+            dbLogs.add('creation', 1)
             message.channel.send(new Discord.MessageEmbed()
                 .setDescription('✅ Création enregistrée au num\éro : `' + creationId + '` ✅\nTapez `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#00FF00')
