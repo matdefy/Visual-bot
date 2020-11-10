@@ -3,7 +3,7 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args, client) => {
-        if (message.member.hasPermission('MANAGE_GUILD')) {
+        if (message.member.id === '364481003479105537') {
             if (args[0]) {
                 message.delete()
                 message.channel.send(message.content.trim().slice(`${config.prefix}say`.length))

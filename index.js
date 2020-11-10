@@ -42,10 +42,18 @@ setInterval(() => {
 
 client.on('message', message => {
     if (message.type !== 'DEFAULT' || message.author.bot) return
-    if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level')) {
+    if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd')) {
         if (message.channel.type === 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
                 .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ⚠️')
+                .setColor('#00FF00')
+                .setFooter(config.version, message.client.user.avatarURL()))
+        }
+    }
+    if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
+        if (message.channel.type !== 'dm') {
+            return message.channel.send(new Discord.MessageEmbed()
+                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ⚠️')
                 .setColor('#00FF00')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
@@ -88,7 +96,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
-    if (reaction.emoji.name === '✅' && reaction.message.author.id === '764867987291111506') {
+    if (reaction.emoji.name === '✅' && reaction.message.content.startsWith('Preuve') && reaction.message.author.id === '764867987291111506') {
         if (dbLogs.has('catcmd_' + reaction.message.guild.id)) {
             const catticketcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
             const description = reaction.message.embeds[0].description
@@ -182,7 +190,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         return
     }
     await reaction.fetch()
-    if (reaction.message.channel.id === '764886091295358996') {
+    if (reaction.message.channel.id === '775274490723827715') {
         const description = reaction.message.embeds[0].description
         const userID = description.substring(
             description.lastIndexOf('(') + 1,
@@ -205,6 +213,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !')
                 .setColor('#00FF00')
                 .setFooter(config.version, client.user.avatarURL()))
+            client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) validée par ' + user.tag + ' (`' + user.id + '`) ')
         } else {
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
                 .setTitle('❌ Preuve invalide ❌')
@@ -248,7 +257,7 @@ job.start()
 // Système activé lors du démarrage du bot
 
 client.on('ready', async () => {
-    client.channels.cache.get('764886091295358996').messages.fetch()
+    client.channels.cache.get('775274490723827715').messages.fetch()
     console.log('✅ bot connecté ✅')
 })
 

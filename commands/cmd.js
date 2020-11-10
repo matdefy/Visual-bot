@@ -32,6 +32,11 @@ module.exports = {
                             }).then(msg => {
                                 msg.react('✅')
                             })
+                            message.channel.send(new Discord.MessageEmbed()
+                                .setTitle('✅ Commande enregistré ✅')
+                                .setDescription('Aller dans les messages privées de Graph Bot pour avoir tout les détails sur votre  📩 commande 📩 !')
+                                .setColor('00FF00')
+                                .setFooter(config.version, message.client.user.avatarURL()))
                             message.author.createDM().then(channel => {
                                 channel.send(new Discord.MessageEmbed()
                                     .setTitle('✅ Commande enregistré ✅')

@@ -6,8 +6,8 @@ module.exports = {
         if (dbLogs.has('logs')) {
             const logs = dbLogs.get('logs')
             const total = logs.length
-            const creation = dbLogs.get('creation').length
-            const preuve = dbLogs.get('preuve').length
+            const creation = dbLogs.get('creation')
+            const preuve = dbLogs.get('preuve')
             const logsDay = logs.filter(log => log.date >= (Date.now() - 24 * 60 * 60 * 1000)).length
             const logscmd = logs.filter(log => log.cmd === ('*cmd')).length
             const logsdescript = logs.filter(log => log.cmd === ('*descript')).length
@@ -21,12 +21,12 @@ module.exports = {
                 .addFields(
                     { name: 'créations enregistrées', value: creation + ' créations', inline: true },
                     { name: 'preuves enregistrées', value: preuve + ' preuves', inline: true },
-                    { name: 'commande : cmd', value: 'tapée ' + logscmd + ' fois', inline: true },
-                    { name: 'commande : descript', value: 'tapée ' + logsdescript + ' fois', inline: true },
-                    { name: 'commande : help', value: 'tapée ' + logshelp + ' fois', inline: true },
-                    { name: 'commande : info', value: 'tapée ' + logsinfo + ' fois', inline: true },
-                    { name: 'commande : level', value: 'tapée ' + logslevel + ' fois', inline: true },
-                    { name: 'commande : viewcrea', value: 'tapée ' + logsviewcrea + ' fois', inline: true }
+                    { name: 'commande : cmd', value: 'tapées ' + logscmd + ' fois', inline: true },
+                    { name: 'commande : descript', value: 'tapées ' + logsdescript + ' fois', inline: true },
+                    { name: 'commande : help', value: 'tapées ' + logshelp + ' fois', inline: true },
+                    { name: 'commande : info', value: 'tapées ' + logsinfo + ' fois', inline: true },
+                    { name: 'commande : level', value: 'tapées ' + logslevel + ' fois', inline: true },
+                    { name: 'commande : viewcrea', value: 'tapées ' + logsviewcrea + ' fois', inline: true }
                 )
                 .setColor('0000FF')
                 .setFooter(config.version, message.client.user.avatarURL()))

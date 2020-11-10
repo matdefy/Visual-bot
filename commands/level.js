@@ -13,7 +13,7 @@ module.exports = {
                         .setDescription('✅ Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' ✅')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
-                    message.client.channels.cache.get('766934052174430218').send('Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
+                    message.client.channels.cache.get('775413874920128542').send('Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('⚠️ Veuillez rentrer un level entre `1` et `5` ⚠️')

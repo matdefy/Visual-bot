@@ -18,7 +18,7 @@ module.exports = {
                         .setFooter(config.version, message.client.user.avatarURL()))
                     dbLogs.add('preuve', 1)
                     const creation = db.get(message.author.id).find(crea => crea.id === creationIdPr)
-                    await client.channels.cache.get('764886091295358996').send({
+                    await client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
                             .setDescription('Création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ')')
                             .setColor('#FF0000')
@@ -28,7 +28,7 @@ module.exports = {
                             attachment: creation.url
                         }]
                     })
-                    client.channels.cache.get('764886091295358996').send({
+                    client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
                             .setDescription('Preuve pour la création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ') lien preuve : -' + message.attachments.first().url + '-')
                             .setColor('#FF0000')
