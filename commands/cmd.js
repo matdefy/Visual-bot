@@ -27,51 +27,51 @@ module.exports = {
                                 embed: new Discord.MessageEmbed()
                                     .setTitle(message.author.id)
                                     .setDescription('Commande numéro : [' + numcmd + ']\nUtilisateur : ' + message.author.tag + ' (' + message.author.id + ')')
-                                    .setColor('#E4534E')
+                                    .setColor('#00FF00')
                                     .setFooter(config.version, message.client.user.avatarURL())
                             }).then(msg => {
                                 msg.react('✅')
                             })
                             message.channel.send(new Discord.MessageEmbed()
                                 .setTitle('✅ Commande enregistré ✅')
-                                .setDescription('Aller dans les messages privées de Graph Bot pour avoir tout les détails sur votre  📩 commande 📩 !')
+                                .setDescription('Aller dans les messages privées de Graph Bot pour avoir tout les détails sur votre  📩 commande 📩 !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                                 .setColor('00FF00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                             message.author.createDM().then(channel => {
                                 channel.send(new Discord.MessageEmbed()
                                     .setTitle('✅ Commande enregistré ✅')
-                                    .setDescription(`Votre commande au numéro \`${numcmd}\` sur le serveur ${guild} a bien été prise en compte, vous serez notifiée 🔽 ici 🔽 lorsqu'un graphiste vous auras pris en charge !`)
+                                    .setDescription(`Votre commande au numéro \`${numcmd}\` sur le serveur ${guild} a bien été prise en compte, vous serez notifiée 🔽 ici 🔽 lorsqu'un graphiste vous auras pris en charge !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**`)
                                     .setColor('00FF00')
                                     .setFooter(config.version, message.client.user.avatarURL()))
                             })
                         } else {
                             message.channel.send(new Discord.MessageEmbed()
-                                .setDescription('Le numéro d\'une commande doit être compris entre `1` et `5`, mais pas `' + numcmd + '` !')
-                                .setColor('FF0000')
+                                .setDescription('⚠️ Le numéro d\'une commande doit être compris entre `1` et `5`, mais pas `' + numcmd + '` ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                                .setColor('#e55f2a')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                         }
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️')
-                            .setColor('FF0000')
+                            .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setColor('#e55f2a')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Le salon stockée dans la base de données pour afficher les commandes est invalide ! ⚠️')
-                        .setColor('FF0000')
+                        .setDescription('⚠️ Le salon stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné la catégorie ou créé les tickets de commandes ! ⚠️')
-                    .setColor('FF0000')
+                    .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné la catégorie ou créé les tickets de commandes ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné le salon ou afficher les commandes ! ⚠️')
-                .setColor('FF0000')
+                .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné le salon ou afficher les commandes ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }

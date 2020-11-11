@@ -14,26 +14,26 @@ module.exports = {
                     // Écrire les modifications dans la base de données
                     db.set(user.id, creations)
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Création ' + idcrea + ' validée ! ✅')
-                        .setColor('#FF0000')
+                        .setDescription('✅ Création ' + idcrea + ' validée ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     message.client.channels.cache.get('766934052174430218').send('création validée pour l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️')
-                        .setColor('#FF0000')
+                        .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller mentionner 1 membre ⚠️')
-                    .setColor('#00FF00')
+                    .setDescription('⚠️ Veuiller mentionner 1 membre ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑')
-                .setColor('#00FF00')
+                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }

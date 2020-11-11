@@ -13,7 +13,7 @@ module.exports = {
                         url: message.attachments.first().url
                     })
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Preuve enregistrée pour la création num\éro : `' + creationIdPr + '` ✅\nTapez `*viewpreuve` pour voir toutes les preuves des créations !\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('✅ Preuve enregistrée pour la création num\éro : `' + creationIdPr + '` ✅\nTapez `*viewpreuve` pour voir toutes les preuves des créations !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     dbLogs.add('preuve', 1)
@@ -21,7 +21,7 @@ module.exports = {
                     await client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
                             .setDescription('Création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ')')
-                            .setColor('#FF0000')
+                            .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()),
                         files: [{
                             name: creation.id + '.' + creation.url.split('.').pop(), // récupère l'extension
@@ -31,7 +31,7 @@ module.exports = {
                     client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
                             .setDescription('Preuve pour la création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ') lien preuve : -' + message.attachments.first().url + '-')
-                            .setColor('#FF0000')
+                            .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()),
                         files: [{
                             name: creation.id + '.' + message.attachments.first().url.split('.').pop(), // récupère l'extension
@@ -43,20 +43,20 @@ module.exports = {
                     })
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Création introuvable ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                        .setColor('#00FF00')
+                        .setDescription('⚠️ Création introuvable ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('❌ Veuillez entrer 1 preuve ❌\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('🛑 Veuillez entrer 1 preuve 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                .setColor('#FF0000')
+                .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }

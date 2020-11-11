@@ -17,7 +17,7 @@ module.exports = {
             const logsviewcrea = logs.filter(log => log.cmd === ('*viewcrea')).length
             message.channel.send(new Discord.MessageEmbed()
                 .setTitle('🔽 Information relative aux commandes tapés 🔽')
-                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n \nCommandes tapées aujourd\'hui : **' + logsDay + '**\n \n**❤️ MERCI ❤️**')
+                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n \nCommandes tapées aujourd\'hui : **' + logsDay + '**\n \n**❤️ MERCI ❤️**\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .addFields(
                     { name: 'créations enregistrées', value: creation + ' créations', inline: true },
                     { name: 'preuves enregistrées', value: preuve + ' preuves', inline: true },
@@ -28,7 +28,7 @@ module.exports = {
                     { name: 'commande : level', value: 'tapées ' + logslevel + ' fois', inline: true },
                     { name: 'commande : viewcrea', value: 'tapées ' + logsviewcrea + ' fois', inline: true }
                 )
-                .setColor('0000FF')
+                .setColor('00FF00')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }

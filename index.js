@@ -45,16 +45,16 @@ client.on('message', message => {
     if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd')) {
         if (message.channel.type === 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ⚠️')
-                .setColor('#00FF00')
+                .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }
     if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
         if (message.channel.type !== 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ⚠️')
-                .setColor('#00FF00')
+                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }
@@ -80,7 +80,7 @@ client.on('guildCreate', (guild) => {
     channelInvite.createInvite({
         maxAge: 0
     }).then(invite => {
-        client.channels.cache.get('764869622541189173').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\nInvitation : https://discord.gg/` + invite.code)
+        client.channels.cache.get('764869622541189173').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\n**Invitation :** https://discord.gg/` + invite.code)
     })
     dbLogs.push('guild', {
         date: Date.now(),
@@ -96,65 +96,78 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
-    if (reaction.emoji.name === '✅' && reaction.message.content.startsWith('Preuve') && reaction.message.author.id === '764867987291111506') {
-        if (dbLogs.has('catcmd_' + reaction.message.guild.id)) {
-            const catticketcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
-            const description = reaction.message.embeds[0].description
-            const userID = description.substring(
-                description.lastIndexOf('(') + 1,
-                description.lastIndexOf(')')
-            )
-            const commandID = description.substring(
-                description.lastIndexOf('[') + 1,
-                description.lastIndexOf(']')
-            )
-            const guild = reaction.message.guild
-            reaction.message.guild.channels.create('ticket-' + userID, {
-                parent: catticketcmd,
-                permissionOverwrites: [
-                    {
-                        id: reaction.message.guild.id,
-                        deny: [
-                            'VIEW_CHANNEL'
-                        ]
-                    },
-                    {
-                        id: user.id,
-                        allow: [
-                            'VIEW_CHANNEL'
-                        ]
-                    },
-                    {
-                        id: userID,
-                        allow: [
-                            'VIEW_CHANNEL'
-                        ]
-                    }
-                ]
-            }).then((channel) => {
-                channel.send('<@' + userID + '>')
-                channel.send(new Discord.MessageEmbed()
-                    .setTitle('🔽 Comment passer commande ? 🔽')
-                    .setDescription('client : (' + userID + ') / graphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !')
-                    .setColor('#00FF00')
-                    .setFooter(config.version, client.user.avatarURL())).then(msg => {
-                    msg.react('🔒')
+    if (reaction.emoji.name === '✅' && reaction.message.author.id === '764867987291111506') {
+        // vérification que la catégorie stockée dans la base de données est valide
+        const guildparents = reaction.message.guild.channels.cache
+        const categoriestout = guildparents.filter((salon) => salon.type === 'category')
+        const categoriesId = categoriestout.map(categorie => categorie.id)
+        const dbcatcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
+        if (categoriesId.includes(dbcatcmd)) {
+            // vérification que la catégorie stockée dans la base de données est valide
+            if (dbLogs.has('catcmd_' + reaction.message.guild.id)) {
+                const catticketcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
+                const description = reaction.message.embeds[0].description
+                const userID = description.substring(
+                    description.lastIndexOf('(') + 1,
+                    description.lastIndexOf(')')
+                )
+                const commandID = description.substring(
+                    description.lastIndexOf('[') + 1,
+                    description.lastIndexOf(']')
+                )
+                const guild = reaction.message.guild
+                reaction.message.guild.channels.create('ticket-' + userID, {
+                    parent: catticketcmd,
+                    permissionOverwrites: [
+                        {
+                            id: reaction.message.guild.id,
+                            deny: [
+                                'VIEW_CHANNEL'
+                            ]
+                        },
+                        {
+                            id: user.id,
+                            allow: [
+                                'VIEW_CHANNEL'
+                            ]
+                        },
+                        {
+                            id: userID,
+                            allow: [
+                                'VIEW_CHANNEL'
+                            ]
+                        }
+                    ]
+                }).then((channel) => {
+                    channel.send('<@' + userID + '>')
+                    channel.send(new Discord.MessageEmbed()
+                        .setTitle('🔽 Comment passer commande ? 🔽')
+                        .setDescription('client : (' + userID + ') / graphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setColor('#00FF00')
+                        .setFooter(config.version, client.user.avatarURL())).then(msg => {
+                        msg.react('🔒')
+                    })
                 })
-            })
 
-            client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                .setTitle('🎉 Bonne nouvelle 🎉')
-                .setDescription('Un graphiste a accepté votre commande au numéro `' + commandID + '` sur le serveur ' + guild.name + ', un ticket vous a été créé !')
-                .setColor('#00FF00')
+                client.users.cache.get(userID).send(new Discord.MessageEmbed()
+                    .setTitle('🎉 Bonne nouvelle 🎉')
+                    .setDescription('Un graphiste a accepté votre commande au numéro `' + commandID + '` sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#00FF00')
+                    .setFooter(config.version, client.user.avatarURL()))
+                client.channels.cache.get('776063705480691722').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                dbLogs.push('cmd', {
+                    date: Date.now(),
+                    cmd: commandID,
+                    userId: userID,
+                    guild: guild.id
+                })
+                reaction.message.delete()
+            }
+        } else {
+            reaction.message.channel.send(new Discord.MessageEmbed()
+                .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
-            client.channels.cache.get('766934052174430218').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)')
-            dbLogs.push('cmd', {
-                date: Date.now(),
-                cmd: commandID,
-                userId: userID,
-                guild: guild.id
-            })
-            reaction.message.delete()
         }
     }
 })
@@ -210,15 +223,15 @@ client.on('messageReactionAdd', async (reaction, user) => {
             db.set(userID, creations)
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
                 .setTitle('🎉 Bonne nouvelle 🎉')
-                .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !')
+                .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#00FF00')
                 .setFooter(config.version, client.user.avatarURL()))
             client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) validée par ' + user.tag + ' (`' + user.id + '`) ')
         } else {
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                .setTitle('❌ Preuve invalide ❌')
-                .setDescription('Votre preuve n\'a pas permi de confirmer que la création à l\'id : `' + creationID + '` vous appartenez ! Veuillez donc revoir vos preuves !')
-                .setColor('#00FF00')
+                .setTitle('⚠️ Preuve invalide ⚠️')
+                .setDescription('Votre preuve n\'a pas permi de confirmer que la création à l\'id : `' + creationID + '` vous appartenez ! Veuillez donc revoir vos preuves !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
             // ici on récupère toutes les preuves de l'utilisateur et on garde que celles ou preuve.url n'est pas égal à celle qu'on veut enlever
             const preuvedb = db.get('pr_' + userID).filter((preuve) => preuve.url !== lienpreuveID)

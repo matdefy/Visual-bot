@@ -10,7 +10,7 @@ module.exports = {
                 const nouveauTableau = db.get(message.author.id).filter((element) => element.id !== parseInt(creationId))
                 db.set(message.author.id, nouveauTableau)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Création et preuve(s) numéro `' + creationId + '` supprimées ✅')
+                    .setDescription('✅ Création et preuve(s) numéro `' + creationId + '` supprimées ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()))
                 if (db.get(message.author.id).length === 0) {
@@ -18,14 +18,14 @@ module.exports = {
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Création introuvable ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                    .setColor('#00FF00')
+                    .setDescription('⚠️ Veuiller entrer le numéro d\'une création valide ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                .setColor('#FF0000')
+                .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
         if (db.has('pr_' + message.author.id)) {

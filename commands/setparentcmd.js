@@ -11,19 +11,19 @@ module.exports = {
             if (categoriesId.includes(parentID)) {
                 dbLogs.set('catcmd_' + message.guild.id, parentID)
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ Catégorie pour les tickets de commande à l\'identifiant : `' + parentID + '` enregistré ! ✅')
-                    .setColor('#FF0000')
+                    .setDescription('✅ Catégorie pour les tickets de commande à l\'identifiant : `' + parentID + '` enregistré ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller entrer l\'identifiant d\'une catégorie ⚠️')
-                    .setColor('#00FF00')
+                    .setDescription('⚠️ Veuiller entrer l\'identifiant d\'une catégorie ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑')
-                .setColor('#00FF00')
+                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
     }
