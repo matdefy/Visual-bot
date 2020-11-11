@@ -34,13 +34,13 @@ module.exports = {
                             })
                             message.channel.send(new Discord.MessageEmbed()
                                 .setTitle('✅ Commande enregistré ✅')
-                                .setDescription('Aller dans les messages privées de Graph Bot pour avoir tout les détails sur votre  📩 commande 📩 !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                                .setDescription('Aller dans les messages privés de Graph Bot pour avoir tous les détails sur votre  📩 commande 📩 !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                                 .setColor('00FF00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                             message.author.createDM().then(channel => {
                                 channel.send(new Discord.MessageEmbed()
                                     .setTitle('✅ Commande enregistré ✅')
-                                    .setDescription(`Votre commande au numéro \`${numcmd}\` sur le serveur ${guild} a bien été prise en compte, vous serez notifiée 🔽 ici 🔽 lorsqu'un graphiste vous auras pris en charge !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**`)
+                                    .setDescription(`Votre commande au numéro \`${numcmd}\` sur le serveur ${guild} a bien été prise en compte, vous serez notifiée 🔽 ici 🔽 lorsqu'un graphiste vous aura pris en charge !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**`)
                                     .setColor('00FF00')
                                     .setFooter(config.version, message.client.user.avatarURL()))
                             })
@@ -58,7 +58,7 @@ module.exports = {
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Le salon stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Le salon stocké dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }

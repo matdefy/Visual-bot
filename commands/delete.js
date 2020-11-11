@@ -30,7 +30,7 @@ module.exports = {
                 } else {
                     const user = args[0]
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Utilisateur avec l\'identifiant (`' + user + '`) introuvable ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Utilisateur avec l\'identifiant (`' + user + '`) introuvable ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }

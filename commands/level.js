@@ -16,13 +16,13 @@ module.exports = {
                     message.client.channels.cache.get('775413874920128542').send('Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Veuillez rentrer un level entre `1` et `5` ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Veuillez rentrer un level entre `1` et `5` ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller mentionner 1 membre ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ Veuillez mentionner 1 membre ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }

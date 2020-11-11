@@ -26,7 +26,7 @@ module.exports = {
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller mentionner 1 membre ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ Veuillez mentionner 1 membre ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }

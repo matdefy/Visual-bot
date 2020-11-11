@@ -14,7 +14,7 @@ module.exports = {
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller entrer l\'identifiant d\'un salon ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ Veuillez entrer l\'identifiant d\'un salon ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }

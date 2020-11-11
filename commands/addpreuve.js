@@ -43,19 +43,19 @@ module.exports = {
                     })
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Création introuvable ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Création introuvable ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('🛑 Veuillez entrer 1 preuve 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('🛑 Veuillez entrer 1 preuve ! 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#FF0000')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Aucune création enregistrée dans la base de données ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ Aucune création enregistrée dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

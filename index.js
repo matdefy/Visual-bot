@@ -45,7 +45,7 @@ client.on('message', message => {
     if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd')) {
         if (message.channel.type === 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
@@ -53,7 +53,7 @@ client.on('message', message => {
     if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
         if (message.channel.type !== 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
@@ -142,7 +142,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     channel.send('<@' + userID + '>')
                     channel.send(new Discord.MessageEmbed()
                         .setTitle('🔽 Comment passer commande ? 🔽')
-                        .setDescription('client : (' + userID + ') / graphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('client : (' + userID + ') / graphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliqué sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                         msg.react('🔒')
@@ -230,7 +230,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         } else {
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
                 .setTitle('⚠️ Preuve invalide ⚠️')
-                .setDescription('Votre preuve n\'a pas permi de confirmer que la création à l\'id : `' + creationID + '` vous appartenez ! Veuillez donc revoir vos preuves !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('Votre preuve n\'a pas permis de confirmer que la création à l\'id : `' + creationID + '` vous appartenez, veuillez donc revoir vos preuves !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
             // ici on récupère toutes les preuves de l'utilisateur et on garde que celles ou preuve.url n'est pas égal à celle qu'on veut enlever

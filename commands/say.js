@@ -9,7 +9,7 @@ module.exports = {
                 message.channel.send(message.content.trim().slice(`${config.prefix}say`.length))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller entrer du texte ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ Veuillez entrer du texte ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
