@@ -11,6 +11,11 @@ const dbLogs = new Database('./database_logs.json')
 client.login(config.token)
 client.commands = new Discord.Collection()
 
+const Sentry = require('@sentry/node')
+Sentry.init({
+    dsn: config.dsn
+})
+
 // Système qui gère les commandes dans le dossier
 
 fs.readdir('./commands', (err, files) => {
