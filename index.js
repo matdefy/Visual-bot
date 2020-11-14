@@ -161,7 +161,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     .setDescription('Un graphiste a accepté votre commande au numéro `' + commandID + '` sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#00FF00')
                     .setFooter(config.version, client.user.avatarURL()))
-                client.channels.cache.get('776063705480691722').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                client.channels.cache.get('776063705480691722').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)')
                 dbLogs.push('cmd', {
                     date: Date.now(),
                     cmd: commandID,
