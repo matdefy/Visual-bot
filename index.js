@@ -96,7 +96,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
-    if (reaction.emoji.name === '✅' && reaction.message.author.id === '764867987291111506') {
+    if (reaction.emoji.name === '✅' && reaction.message.author.id === client.user.id) {
         // vérification que la catégorie stockée dans la base de données est valide
         const guildparents = reaction.message.guild.channels.cache
         const categoriestout = guildparents.filter((salon) => salon.type === 'category')
@@ -181,7 +181,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     } else { return }
     await reaction.fetch()
     if (reaction.message.channel.name.startsWith('ticket-')) {
-        if (reaction.emoji.name === '🔒' && reaction.message.author.id === '764867987291111506') {
+        if (reaction.emoji.name === '🔒' && reaction.message.author.id === client.user.id) {
             const description = reaction.message.embeds[0].description
             const graphisteID = description.substring(
                 description.indexOf('+') + 1,
