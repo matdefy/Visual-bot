@@ -17,7 +17,7 @@ module.exports = {
                         .setDescription('✅ Création ' + idcrea + ' validée ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
-                    message.client.channels.cache.get('766934052174430218').send('création validée pour l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
+                    message.client.channels.cache.get('775411371189862410').send('création validée pour l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')

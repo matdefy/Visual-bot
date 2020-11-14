@@ -4,7 +4,7 @@ const config = require('../config.json')
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
         const user = message.mentions.users.first()
-        if (message.member.hasPermission('KICK_MEMBERS') && message.guild.id === '764869621982691329') {
+        if (message.member.hasPermission('KICK_MEMBERS') && message.guild.id === '775274490723827712') {
             if (message.mentions.users.size === 1) {
                 if (args[1] < 6) {
                     const numlevel = args[1]

@@ -42,7 +42,7 @@ setInterval(() => {
 
 client.on('message', message => {
     if (message.type !== 'DEFAULT' || message.author.bot) return
-    if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd')) {
+    if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd') || message.content.startsWith(config.prefix + 'say')) {
         if (message.channel.type === 'dm') {
             return message.channel.send(new Discord.MessageEmbed()
                 .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
@@ -80,7 +80,7 @@ client.on('guildCreate', (guild) => {
     channelInvite.createInvite({
         maxAge: 0
     }).then(invite => {
-        client.channels.cache.get('764869622541189173').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\n**Invitation :** https://discord.gg/` + invite.code)
+        client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\n**Invitation :** https://discord.gg/` + invite.code)
     })
     dbLogs.push('guild', {
         date: Date.now(),
