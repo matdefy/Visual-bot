@@ -97,6 +97,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     } else { return }
     await reaction.fetch()
     if (reaction.emoji.name === '✅' && reaction.message.author.id === client.user.id) {
+        const channelID = dbLogs.get('channelcmd_' + reaction.message.guild.id)
+        if (reaction.message.channel.id !== channelID) return
         // vérification que la catégorie stockée dans la base de données est valide
         const guildparents = reaction.message.guild.channels.cache
         const categoriestout = guildparents.filter((salon) => salon.type === 'category')
