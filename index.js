@@ -122,6 +122,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     description.lastIndexOf('[') + 1,
                     description.lastIndexOf(']')
                 )
+                const descriptcmd = description.substring(
+                    description.lastIndexOf('<') + 1,
+                    description.lastIndexOf('>')
+                )
                 const guild = reaction.message.guild
                 reaction.message.guild.channels.create('ticket-' + userID, {
                     parent: catticketcmd,
@@ -149,7 +153,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     channel.send('<@' + userID + '>')
                     channel.send(new Discord.MessageEmbed()
                         .setTitle('🔽 Comment passer commande ? 🔽')
-                        .setDescription('client : (' + userID + ') / graphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliqué sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliqué sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                         msg.react('🔒')
@@ -172,7 +176,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             }
         } else {
             reaction.message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
         }
