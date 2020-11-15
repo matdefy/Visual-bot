@@ -33,7 +33,8 @@ fs.readdir('./commands', (err, files) => {
 
 const statuses = [
     'MP le bot',
-    'pour enregistrer des 🎨 créations 🎨 !'
+    'pour enregistrer des 🎨 créations 🎨 !',
+    'regarder !gb help'
 ]
 let i = 5
 setInterval(() => {
