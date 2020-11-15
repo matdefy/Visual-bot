@@ -15,7 +15,7 @@ module.exports = {
             })
             dbLogs.add('creation', 1)
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('✅ Création enregistrée au num\éro : `' + creationId + '` ✅\nTapez `*addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('✅ Création enregistrée au num\éro : `' + creationId + '` ✅\nTapez `!gbaddpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#00FF00')
                 .setFooter(config.version, message.client.user.avatarURL()))
         } else {

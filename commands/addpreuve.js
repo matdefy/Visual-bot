@@ -13,7 +13,7 @@ module.exports = {
                         url: message.attachments.first().url
                     })
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Preuve enregistrée pour la création num\éro : `' + creationIdPr + '` ✅\nTapez `*viewpreuve` pour voir toutes les preuves des créations !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('✅ Preuve enregistrée pour la création num\éro : `' + creationIdPr + '` ✅\nTapez `!gbviewpreuve` pour voir toutes les preuves des créations !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     dbLogs.add('preuve', 1)
