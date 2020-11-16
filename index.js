@@ -102,6 +102,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
+    if (reaction.message.channel.type === 'dm') return
     if (reaction.emoji.name === '✅' && reaction.message.author.id === client.user.id) {
         const channelID = dbLogs.get('channelcmd_' + reaction.message.guild.id)
         if (reaction.message.channel.id !== channelID) return
@@ -200,6 +201,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
+    if (reaction.message.channel.type === 'dm') return
     if (reaction.message.channel.name.startsWith('ticket-')) {
         if (reaction.emoji.name === '🔒' && reaction.message.author.id === client.user.id) {
             const description = reaction.message.embeds[0].description
@@ -259,6 +261,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             db.set('pr_' + userID, preuvedb)
         }
         reaction.message.channel.messages.cache.filter(message => {
+            if (message.embeds.length === 0) return false
             const description2 = message.embeds[0].description
             const userID2 = description2.substring(
                 description2.lastIndexOf('(') + 1,
@@ -291,6 +294,22 @@ job.start()
 
 client.on('ready', async () => {
     client.channels.cache.get('775274490723827715').messages.fetch()
+
+    // Système qui gère le jeu du bot
+
+    const statuses = [
+        'MP le bot',
+        'pour enregistrer des 🎨 créations 🎨 !',
+        'regarder !gb help'
+    ]
+    let i = 5
+    setInterval(() => {
+        client.user.setActivity(statuses[i], { type: 'PLAYING' })
+        i = ++i % statuses.length
+    }, 20 * 1000)
+
+    // Système qui gère le jeu du bot
+
     console.log('✅ bot connecté ✅')
 })
 
