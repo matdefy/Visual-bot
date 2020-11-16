@@ -153,8 +153,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             id: '747833110376218624',
                             allow: [
                                 'VIEW_CHANNEL',
-                                'ADD_REACTIONS',
-                                'MANAGE_CHANNEL'
+                                'ADD_REACTIONS'
                             ]
                         }
                     ]
