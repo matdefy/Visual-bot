@@ -153,7 +153,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             id: '747833110376218624',
                             allow: [
                                 'VIEW_CHANNEL',
-                                'ADD_REACTIONS'
+                                'ADD_REACTIONS',
+                                'MANAGE_CHANNEL'
                             ]
                         }
                     ]
@@ -161,7 +162,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     channel.send('<@' + userID + '>')
                     channel.send(new Discord.MessageEmbed()
                         .setTitle('🔽 Comment passer commande ? 🔽')
-                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliqué sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                         msg.react('🔒')
