@@ -29,21 +29,6 @@ fs.readdir('./commands', (err, files) => {
 
 // Système qui gère les commandes dans le dossier
 
-// Système qui gère le jeu du bot
-
-const statuses = [
-    'MP le bot',
-    'pour enregistrer des 🎨 créations 🎨 !',
-    'regarder !gbhelp'
-]
-let i = 5
-setInterval(() => {
-    client.user.setActivity(statuses[i], { type: 'PLAYING' })
-    i = ++i % statuses.length
-}, 20 * 1000)
-
-// Système qui gère le jeu du bot
-
 // Système qui dirige les commandes tapées
 
 client.on('message', message => {
@@ -300,7 +285,7 @@ client.on('ready', async () => {
     const statuses = [
         'MP le bot',
         'pour enregistrer des 🎨 créations 🎨 !',
-        'regarder !gb help'
+        'regarder !gbhelp'
     ]
     let i = 5
     setInterval(() => {
