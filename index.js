@@ -280,6 +280,13 @@ job.start()
 client.on('ready', async () => {
     client.channels.cache.get('775274490723827715').messages.fetch()
 
+    Object.keys(dbLogs.data).forEach(element => {
+        if (element.startsWith('channelcmd_')) {
+            const channelID = dbLogs.data[element]
+            client.channels.cache.get(channelID).messages.fetch()
+        }
+    })
+
     // Système qui gère le jeu du bot
 
     const statuses = [
