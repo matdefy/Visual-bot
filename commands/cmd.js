@@ -27,7 +27,7 @@ module.exports = {
                                 const channelCMD = dbLogs.get('channelcmd_' + message.guild.id)
                                 client.channels.cache.get(channelCMD).send({
                                     embed: new Discord.MessageEmbed()
-                                        .setTitle(message.author.id)
+                                        .setTitle('🎉 Nouvelle commande 🎉')
                                         .setDescription('Commande numéro : [' + numcmd + ']\nDescription : <' + descriptcmd + '>\nUtilisateur : ' + message.author.tag + ' (' + message.author.id + ')')
                                         .setColor('#00FF00')
                                         .setFooter(config.version, message.client.user.avatarURL())
