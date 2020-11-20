@@ -30,7 +30,7 @@ module.exports = {
                     })
                     client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
-                            .setDescription('Preuve pour la création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ') lien preuve : -' + message.attachments.first().url + '-')
+                            .setDescription('Preuve pour la création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ')\nlien preuve : -' + message.attachments.first().url + '-')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()),
                         files: [{

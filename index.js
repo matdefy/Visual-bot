@@ -148,7 +148,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     channel.send('<@' + userID + '>')
                     channel.send(new Discord.MessageEmbed()
                         .setTitle('🔽 Comment passer commande ? 🔽')
-                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒 (seul le graphiste peut supprimer le ticket) !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                         msg.react('🔒')
@@ -189,14 +189,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.message.channel.type === 'dm') return
     if (reaction.message.channel.name.startsWith('ticket-')) {
         if (reaction.emoji.name === '🔒' && reaction.message.author.id === client.user.id) {
-            const description = reaction.message.embeds[0].description
-            const graphisteID = description.substring(
-                description.indexOf('+') + 1,
-                description.lastIndexOf('+')
-            )
-            if (user.id === graphisteID) {
-                reaction.message.channel.delete()
-            }
+            reaction.message.channel.delete()
         }
     }
 })
