@@ -120,19 +120,22 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         {
                             id: reaction.message.guild.id,
                             deny: [
-                                'VIEW_CHANNEL'
+                                'VIEW_CHANNEL',
+                                'ATTACH_FILES'
                             ]
                         },
                         {
                             id: user.id,
                             allow: [
-                                'VIEW_CHANNEL'
+                                'VIEW_CHANNEL',
+                                'ATTACH_FILES'
                             ]
                         },
                         {
                             id: userID,
                             allow: [
-                                'VIEW_CHANNEL'
+                                'VIEW_CHANNEL',
+                                'ATTACH_FILES'
                             ]
                         },
                         {
@@ -140,7 +143,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             allow: [
                                 'VIEW_CHANNEL',
                                 'ADD_REACTIONS',
-                                'MANAGE_CHANNELS'
+                                'MANAGE_CHANNELS',
+                                'ATTACH_FILES'
                             ]
                         }
                     ]
