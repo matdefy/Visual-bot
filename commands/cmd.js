@@ -60,25 +60,25 @@ module.exports = {
                         }
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `!gbsetparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                             .setColor('#e55f2a')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Le salon stocké dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Le salon stocké dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `!gbsetchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné la catégorie ou créé les tickets de commandes ! ⚠️\nTapez `*setparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné la catégorie ou créé les tickets de commandes ! ⚠️\nTapez `!gbsetparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné le salon ou afficher les commandes ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné le salon ou afficher les commandes ! ⚠️\nTapez `!gbsetchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }
