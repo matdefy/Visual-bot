@@ -280,7 +280,9 @@ client.on('ready', async () => {
     Object.keys(dbLogs.data).forEach(element => {
         if (element.startsWith('channelcmd_')) {
             const channelID = dbLogs.data[element]
-            client.channels.cache.get(channelID).messages.fetch()
+            const channel = client.channels.cache.get(channelID)
+            if (!channel) return
+            channel.messages.fetch()
         }
     })
 
