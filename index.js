@@ -275,7 +275,7 @@ job.start()
 // Système activé lors du démarrage du bot
 
 client.on('ready', async () => {
-    client.channels.cache.get('775274490723827715').message.fetch()
+    client.channels.cache.get('775274490723827715').messages.fetch()
 
     Object.keys(dbLogs.data).forEach(element => {
         if (element.startsWith('channelcmd_')) {
