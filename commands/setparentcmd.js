@@ -2,14 +2,14 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args, client, dbLogs) => {
+    run: (db, message, args, client) => {
         if (message.member.hasPermission('KICK_MEMBERS')) {
             const parentID = args[0]
             const guildparents = message.guild.channels.cache
             const categoriestout = guildparents.filter((categorie) => categorie.type === 'category')
             const categoriesId = categoriestout.map(id => id.id)
             if (categoriesId.includes(parentID)) {
-                dbLogs.set('catcmd_' + message.guild.id, parentID)
+                db.set('catcmd_' + message.guild.id, parentID)
                 message.channel.send(new Discord.MessageEmbed()
                     .setDescription('✅ Catégorie pour les tickets de commande à l\'identifiant : `' + parentID + '` enregistré ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#00FF00')

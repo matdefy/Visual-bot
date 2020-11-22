@@ -2,12 +2,12 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args, client, dbLogs) => {
+    run: (db, message, args, client) => {
         if (message.member.hasPermission('KICK_MEMBERS')) {
             const channelID = args[0]
             const guildchannels = message.guild.channels.cache.map(channel => channel.id)
             if (guildchannels.includes(channelID)) {
-                dbLogs.set('channelcmd_' + message.guild.id, channelID)
+                db.set('channelcmd_' + message.guild.id, channelID)
                 message.channel.send(new Discord.MessageEmbed()
                     .setDescription('✅ Salon de commande à l\'identifiant : `' + channelID + '` enregistré ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                     .setColor('#00FF00')

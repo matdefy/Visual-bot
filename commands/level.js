@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args, client, dbLogs) => {
+    run: (db, message, args, client) => {
         const user = message.mentions.users.first()
         if (message.member.hasPermission('KICK_MEMBERS') && message.guild.id === '775274490723827712') {
             if (message.mentions.users.size === 1) {

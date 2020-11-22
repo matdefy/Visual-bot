@@ -89,17 +89,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
     await reaction.fetch()
     if (reaction.message.channel.type === 'dm') return
     if (reaction.emoji.name === '✅' && reaction.message.author.id === client.user.id) {
-        const channelID = dbLogs.get('channelcmd_' + reaction.message.guild.id)
+        const channelID = db.get('channelcmd_' + reaction.message.guild.id)
         if (reaction.message.channel.id !== channelID) return
         // vérification que la catégorie stockée dans la base de données est valide
         const guildparents = reaction.message.guild.channels.cache
         const categoriestout = guildparents.filter((salon) => salon.type === 'category')
         const categoriesId = categoriestout.map(categorie => categorie.id)
-        const dbcatcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
+        const dbcatcmd = db.get('catcmd_' + reaction.message.guild.id)
         if (categoriesId.includes(dbcatcmd)) {
             // vérification que la catégorie stockée dans la base de données est valide
-            if (dbLogs.has('catcmd_' + reaction.message.guild.id)) {
-                const catticketcmd = dbLogs.get('catcmd_' + reaction.message.guild.id)
+            if (db.has('catcmd_' + reaction.message.guild.id)) {
+                const catticketcmd = db.get('catcmd_' + reaction.message.guild.id)
                 const description = reaction.message.embeds[0].description
                 const userID = description.substring(
                     description.lastIndexOf('(') + 1,

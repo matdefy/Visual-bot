@@ -2,14 +2,14 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args, client, dbLogs) => {
+    run: (db, message, args, client) => {
         const numcmd = args[0]
         const descriptcmd = message.content.trim().slice(`${config.prefix}cmd ${numcmd} `.length)
         const guild = message.guild.name
-        if (dbLogs.has('channelcmd_' + message.guild.id)) {
-            if (dbLogs.has('catcmd_' + message.guild.id)) {
+        if (db.has('channelcmd_' + message.guild.id)) {
+            if (db.has('catcmd_' + message.guild.id)) {
                 // vérification que le salon stockée dans la base de données est valide
-                const channelID = dbLogs.get('channelcmd_' + message.guild.id)
+                const channelID = db.get('channelcmd_' + message.guild.id)
                 const guildchannels = message.guild.channels.cache.map(channel => channel.id)
                 if (guildchannels.includes(channelID)) {
                 // vérification que le salon stockée dans la base de données est valide
@@ -18,13 +18,13 @@ module.exports = {
                     const guildparents = message.guild.channels.cache
                     const categoriestout = guildparents.filter((salon) => salon.type === 'category')
                     const categoriesId = categoriestout.map(categorie => categorie.id)
-                    const dbcatcmd = dbLogs.get('catcmd_' + message.guild.id)
+                    const dbcatcmd = db.get('catcmd_' + message.guild.id)
                     if (categoriesId.includes(dbcatcmd)) {
                     // vérification que la catégorie stockée dans la base de données est valide
 
                         if (numcmd < 6) {
                             if (descriptcmd.length > 14) {
-                                const channelCMD = dbLogs.get('channelcmd_' + message.guild.id)
+                                const channelCMD = db.get('channelcmd_' + message.guild.id)
                                 client.channels.cache.get(channelCMD).send({
                                     embed: new Discord.MessageEmbed()
                                         .setTitle('🎉 Nouvelle commande 🎉')
