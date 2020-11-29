@@ -14,7 +14,7 @@ https://github.com/matdefy/Graph-bot
 {
     "token": "Your discord bot token",
     "prefix": "!gb",
-    "version": 2.2.0,
+    "version": "2.2.0",
     "dsn": "https://d61475e14cfa459b8fd9164e0621c8ae@o476645.ingest.sentry.io/5516637"
 }
 ```
