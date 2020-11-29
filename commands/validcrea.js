@@ -6,13 +6,13 @@ module.exports = {
         const user = message.mentions.users.first()
         if (message.member.hasPermission('KICK_MEMBERS') && message.guild.id === '764869621982691329') {
             if (message.mentions.users.size === 1) {
-                if (db.has(user.id)) {
-                    const creations = db.get(user.id)
+                if (db.has('crea_' + user.id)) {
+                    const creations = db.get('crea_' + user.id)
                     const idcrea = args[0]
                     // Récupérer et modifier une creation
                     creations.find((creation) => creation.id === parseInt(idcrea)).verif = '✅'
                     // Écrire les modifications dans la base de données
-                    db.set(user.id, creations)
+                    db.set('crea_' + user.id, creations)
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('✅ Création ' + idcrea + ' validée ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')

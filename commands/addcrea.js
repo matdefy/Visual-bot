@@ -4,11 +4,11 @@ const config = require('../config.json')
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
         let creationId = 1
-        if (db.has(message.author.id)) {
-            creationId = db.get(message.author.id).length + 1
+        if (db.has('crea_' + message.author.id)) {
+            creationId = db.get('crea_' + message.author.id).length + 1
         }
         if (message.attachments.size === 1) {
-            db.push(message.author.id, {
+            db.push('crea_' + message.author.id, {
                 id: creationId,
                 url: message.attachments.first().url,
                 verif: '❌'

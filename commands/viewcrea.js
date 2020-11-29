@@ -5,8 +5,8 @@ module.exports = {
     run: (db, message, args) => {
         const user = message.mentions.users.first()
         if (message.mentions.users.size === 1) {
-            if (db.has(user.id)) {
-                const creations = db.get(user.id)
+            if (db.has('crea_' + user.id)) {
+                const creations = db.get('crea_' + user.id)
                 const text = creations.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'vérification ' + crea.verif + '\n')
                 message.channel.send({
                     embed: new Discord.MessageEmbed()
@@ -43,8 +43,8 @@ module.exports = {
             }
         }
         if (message.mentions.users.size === 0) {
-            if (db.has(message.author.id)) {
-                const creations2 = db.get(message.author.id)
+            if (db.has('crea_' + message.author.id)) {
+                const creations2 = db.get('crea_' + message.author.id)
                 const text2 = creations2.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'vérification ' + crea.verif + '\n')
                 message.channel.send({
                     embed: new Discord.MessageEmbed()

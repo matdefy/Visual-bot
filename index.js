@@ -33,33 +33,67 @@ fs.readdir('./commands', (err, files) => {
 
 client.on('message', message => {
     if (message.type !== 'DEFAULT' || message.author.bot) return
-    if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd') || message.content.startsWith(config.prefix + 'say')) {
-        if (message.channel.type === 'dm') {
+    if (message.channel.type === 'dm') {
+        if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd') || message.content.startsWith(config.prefix + 'say') || message.content.startsWith(config.prefix + 'setprefix')) {
             return message.channel.send(new Discord.MessageEmbed()
                 .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
+        } else {
+            const args = message.content.trim().split(/ +/g)
+            const commandName = args.shift().toLowerCase()
+            if (!commandName.startsWith(config.prefix)) return
+            const command = client.commands.get(commandName.slice(config.prefix.length))
+            if (!command) return
+            command.run(db, message, args, client, dbLogs)
+            dbLogs.push('logs', {
+                date: Date.now(),
+                cmd: commandName.slice(config.prefix.length),
+                userId: message.author.id
+            })
+        }
+    } else {
+        if (db.has('prefix_' + message.guild.id)) {
+            const prefix = db.get('prefix_' + message.guild.id)
+            if (message.content.startsWith(prefix + 'viewpreuve') || message.content.startsWith(prefix + 'addpreuve')) {
+                return message.channel.send(new Discord.MessageEmbed()
+                    .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
+                    .setFooter(config.version, message.client.user.avatarURL()))
+            } else {
+                const args = message.content.trim().split(/ +/g)
+                const commandName = args.shift().toLowerCase()
+                if (!commandName.startsWith(prefix)) return
+                const command = client.commands.get(commandName.slice(prefix.length))
+                if (!command) return
+                command.run(db, message, args, client, dbLogs)
+                dbLogs.push('logs', {
+                    date: Date.now(),
+                    cmd: commandName.slice(prefix.length),
+                    userId: message.author.id
+                })
+            }
+        } else {
+            if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
+                return message.channel.send(new Discord.MessageEmbed()
+                    .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setColor('#e55f2a')
+                    .setFooter(config.version, message.client.user.avatarURL()))
+            } else {
+                const args = message.content.trim().split(/ +/g)
+                const commandName = args.shift().toLowerCase()
+                if (!commandName.startsWith(config.prefix)) return
+                const command = client.commands.get(commandName.slice(config.prefix.length))
+                if (!command) return
+                command.run(db, message, args, client, dbLogs)
+                dbLogs.push('logs', {
+                    date: Date.now(),
+                    cmd: commandName.slice(config.prefix.length),
+                    userId: message.author.id
+                })
+            }
         }
     }
-    if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
-        if (message.channel.type !== 'dm') {
-            return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                .setColor('#e55f2a')
-                .setFooter(config.version, message.client.user.avatarURL()))
-        }
-    }
-    const args = message.content.trim().split(/ +/g)
-    const commandName = args.shift().toLowerCase()
-    if (!commandName.startsWith(config.prefix)) return
-    const command = client.commands.get(commandName.slice(config.prefix.length))
-    if (!command) return
-    command.run(db, message, args, client, dbLogs)
-    dbLogs.push('logs', {
-        date: Date.now(),
-        cmd: commandName,
-        userId: message.author.id
-    })
 })
 
 // Système qui dirige les commandes tapées
@@ -222,9 +256,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
             description.lastIndexOf('-')
         )
         if (reaction.emoji.name === '✅') {
-            const creations = db.get(userID)
+            const creations = db.get('crea_' + userID)
             creations.find((creation) => creation.id === parseInt(creationID)).verif = '✅'
-            db.set(userID, creations)
+            db.set('crea_' + userID, creations)
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
                 .setTitle('🎉 Bonne nouvelle 🎉')
                 .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')

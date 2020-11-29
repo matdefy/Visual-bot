@@ -5,9 +5,9 @@ module.exports = {
     run: (db, message, args) => {
         if (message.mentions.users.size === 0) {
             if (message.channel.type === 'dm') {
-                if (db.has('pr_' + message.author.id) || db.has(message.author.id)) {
+                if (db.has('pr_' + message.author.id) || db.has('crea_' + message.author.id)) {
                     db.delete('pr_' + message.author.id)
-                    db.delete(message.author.id)
+                    db.delete('crea_' + message.author.id)
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#00FF00')
@@ -20,10 +20,10 @@ module.exports = {
                 }
             } else {
                 if (message.guild.id === '775274490723827712') {
-                    if (db.get(args[0])) {
+                    if (db.get('crea_' + args[0])) {
                         const user = args[0]
                         db.delete('pr_' + user)
-                        db.delete(user)
+                        db.delete('crea_' + user)
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('✅ (`' + user + '`) n\'est plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                             .setColor('#00FF00')
@@ -36,9 +36,9 @@ module.exports = {
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
-                    if (db.has('pr_' + message.author.id) || db.has(message.author.id)) {
+                    if (db.has('pr_' + message.author.id) || db.has('crea_' + message.author.id)) {
                         db.delete('pr_' + message.author.id)
-                        db.delete(message.author.id)
+                        db.delete('crea_' + message.author.id)
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                             .setColor('#00FF00')

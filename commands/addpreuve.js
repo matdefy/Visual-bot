@@ -4,8 +4,8 @@ const config = require('../config.json')
 module.exports = {
     run: async (db, message, args, client, dbLogs) => {
         const creationIdPr = parseInt(args[0])
-        if (db.has(message.author.id)) {
-            const creationIdverif = db.get(message.author.id).some((creation) => creation.id === parseInt(args[0]))
+        if (db.has('crea_' + message.author.id)) {
+            const creationIdverif = db.get('crea_' + message.author.id).some((creation) => creation.id === parseInt(args[0]))
             if (message.attachments.size === 1) {
                 if (creationIdverif) {
                     db.push('pr_' + message.author.id, {
@@ -17,7 +17,7 @@ module.exports = {
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     dbLogs.add('preuve', 1)
-                    const creation = db.get(message.author.id).find(crea => crea.id === creationIdPr)
+                    const creation = db.get('crea_' + message.author.id).find(crea => crea.id === creationIdPr)
                     await client.channels.cache.get('775274490723827715').send({
                         embed: new Discord.MessageEmbed()
                             .setDescription('Création numéro [' + creationIdPr + '] / Utilisateur : (' + message.author.id + ')')
