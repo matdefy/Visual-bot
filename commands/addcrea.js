@@ -11,7 +11,8 @@ module.exports = {
             db.push('crea_' + message.author.id, {
                 id: creationId,
                 url: message.attachments.first().url,
-                verif: '❌'
+                verif: '❌',
+                advance: '✅'
             })
             dbLogs.add('creation', 1)
             message.channel.send(new Discord.MessageEmbed()
