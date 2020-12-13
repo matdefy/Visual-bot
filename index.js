@@ -16,6 +16,23 @@ Sentry.init({
     dsn: config.dsn
 })
 
+/* const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => {
+    res.send(`<html>
+    <head></head>
+    <body>
+        <font size=""><font face="FreeMono, monospace">Un système de prise de commande intelligent, un enregistrement de création, Graph Bot est fait pour vous ! Utilisé sur ${client.guilds.cache.size} serveurs actuellement !</font></font>
+    </body>
+</html>`)
+})
+
+app.listen(port, () => {
+    console.log(`GraphBot écoute le web sur le port ${port}`)
+}) */
+
 // Système qui gère les commandes dans le dossier
 
 fs.readdir('./commands', (err, files) => {
