@@ -3,3 +3,5 @@ config.json
 database.json
 database_logs.json
 backupdatabase
+package.json
+package-lock.json
