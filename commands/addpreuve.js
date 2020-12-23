@@ -43,7 +43,7 @@ module.exports = {
                     })
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Création introuvable ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ Veuillez entrer le numéro d\'une création valide ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
