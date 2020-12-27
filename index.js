@@ -497,7 +497,7 @@ job.start()
 
 // Système d'installhelp
 
-/* client.on('messageReactionAdd', async (reaction, user) => {
+client.on('messageReactionAdd', async (reaction, user) => {
     if (!user.bot) {
     } else { return }
     await reaction.fetch()
@@ -549,9 +549,7 @@ job.start()
                 .setFooter(config.version, reaction.message.client.user.avatarURL()))
         }
     }
-}) */
-
-// système d'installhelp
+})
 
 // Système activé lors du démarrage du bot
 

@@ -12,9 +12,7 @@ module.exports = {
                 const urlcrea = creations.find((creation) => creation.id === parseInt(idcrea)).url
                 const ORIGINAL_IMAGE = urlcrea
 
-                const LOGO = 'https://cdn.discordapp.com/attachments/791336914379997205/791337724140453908/pere_noel.png'
-
-                const LOGO_MARGIN_PERCENTAGE = 5
+                const LOGO = 'https://cdn.discordapp.com/attachments/791336914379997205/792694216262156298/graph_bot_5_filigrane.png'
 
                 const FILENAME = urlcrea
                 const urlFichier = FILENAME.split('.')
@@ -26,15 +24,9 @@ module.exports = {
                         Jimp.read(LOGO)
                     ])
 
-                    logo.resize(image.bitmap.width / 5, Jimp.AUTO)
+                    logo.resize(image.bitmap.width / 1, image.bitmap.height / 1)
 
-                    const xMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
-                    const yMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
-
-                    const X = image.bitmap.width - logo.bitmap.width - xMargin
-                    const Y = image.bitmap.height - logo.bitmap.height - yMargin
-
-                    return image.composite(logo, X, Y, [
+                    return image.composite(logo, 0, 0, [
                         {
                             mode: Jimp.BLEND_SCREEN,
                             opacitySource: 0.1,
@@ -50,7 +42,7 @@ module.exports = {
                             creations.find((creation) => creation.id === parseInt(idcrea)).url = imageAvecFiligrane
                         })
                         message.channel.send(new Discord.MessageEmbed()
-                            .setTitle('🎄 Joyeux noël 🎄')
+                            .setTitle('✅ Filigrane appliqué sur la création numéro ' + idcrea + ' ! ✅')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     })
