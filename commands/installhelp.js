@@ -8,8 +8,8 @@ module.exports = {
         const channelcmd = db.has('channelcmd_' + message.guild.id)
 
         message.channel.send(new Discord.MessageEmbed()
-            .setTitle('⚙️ Aide d\'installation ⚙️')
-            .setDescription('Bienvenue dans l\'aide d\'installation, après avoir suivi ce tuto pas à pas, Graph Bot sera entièrement configuré sur votre serveur !\n\nSi vous rencontrez des difficultés pour la configuration du bot, il vous suffit de rejoindre le serveur de support : **https://discord.gg/pUj3AK5u5V**, et de créer un ticket dans ce channel : <#751360635928838175> !')
+            .setTitle('⚙️ Aide d\'installation')
+            .setDescription('Bienvenue dans l\'aide d\'installation, après avoir suivi ce tuto pas à pas, Graph Bot sera entièrement configuré sur votre serveur !\n\nSi vous rencontrez des difficultés pour la configuration du bot, il vous suffit de rejoindre le serveur de support **https://discord.gg/pUj3AK5u5V**, et de créer un ticket dans ce channel <#751360635928838175> !')
             .setColor('#e55f2a')
             .setFooter(config.version, message.client.user.avatarURL()))
         message.channel.send('**Vérification de la configuration actuelle du serveur...**').then(msg => {

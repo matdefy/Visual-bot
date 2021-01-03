@@ -4,6 +4,12 @@ const Jimp = require('jimp')
 
 module.exports = {
     run: (db, message, args, client) => {
+        let prefix = '!gb'
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
         if (db.has('crea_' + message.author.id)) {
             const creations = db.get('crea_' + message.author.id)
             const creationIdverif = db.get('crea_' + message.author.id).some((creation) => creation.id === parseInt(args[0]))
@@ -42,20 +48,20 @@ module.exports = {
                             creations.find((creation) => creation.id === parseInt(idcrea)).url = imageAvecFiligrane
                         })
                         message.channel.send(new Discord.MessageEmbed()
-                            .setTitle('✅ Filigrane appliqué sur la création numéro ' + idcrea + ' ! ✅')
+                            .setDescription('✅ **Filigrane appliqué sur la création numéro ' + idcrea + '**\n\n**(rejoigner le **[serveur](https://discord.gg/pUj3AK5u5V)** de support pour obtenir de l\'aide)**')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     })
                 })
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuillez entrer le numéro d\'une création valide ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ **Veuillez entrer le numéro d\'une création valide**\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n**(rejoigner le **[serveur](https://discord.gg/pUj3AK5u5V)** de support pour obtenir de l\'aide)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ **Vous n\'êtes pas enregistré dans la base de données**\n\n**(rejoigner le **[serveur](https://discord.gg/pUj3AK5u5V)** de support pour obtenir de l\'aide)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

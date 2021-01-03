@@ -10,25 +10,25 @@ module.exports = {
                     const numlevel = args[1]
                     db.set('level_' + user.id, parseInt(numlevel))
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('✅ **Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + '**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     message.client.channels.cache.get('775413874920128542').send('Level ' + parseInt(numlevel) + ' attribué à l\'utilisateur ' + user.tag + ' (`' + user.id + '`) Par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Veuillez rentrer un level entre `1` et `5` ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ **Veuillez rentrer un level entre `1` et `5`**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuillez mentionner 1 membre ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ **Veuillez mentionner 1 membre**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('🛑 **Vous n\'avez pas les permissions suffisantes**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

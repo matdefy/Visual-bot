@@ -3,6 +3,12 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args) => {
+        let prefix = '!gb'
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
         const user = message.mentions.users.first()
         if (message.mentions.users.size === 1) {
             if (db.has('crea_' + user.id)) {
@@ -22,22 +28,20 @@ module.exports = {
                 })
                 if (db.has('descript_' + user.id)) {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setTitle('Description :')
-                        .setDescription(db.get('descript_' + user.id) + '\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('**💬 description :**\n\n' + db.get('descript_' + user.id))
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
                 if (db.has('level_' + user.id)) {
                     const level = db.get('level_' + user.id)
                     message.channel.send(new Discord.MessageEmbed()
-                        .setTitle('Level :')
-                        .setDescription('`' + level + '`')
+                        .setDescription('**🔢 level : **' + '`' + level + '`')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ **Ce membre n\'est pas enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
@@ -63,22 +67,20 @@ module.exports = {
                         })
                         if (db.has('descript_' + memberID)) {
                             message.channel.send(new Discord.MessageEmbed()
-                                .setTitle('Description :')
-                                .setDescription(db.get('descript_' + memberID) + '\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                                .setDescription('**💬 description :**\n\n' + db.get('descript_' + memberID))
                                 .setColor('#FF0000')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                         }
                         if (db.has('level_' + memberID)) {
                             const level = db.get('level_' + memberID)
                             message.channel.send(new Discord.MessageEmbed()
-                                .setTitle('Level :')
-                                .setDescription('`' + level + '`')
+                                .setDescription('**🔢 level : **' + '`' + level + '`')
                                 .setColor('#FF0000')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                         }
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ Ce membre n\'est pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('⚠️ **Ce membre n\'est pas enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                             .setColor('#e55f2a')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
@@ -101,22 +103,20 @@ module.exports = {
                     })
                     if (db.has('descript_' + message.author.id)) {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setTitle('Description :')
-                            .setDescription(db.get('descript_' + message.author.id) + '\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('**💬 description :**\n\n' + db.get('descript_' + message.author.id))
                             .setColor('#FF0000')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                     if (db.has('level_' + message.author.id)) {
                         const level = db.get('level_' + message.author.id)
                         message.channel.send(new Discord.MessageEmbed()
-                            .setTitle('Level :')
-                            .setDescription('`' + level + '`')
+                            .setDescription('**🔢 level : **' + '`' + level + '`')
                             .setColor('#FF0000')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ **Vous n\'êtes pas enregistré dans la base de données**\n\n`' + prefix + 'addcrea [votre création]` : permet d\'enregistrer une création dans la base de données !\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }

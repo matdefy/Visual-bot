@@ -4,6 +4,12 @@ const Jimp = require('jimp')
 
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
+        let prefix = '!gb'
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
         let creationId = 1
         if (db.has('crea_' + message.author.id)) {
             creationId = db.get('crea_' + message.author.id).length + 1
@@ -47,14 +53,14 @@ module.exports = {
                     })
                     dbLogs.add('creation', 1)
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Création enregistrée au num\éro : `' + creationId + '` ✅\nTapez `!gbaddpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('✅ **Création enregistrée au num\éro `' + creationId + '`**\n\nTapez `' + prefix + 'addpreuve ' + creationId + ' [le fichier de votre preuve]` pour ajouter une preuve à la création ! Une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\nLorsqu\'une preuve est enregistrée, elle est envoyée en examen pour déterminer si oui ou non, elle permet de confirmer que la création qui lui est reliée vous appartient ! Si oui, votre création sera **validée**, un emoji ✅ sera affiché avec votre création !\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 })
             })
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Veuillez entrer 1 création 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ **Veuillez entrer 1 création**\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

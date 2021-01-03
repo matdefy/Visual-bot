@@ -14,13 +14,13 @@ module.exports = {
                     .setFooter(config.version, client.user.avatarURL()))
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Veuiller entrer du texte ⚠️')
+                    .setDescription('⚠️ **Veuiller entrer du texte**')
                     .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑')
+                .setDescription('🛑 **Vous n\'avez pas les permissions suffisantes**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                 .setColor('#00FF00')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

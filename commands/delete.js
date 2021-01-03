@@ -3,18 +3,24 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args) => {
+        let prefix = '!gb'
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
         if (message.mentions.users.size === 0) {
             if (message.channel.type === 'dm') {
                 if (db.has('pr_' + message.author.id) || db.has('crea_' + message.author.id)) {
                     db.delete('pr_' + message.author.id)
                     db.delete('crea_' + message.author.id)
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('✅ **Vous n\'êtes plus enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('⚠️ **Vous n\'êtes pas enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
@@ -25,13 +31,13 @@ module.exports = {
                         db.delete('pr_' + user)
                         db.delete('crea_' + user)
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('✅ (`' + user + '`) n\'est plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('✅ **(`' + user + '`) n\'est plus enregistré dans la base de données**')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
                         const user = args[0]
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ Utilisateur avec l\'identifiant (`' + user + '`) introuvable ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('⚠️ **Utilisateur avec l\'identifiant (`' + user + '`) introuvable**')
                             .setColor('#e55f2a')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
@@ -40,12 +46,12 @@ module.exports = {
                         db.delete('pr_' + message.author.id)
                         db.delete('crea_' + message.author.id)
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('✅ Vous n\'êtes plus enregistré dans la base de données ! ✅\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('✅ **Vous n\'êtes plus enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                             .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     } else {
                         message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ Vous n\'êtes pas enregistré dans la base de données ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                            .setDescription('⚠️ **Vous n\'êtes pas enregistré dans la base de données**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                             .setColor('#e55f2a')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
@@ -53,7 +59,7 @@ module.exports = {
             }
         } else {
             message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 Vous n\'avez pas les permissions suffisantes ! 🛑\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('🛑 **Vous n\'avez pas les permissions suffisantes**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                 .setColor('#FF0000')
                 .setFooter(config.version, message.client.user.avatarURL()))
         }

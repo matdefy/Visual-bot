@@ -3,6 +3,12 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
+        let prefix = '!gb'
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
         if (dbLogs.has('logs')) {
             const logs = dbLogs.get('logs')
             const total = logs.length
@@ -17,7 +23,7 @@ module.exports = {
             const logsviewcrea = logs.filter(log => log.cmd === ('viewcrea')).length
             message.channel.send(new Discord.MessageEmbed()
                 .setTitle('🔽 Information relative au bot 🔽')
-                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n \nCommandes tapées aujourd\'hui : **' + logsDay + '**\n\n 📡 Ping 📡 de Graph Bot : **' + client.ws.ping + '**ms\n\n**❤️ MERCI ❤️**\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n\nCommandes tapées aujourd\'hui : **' + logsDay + '**\n\n 📡 Ping 📡 de Graph Bot : **' + client.ws.ping + '**ms\n\n**❤️ MERCI ❤️**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                 .addFields(
                     { name: 'créations enregistrées', value: creation + ' créations', inline: true },
                     { name: 'preuves enregistrées', value: preuve + ' preuves', inline: true },
