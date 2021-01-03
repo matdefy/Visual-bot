@@ -53,7 +53,7 @@ client.on('message', message => {
     if (message.channel.type === 'dm') {
         if (message.content.startsWith(config.prefix + 'cmd') || message.content.startsWith(config.prefix + 'level') || message.content.startsWith(config.prefix + 'validcrea') || message.content.startsWith(config.prefix + 'setparentcmd') || message.content.startsWith(config.prefix + 'setchannelcmd') || message.content.startsWith(config.prefix + 'say') || message.content.startsWith(config.prefix + 'setprefix')) {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Cette commande doit être tapée sur un serveur obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement**\n\n(Pour obtenir de l\'aide, taper `' + config.prefix + 'help` !)')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         } else {
@@ -74,7 +74,7 @@ client.on('message', message => {
             const prefix = db.get('prefix_' + message.guild.id)
             if (message.content.startsWith(prefix + 'viewpreuve') || message.content.startsWith(prefix + 'addpreuve')) {
                 return message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ **Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
@@ -93,7 +93,7 @@ client.on('message', message => {
         } else {
             if (message.content.startsWith(config.prefix + 'viewpreuve') || message.content.startsWith(config.prefix + 'addpreuve')) {
                 return message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('⚠️ **Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement**\n\n(Pour obtenir de l\'aide, taper `' + config.prefix + 'help` !)')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
@@ -109,6 +109,21 @@ client.on('message', message => {
                     userId: message.author.id
                 })
             }
+        }
+    }
+})
+
+client.on('message', message => {
+    if (message.type !== 'DEFAULT' || message.author.bot) return
+    if (message.content === '<@!764867987291111506>') {
+        if (message.channel.type === 'dm') {
+            message.channel.send('**Bonjour ! Mon prefix est `!gb`, si tu as besoin d\'aide tape `!gbhelp` !**')
+        } else {
+            let prefix = '!gb'
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+            message.channel.send('**Bonjour ! Mon prefix est `' + prefix + '`, si tu as besoin d\'aide tape `' + prefix + 'help` !**')
         }
     }
 })
@@ -311,6 +326,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
     } else { return }
     await reaction.fetch()
     if (reaction.message.channel.type === 'dm') return
+    let prefix = '!gb'
+    if (db.has('prefix_' + reaction.message.guild.id)) {
+        prefix = db.get('prefix_' + reaction.message.guild.id)
+    }
     if (reaction.emoji.name === '✅' && reaction.message.author.id === client.user.id) {
         const channelID = db.get('channelcmd_' + reaction.message.guild.id)
         if (reaction.message.channel.id !== channelID) return
@@ -374,8 +393,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 }).then((channel) => {
                     channel.send('<@' + userID + '>')
                     channel.send(new Discord.MessageEmbed()
-                        .setTitle('🔽 Comment passer commande ? 🔽')
-                        .setDescription('client : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                        .setDescription('🔽 **Comment passer commande ?**\n\nclient : (' + userID + ')\nDescription : ' + descriptcmd + '\ngraphiste : +' + user.id + '+ \n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ' ! Veuillez maintenant décrire précisément votre commande !\n\nPour fermer le ticket cliquer sur la réaction 🔒')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                         msg.react('🔒')
@@ -383,8 +401,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 })
 
                 client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                    .setTitle('🎉 Bonne nouvelle 🎉')
-                    .setDescription('Un graphiste a accepté votre commande au numéro `' + commandID + '` sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                    .setDescription('🎉 **Bonne nouvelle**\n\nUn graphiste a accepté votre commande au numéro `' + commandID + '` sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                     .setColor('#00FF00')
                     .setFooter(config.version, client.user.avatarURL()))
                 client.channels.cache.get('776063705480691722').send('ticket de commande numéro : `' + commandID + '` créé pour l\'utilisateur : (`' + userID + '`)')
@@ -398,7 +415,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             }
         } else {
             reaction.message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `!gbsetparentcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ **La catégorie stockée dans la base de données pour stocker les tickets est invalide**\n\n`' + prefix + 'installhelp` : permet de vous guider dans la configuration de Graph Bot, en vous expliquant pas à pas les différentes fonctionnalités à configurer !\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
         }
@@ -430,6 +447,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
         return
     }
     await reaction.fetch()
+    let prefix = '!gb'
+    if (reaction.message.channel.type !== 'dm') {
+        if (db.has('prefix_' + reaction.message.guild.id)) {
+            prefix = db.get('prefix_' + reaction.message.guild.id)
+        }
+    }
     if (reaction.message.channel.id === '775274490723827715') {
         const description = reaction.message.embeds[0].description
         const userID = description.substring(
@@ -449,15 +472,13 @@ client.on('messageReactionAdd', async (reaction, user) => {
             creations.find((creation) => creation.id === parseInt(creationID)).verif = '✅'
             db.set('crea_' + userID, creations)
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                .setTitle('🎉 Bonne nouvelle 🎉')
-                .setDescription('Votre création à l\'id : `' + creationID + '` a été vérifié ! Taper `*viewcrea` pour voir votre nouvelle validation !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('🎉 **Bonne nouvelle**\n\nVotre création à l\'identifiant `' + creationID + '` a été vérifié !\n\nTaper `' + prefix + 'viewcrea` pour voir votre nouvelle validation !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                 .setColor('#00FF00')
                 .setFooter(config.version, client.user.avatarURL()))
             client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) validée par ' + user.tag + ' (`' + user.id + '`)')
         } else {
             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                .setTitle('⚠️ Preuve invalide ⚠️')
-                .setDescription('Votre preuve n\'a pas permis de confirmer que la création à l\'id : `' + creationID + '` vous appartenez, veuillez donc revoir vos preuves !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
+                .setDescription('⚠️ **Preuve invalide**\n\nVotre preuve n\'a pas permis de confirmer que la création à l\'identifiant `' + creationID + '` vous appartenez !\n\n`' + prefix + 'addpreuve ' + creationID + ' [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, client.user.avatarURL()))
             // ici on récupère toutes les preuves de l'utilisateur et on garde que celles ou preuve.url n'est pas égal à celle qu'on veut enlever
@@ -503,13 +524,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
     await reaction.fetch()
     if (reaction.message.channel.type === 'dm') return
     if (reaction.emoji.name === '➡️' && reaction.message.author.id === client.user.id) {
+        let prefix2 = '!gb'
+        if (db.has('prefix_' + reaction.message.guild.id)) {
+            prefix2 = db.get('prefix_' + reaction.message.guild.id)
+        }
         const prefix = db.has('prefix_' + reaction.message.guild.id)
         const catcmd = db.has('catcmd_' + reaction.message.guild.id)
         const channelcmd = db.has('channelcmd_' + reaction.message.guild.id)
         if (prefix === false) {
             return reaction.message.channel.send(new Discord.MessageEmbed()
-                .setTitle('⚙️ Configuration du prefix ⚙️')
-                .setDescription('Chaque bot à ce que l\'on appelle un prefix, c\'est ce qui est utilisé pour appeler le bot !\nSi vous tapez `viewcrea` le bot ne va rien répondre, mais si vous tapez `!gbviewcrea` le bot va envoyer vos créations ! Le prefix est donc `!gb` pour l\'appelez !\n\nCette commande : `!gbsetprefix [votre prefix]` permet de modifier le prefix du bot sur le serveur ou vous vous situez !\n (Si vous souhaitez garder le prefix par defaut, taper : `!gb`)\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
+                .setTitle('⚙️ Configuration du prefix')
+                .setDescription('Chaque bot à ce que l\'on appelle un prefix, c\'est ce qui est utilisé pour appeler le bot !\nSi vous tapez `viewcrea` le bot ne va rien répondre, mais si vous tapez `' + prefix2 + 'viewcrea` le bot va envoyer vos créations ! Le prefix est donc `' + prefix2 + '` pour l\'appelez !\n\nCette commande : `' + prefix2 + 'setprefix [votre prefix]` permet de modifier le prefix du bot sur le serveur ou vous vous situez !\n (Si vous souhaitez garder le prefix par defaut, taper : `!gb`)\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
                 .setImage('https://cdn.discordapp.com/attachments/749269193425158205/791016477682565170/Capture_decran_2020-12-22_195653.png')
                 .setColor('#e55f2a')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
@@ -518,8 +543,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
         if (catcmd === false) {
             return reaction.message.channel.send(new Discord.MessageEmbed()
-                .setTitle('⚙️ Configuration de la catégorie pour la création des tickets ⚙️')
-                .setDescription('Le système de prise de commande intègre la création de ticket, il faut donc savoir dans quelles catégories les tickets vont être créés !\n\nPour cela, faites un clic droit sur une catégorie et copiez l\'identifiant !\nPar la suite taper : `[le prefix du bot]setparentcmd [l\'identifiant d\'une catégorie]` les tickets vont maintenant être créés dans la catégorie sélectionnée !\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
+                .setTitle('⚙️ Configuration de la catégorie pour la création des tickets')
+                .setDescription('Le système de prise de commande intègre la création de ticket, il faut donc savoir dans quelles catégories les tickets vont être créés !\n\nPour cela, faites un clic droit sur une catégorie et copiez l\'identifiant !\nPar la suite taper `' + prefix2 + 'setparentcmd [l\'identifiant d\'une catégorie]` les tickets vont maintenant être créés dans la catégorie sélectionnée !\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
                 .setImage('https://cdn.discordapp.com/attachments/749269193425158205/791015381526773790/Capture_decran_2020-12-22_195232.png')
                 .setColor('#e55f2a')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
@@ -528,8 +553,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
         if (channelcmd === false) {
             return reaction.message.channel.send(new Discord.MessageEmbed()
-                .setTitle('⚙️ Configuration du salon pour la prise de commandes ⚙️')
-                .setDescription('Après qu\'une personne ait passé une commande, elle va être stockée dans un salon.\nCe salon permettra au graphiste d\'accepter les commandes des clients en cliquant sur la réaction du message de la commande ! Un ticket va alors être créé pour le graphiste et le client !\n\nPour enregistrer un salon, faites un clic droit sur un salon et copiez l\'identifiant !\nPar la suite taper : `[le prefix du bot]setchannelcmd [l\'identifiant d\'un salon]` les commandes vont maintenant apparaître dans le salon sélectionné !\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
+                .setTitle('⚙️ Configuration du salon pour la prise de commandes')
+                .setDescription('Après qu\'une personne ait passé une commande, elle va être stockée dans un salon.\nCe salon permettra au graphiste d\'accepter les commandes des clients en cliquant sur la réaction du message de la commande ! Un ticket va alors être créé pour le graphiste et le client !\n\nPour enregistrer un salon, faites un clic droit sur un salon et copiez l\'identifiant !\nPar la suite taper `' + prefix2 + 'setchannelcmd [l\'identifiant d\'un salon]` les commandes vont maintenant apparaître dans le salon sélectionné !\n\n**Prérequis** :\n\n - Permission de Gérer le serveur\n\nPour suivre la configuration pas à pas, veuillez cliquer sur la réaction ➡️\n\nExemple d\'utilisation :')
                 .setImage('https://cdn.discordapp.com/attachments/749269193425158205/791014682407338005/Capture_decran_2020-12-22_194820.png')
                 .setColor('#e55f2a')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
@@ -538,8 +563,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
         if (prefix === true && catcmd === true && channelcmd === true) {
             return reaction.message.channel.send(new Discord.MessageEmbed()
-                .setTitle('✅ Votre serveur est entièrement configuré ✅')
-                .setDescription('**Configuration actuelle du serveur :**')
+                .setDescription('✅ **Votre serveur est entièrement configuré**\n\n**Configuration actuelle du serveur :**')
                 .addFields(
                     { name: 'prefix', value: prefix, inline: true },
                     { name: 'catégorie des tickets de commandes', value: catcmd, inline: true },
@@ -550,6 +574,186 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 })
+
+// Système d'installhelp
+
+// Système commande help
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (!user.bot) {
+    } else { return }
+    await reaction.fetch()
+    let prefix = '!gb'
+    if (reaction.message.channel.type !== 'dm') {
+        if (db.has('prefix_' + reaction.message.guild.id)) {
+            prefix = db.get('prefix_' + reaction.message.guild.id)
+        }
+    }
+    if (reaction.emoji.name === '🤖' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('🤖 Explication et but du bot')
+            .setDescription('Graph bot est un bot open source (son **[code](https://github.com/matdefy/Graph-bot)** est disponible librement), c’est un projet qui a pour but d’offrir un bot discord qui est en ligne 24h/24 7j/7 365j/365, et qui touche le milieu du graphisme !\n\nSon objectif est de simplifier les serveurs de ce thème avec par exemple un système de prise de commande intelligent, ou un enregistrement de création totalement gratuit !\n\nIl est équipé d’une **[documentation](https://graphbot.gitbook.io/graph-bot/)** qui permet de comprendre en détaille toutes ces commandes, et fonctionnalités !\nUn **[serveur](https://discord.gg/pUj3AK5u5V)** de support qui permet en cas de problème de pouvoir être aidé dans un délai le plus court possible !\nOu encore la possibilité de pouvoir proposer des **[suggestions](https://discord.gg/c7KfGJXBJY)** pour une amélioration constante du bot !')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('ℹ️')
+        })
+    }
+    if (reaction.emoji.name === '⌨️' && reaction.message.author.id === client.user.id) {
+        if (reaction.message.channel.type === 'dm') {
+            reaction.message.edit(new Discord.MessageEmbed()
+                .setTitle('⌨️ Commandes disponibles')
+                .setDescription('Pour améliorer l’organisation des commandes, elles sont reliées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer Graph Bot sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Graph Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧, 🇨**')
+                .setColor('00FF00')
+                .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+                reaction.message.reactions.removeAll()
+                msg.react('ℹ️')
+                msg.react('💬')
+                msg.react('🖼️')
+                msg.react('⚙️')
+                msg.react('📊')
+            })
+        } else {
+            reaction.message.edit(new Discord.MessageEmbed()
+                .setTitle('⌨️ Commandes disponibles')
+                .setDescription('Pour améliorer l’organisation des commandes, elles sont groupées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer Graph Bot sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Graph Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧, 🇨**')
+                .setColor('00FF00')
+                .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+                reaction.message.reactions.removeAll()
+                msg.react('ℹ️')
+                msg.react('💬')
+                msg.react('🖼️')
+                msg.react('⚙️')
+                msg.react('📊')
+            })
+        }
+    }
+    if (reaction.emoji.name === 'ℹ️' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('ℹ️ Commande help')
+            .setDescription('La commande help se partage en **2 parties** :\n\n**- explication et but du bot : 🤖**\n\n**- commandes disponibles : ⌨️**\n\nChaque partie est affichée en cliquant sur la réaction adéquat !\n\nPour faire un retour en arrière dans les messages qui vont suivres, il vous suffit de cliquer sur la réaction avec l\'emoji présent dans le titre du dernier message !\n\nPour avoir plus d\'information, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('🤖')
+            msg.react('⌨️')
+        })
+    }
+    if (reaction.emoji.name === '💬' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('💬 Passer commande')
+            .setDescription('`' + prefix + 'cmd [le chiffre de votre commande] [la description de votre commande]` : permet de passer commande sur un serveur, par la suite si un graphiste accepte votre commande un ticket sera créé entre vous et lui ! Votre description doit comprendre le prix minimum que vous pouvez allouer à votre demande, ainsi qu’une brève description de celle-ci !\n\n(le chiffre de votre commande et le type de commande, logo, bannière, etc… Renseignez vous auprès du staff pour obtenir le numéro correspondant à votre commande !)\n\n**⚠️ Cette commande doit être tapée sur un serveur obligatoirement !**')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+        })
+    }
+    if (reaction.emoji.name === '🖼️' || reaction.emoji.name === '1️⃣') {
+        if (reaction.message.author.id === client.user.id) {
+            reaction.message.edit(new Discord.MessageEmbed()
+                .setTitle('🖼️ Enregistrer/Gérer une création (page 1️⃣)')
+                .setDescription('`' + prefix + 'addcrea [votre création]` : permet d’enregistrer une création dans la base de données !\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n`' + prefix + 'addpreuve [numéro de votre création] [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Graph Bot obligatoirement !**\n\nLorsqu\'une preuve est enregistrée, elle est envoyée en examen pour déterminer si oui ou non, elle permet de confirmer que la création qui lui est reliée vous appartient ! Si oui, votre création sera **validée**, un emoji ✅ sera affiché avec votre création !')
+                .setColor('00FF00')
+                .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+                reaction.message.reactions.removeAll()
+                msg.react('⌨️')
+                msg.react('2️⃣')
+                msg.react('3️⃣')
+                msg.react('4️⃣')
+            })
+        }
+    }
+    if (reaction.emoji.name === '2️⃣' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('🖼️ Enregistrer/Gérer une création (page 2️⃣)')
+            .setDescription('`' + prefix + 'viewcrea [@membre, ID d’un utilisateur, rien]` : permet d’afficher les créations, description, d’un utilisateur ! Si vous ne rentrez aucunes options, cela affichera vos créations !\n\n`' + prefix + 'viewpreuve` : permet d’afficher les preuves qui sont reliées à vos créations ! Comme une preuve est privée pour des raisons de sécurité, seul vous pouvez les voir !\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Graph Bot obligatoirement !**\n\n`' + prefix + 'descript [une description]` : permet d’enregistrer une description de votre profil dans la base de données, elle sera affichée avec vos créations !')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+            msg.react('1️⃣')
+            msg.react('3️⃣')
+            msg.react('4️⃣')
+        })
+    }
+    if (reaction.emoji.name === '3️⃣' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('🖼️ Enregistrer/Gérer une création (page 3️⃣)')
+            .setDescription('`' + prefix + 'setadvance [numéro d’une création]` : permet d’avertir les utilisateurs que la création au numéro entrer dans la commande n’est pas terminée ! Un emoji 🛠️ sera affiché avec votre création !\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n`' + prefix + 'setadvance [numéro d’une création] [création finalisé]` : permet de remplacer votre création non terminée par celle finalisé ! L’emoji 🛠️ sera remplacer par ✅ quand votre création sera affiché !\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n⚠️ **Cette commande ne fonctionne que si vous avez tapé au par avant `' + prefix + 'setadvance [numéro d\'une création]` !**\n\n⚠️ **La validation de la création saute automatiquement à chaque modification de celles-ci !**')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+            msg.react('1️⃣')
+            msg.react('2️⃣')
+            msg.react('4️⃣')
+        })
+    }
+    if (reaction.emoji.name === '4️⃣' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('🖼️ Enregistrer/Gérer une création (page 4️⃣)')
+            .setDescription('`' + prefix + 'deletecrea [numéro d’une création]` : permet de supprimer de la base de données la création et les/la preuve/s entré dans la commande !\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n⚠️ **Lorsque cette commande est tapée, aucun retour en arrière n\'est possible !**\n\n`' + prefix + 'delete` : permet de supprimer toutes les créations, preuves, description, de la base de données !\n\n⚠️ **Lorsque cette commande est tapée, aucun retour en arrière n\'est possible !**')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+            msg.react('1️⃣')
+            msg.react('2️⃣')
+            msg.react('3️⃣')
+        })
+    }
+    if (reaction.emoji.name === '⚙️' || reaction.emoji.name === '🇦') {
+        if (reaction.message.author.id === client.user.id) {
+            reaction.message.edit(new Discord.MessageEmbed()
+                .setTitle('⚙️ Configurer Graph Bot sur un serveur (page 🇦)')
+                .setDescription('`' + prefix + 'installhelp` : permet de vous guider dans la configuration de Graph Bot, en vous expliquant pas à pas les différentes fonctionnalités à configurer !\n\n⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
+                .setColor('00FF00')
+                .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+                reaction.message.reactions.removeAll()
+                msg.react('⌨️')
+                msg.react('🇧')
+                msg.react('🇨')
+            })
+        }
+    }
+    if (reaction.emoji.name === '🇧' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('⚙️ Configurer Graph Bot sur un serveur (page 🇧)')
+            .setDescription('🔽 **Les commandes suivantes sont reprises de la commande `installhelp`** 🔽\n\n`' + prefix + 'setprefix [un prefix]` : permet de configurer un prefix sur le serveur ou vous vous situez !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**\n\n`' + prefix + 'setchannelcmd [l’identifiant d’un salon]` : permet d’enregistrer un salon permettant au graphiste d\'accepter les commandes des clients en cliquant sur la réaction du message de la commande ! Un ticket va alors être créé pour le graphiste et le client !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+            msg.react('🇦')
+            msg.react('🇨')
+        })
+    }
+    if (reaction.emoji.name === '🇨' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('⚙️ Configurer Graph Bot sur un serveur (page 🇨)')
+            .setDescription('`' + prefix + 'setparentcmd [l’identifiant d’un salon]` : permet d’enregistrer une catégorie permettant de stocker les tickets de commandes !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+            msg.react('🇦')
+            msg.react('🇧')
+        })
+    }
+    if (reaction.emoji.name === '📊' && reaction.message.author.id === client.user.id) {
+        reaction.message.edit(new Discord.MessageEmbed()
+            .setTitle('📊 Information sur le bot')
+            .setDescription('`' + prefix + 'help` : permet d’avoir des informations sur le bot est sur les commandes disponibles !\n**⚠️ Cela ne sert à rien de taper cette commande comme vous êtes déjà à l’intérieur de celles-ci !**\n\n`' + prefix + 'info` : permet d’avoir des informations sur le nombre de commandes tapées de manière individuelle, ou groupées ! Ainsi que le ping du bot ! (Actuellement `' + client.ws.ping + 'ms`.)')
+            .setColor('00FF00')
+            .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
+            reaction.message.reactions.removeAll()
+            msg.react('⌨️')
+        })
+    }
+})
+
+// Système commande help
 
 // Système activé lors du démarrage du bot
 
