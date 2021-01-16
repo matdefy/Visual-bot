@@ -12,10 +12,10 @@ const hastebin = require('hastebin-gen')
 client.login(config.token)
 client.commands = new Discord.Collection()
 
-/* const Sentry = require('@sentry/node')
+const Sentry = require('@sentry/node')
 Sentry.init({
     dsn: config.dsn
-}) */
+})
 
 /* const express = require('express')
 const app = express()
