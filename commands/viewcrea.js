@@ -13,11 +13,11 @@ module.exports = {
         if (message.mentions.users.size === 1) {
             if (db.has('crea_' + user.id)) {
                 const creations = db.get('crea_' + user.id)
-                const text = creations.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n' + 'Avancer ' + crea.advance + '\n')
+                const text = creations.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n')
                 message.channel.send({
                     embed: new Discord.MessageEmbed()
                         .setDescription(text)
-                        .setColor('#FF0000')
+                        .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()),
                     files: creations.map((crea) => {
                         return {
@@ -29,14 +29,14 @@ module.exports = {
                 if (db.has('descript_' + user.id)) {
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('**💬 description :**\n\n' + db.get('descript_' + user.id))
-                        .setColor('#FF0000')
+                        .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
                 if (db.has('level_' + user.id)) {
                     const level = db.get('level_' + user.id)
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription('**🔢 level : **' + '`' + level + '`')
-                        .setColor('#FF0000')
+                        .setColor('#00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
@@ -52,11 +52,11 @@ module.exports = {
                 if (memberID.length !== 0) {
                     if (db.has('crea_' + memberID)) {
                         const creations2 = db.get('crea_' + memberID)
-                        const text2 = creations2.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n' + 'Avancer ' + crea.advance + '\n')
+                        const text2 = creations2.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n')
                         message.channel.send({
                             embed: new Discord.MessageEmbed()
                                 .setDescription(text2)
-                                .setColor('#FF0000')
+                                .setColor('#00FF00')
                                 .setFooter(config.version, message.client.user.avatarURL()),
                             files: creations2.map((crea) => {
                                 return {
@@ -68,14 +68,14 @@ module.exports = {
                         if (db.has('descript_' + memberID)) {
                             message.channel.send(new Discord.MessageEmbed()
                                 .setDescription('**💬 description :**\n\n' + db.get('descript_' + memberID))
-                                .setColor('#FF0000')
+                                .setColor('#00FF00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                         }
                         if (db.has('level_' + memberID)) {
                             const level = db.get('level_' + memberID)
                             message.channel.send(new Discord.MessageEmbed()
                                 .setDescription('**🔢 level : **' + '`' + level + '`')
-                                .setColor('#FF0000')
+                                .setColor('#00FF00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
                         }
                     } else {
@@ -88,11 +88,11 @@ module.exports = {
             } else {
                 if (db.has('crea_' + message.author.id)) {
                     const creations2 = db.get('crea_' + message.author.id)
-                    const text2 = creations2.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n' + 'Avancer ' + crea.advance + '\n')
+                    const text2 = creations2.map((crea) => 'Création numéro `' + crea.id + '`\n' + 'Vérification ' + crea.verif + '\n')
                     message.channel.send({
                         embed: new Discord.MessageEmbed()
                             .setDescription(text2)
-                            .setColor('#FF0000')
+                            .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()),
                         files: creations2.map((crea) => {
                             return {
@@ -104,14 +104,14 @@ module.exports = {
                     if (db.has('descript_' + message.author.id)) {
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('**💬 description :**\n\n' + db.get('descript_' + message.author.id))
-                            .setColor('#FF0000')
+                            .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                     if (db.has('level_' + message.author.id)) {
                         const level = db.get('level_' + message.author.id)
                         message.channel.send(new Discord.MessageEmbed()
                             .setDescription('**🔢 level : **' + '`' + level + '`')
-                            .setColor('#FF0000')
+                            .setColor('#00FF00')
                             .setFooter(config.version, message.client.user.avatarURL()))
                     }
                 } else {

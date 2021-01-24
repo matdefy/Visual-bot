@@ -47,8 +47,7 @@ module.exports = {
                         db.push('crea_' + message.author.id, {
                             id: creationId,
                             url: imageAvecFiligrane,
-                            verif: '❌',
-                            advance: '✅'
+                            verif: '❌'
                         })
                     })
                     dbLogs.add('creation', 1)

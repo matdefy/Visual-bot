@@ -22,7 +22,7 @@ module.exports = {
             message.channel.send({
                 embed: new Discord.MessageEmbed()
                     .setDescription(text2)
-                    .setColor('#FF0000')
+                    .setColor('#00FF00')
                     .setFooter(config.version, message.client.user.avatarURL()),
                 files: preuve2.map((crea) => {
                     return {
