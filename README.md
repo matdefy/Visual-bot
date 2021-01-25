@@ -6,7 +6,7 @@
 
 * Cloner le repository:
 ```sh
-https://github.com/matdefy/Visual Bot
+https://github.com/matdefy/Visual-bot
 ```
 
 * Modifier le fichier de configuration (config.json):
