@@ -27,7 +27,7 @@ module.exports = {
                         msg.react('✅')
                     })
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ **Commande enregistré ' + message.author.tag + '**\n\nAller dans les messages privés de Graph Bot pour avoir tous les détails sur votre  📩 commande 📩 !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                        .setDescription('✅ **Commande enregistré ' + message.author.tag + '**\n\nAller dans les messages privés de Visual Bot pour avoir tous les détails sur votre  📩 commande 📩 !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                         .setColor('00FF00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                     message.author.createDM().then(channel => {

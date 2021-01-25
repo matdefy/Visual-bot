@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
     res.send(`<html>
     <head></head>
     <body>
-        <font size=""><font face="FreeMono, monospace">Un système de prise de commande intelligent, un enregistrement de création, Graph Bot est fait pour vous ! Utilisé sur ${client.guilds.cache.size} serveurs actuellement !</font></font>
+        <font size=""><font face="FreeMono, monospace">Un système de prise de commande intelligent, un enregistrement de création, Visual Bot est fait pour vous ! Utilisé sur ${client.guilds.cache.size} serveurs actuellement !</font></font>
     </body>
 </html>`)
 })
@@ -101,7 +101,7 @@ client.on('message', async message => {
     } else {
         if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'viewpreuve')) {
             return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ **Cette commande doit être tapée dans le salon MP de Graph Bot obligatoirement**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                .setDescription('⚠️ **Cette commande doit être tapée dans le salon MP de Visual Bot obligatoirement**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                 .setColor('#e55f2a')
                 .setFooter(config.version, message.client.user.avatarURL()))
         } else {
@@ -604,7 +604,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         .setFooter(config.version, client.user.avatarURL()))
                     db.push('blacklist', graphisteID)
                     client.users.cache.get(graphisteID).send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Graph Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                         .setColor('#FF0000')
                         .setFooter(config.version, client.user.avatarURL()))
                     reaction.message.delete()
@@ -617,7 +617,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         .setFooter(config.version, client.user.avatarURL()))
                     db.push('blacklist', clientID)
                     client.users.cache.get(clientID).send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Graph Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                         .setColor('#FF0000')
                         .setFooter(config.version, client.user.avatarURL()))
                     reaction.message.delete()
@@ -695,7 +695,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         if (reaction.emoji.name === '🤖') {
             reaction.message.edit(new Discord.MessageEmbed()
                 .setTitle('🤖 Explication et but du bot')
-                .setDescription('Graph bot est un bot open source (son **[code](https://github.com/matdefy/Graph-bot)** est disponible librement), c’est un projet qui a pour but d’offrir un bot discord qui est en ligne 24h/24 7j/7 365j/365, et qui touche le milieu du graphisme !\n\nSon objectif est de simplifier les serveurs de ce thème avec par exemple un système de prise de commande intelligent, ou un enregistrement de création totalement gratuit !\n\nIl est équipé d’une **[documentation](https://graphbot.gitbook.io/graph-bot/)** qui permet de comprendre en détaille toutes ces commandes, et fonctionnalités !\nUn **[serveur](https://discord.gg/pUj3AK5u5V)** de support qui permet en cas de problème de pouvoir être aidé dans un délai le plus court possible !\nOu encore la possibilité de pouvoir proposer des **[suggestions](https://discord.gg/c7KfGJXBJY)** pour une amélioration constante du bot !')
+                .setDescription('Visual Bot est un bot open source (son **[code](https://github.com/matdefy/Graph-bot)** est disponible librement), c’est un projet qui a pour but d’offrir un bot discord qui est en ligne 24h/24 7j/7 365j/365, et qui touche le milieu du graphisme !\n\nSon objectif est de simplifier les serveurs de ce thème avec par exemple un système de prise de commande intelligent, ou un enregistrement de création totalement gratuit !\n\nIl est équipé d’une **[documentation](https://graphbot.gitbook.io/graph-bot/)** qui permet de comprendre en détaille toutes ces commandes, et fonctionnalités !\nUn **[serveur](https://discord.gg/pUj3AK5u5V)** de support qui permet en cas de problème de pouvoir être aidé dans un délai le plus court possible !\nOu encore la possibilité de pouvoir proposer des **[suggestions](https://discord.gg/c7KfGJXBJY)** pour une amélioration constante du bot !')
                 .setColor('00FF00')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                 reaction.message.reactions.removeAll()
@@ -706,7 +706,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             if (reaction.message.channel.type === 'dm') {
                 reaction.message.edit(new Discord.MessageEmbed()
                     .setTitle('⌨️ Commandes disponibles')
-                    .setDescription('Pour améliorer l’organisation des commandes, elles sont reliées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer le système de commandes/tickets sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Graph Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧**')
+                    .setDescription('Pour améliorer l’organisation des commandes, elles sont reliées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer le système de commandes/tickets sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Visual Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧**')
                     .setColor('00FF00')
                     .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                     reaction.message.reactions.removeAll()
@@ -719,7 +719,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             } else {
                 reaction.message.edit(new Discord.MessageEmbed()
                     .setTitle('⌨️ Commandes disponibles')
-                    .setDescription('Pour améliorer l’organisation des commandes, elles sont groupées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer le système de commandes/tickets sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Graph Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧**')
+                    .setDescription('Pour améliorer l’organisation des commandes, elles sont groupées en **fonctionnalitées** :\n\n**- Passer commande : 💬**\n\n**- Enregistrer/Gérer une création : 🖼️**\n\n**- Configurer le système de commandes/tickets sur un serveur : ⚙️**\n\n**- Information sur le bot : 📊**\n\nChaque commande doit s’écrire avec un **prefix** pour permettre à Visual Bot de la prendre en compte, ce qui donne `' + prefix + '[commande]` !\n\nUne commande peut comporter une ou plusieurs **option/s**, elles seront affichées entre des `[option, option, option]` !\nPour utiliser les commandes, les crochets doivent être supprimés !\n\n**Certaines fonctionnalitées contiennent plusieurs pages, vous pouvez y navigez en cliquant sur les réactions 1️⃣, 2️⃣, 3️⃣, 4️⃣ et 🇦, 🇧**')
                     .setColor('00FF00')
                     .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                     reaction.message.reactions.removeAll()
@@ -755,7 +755,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         if (reaction.emoji.name === '🖼️' || reaction.emoji.name === '1️⃣') {
             reaction.message.edit(new Discord.MessageEmbed()
                 .setTitle('🖼️ Enregistrer/Gérer une création (page 1️⃣)')
-                .setDescription('`' + prefix + 'addcrea [votre création]` : permet d’enregistrer une création dans la base de données !\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n`' + prefix + 'addpreuve [numéro de votre création] [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Graph Bot obligatoirement !**\n\nLorsqu\'une preuve est enregistrée, elle est envoyée en examen pour déterminer si oui ou non, elle permet de confirmer que la création qui lui est reliée vous appartient ! Si oui, votre création sera **validée**, un emoji ✅ sera affiché avec votre création !')
+                .setDescription('`' + prefix + 'addcrea [votre création]` : permet d’enregistrer une création dans la base de données !\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n`' + prefix + 'addpreuve [numéro de votre création] [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Visual Bot obligatoirement !**\n\nLorsqu\'une preuve est enregistrée, elle est envoyée en examen pour déterminer si oui ou non, elle permet de confirmer que la création qui lui est reliée vous appartient ! Si oui, votre création sera **validée**, un emoji ✅ sera affiché avec votre création !')
                 .setColor('00FF00')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                 reaction.message.reactions.removeAll()
@@ -768,7 +768,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         if (reaction.emoji.name === '2️⃣') {
             reaction.message.edit(new Discord.MessageEmbed()
                 .setTitle('🖼️ Enregistrer/Gérer une création (page 2️⃣)')
-                .setDescription('`' + prefix + 'viewcrea [@membre, ID d’un utilisateur, rien]` : permet d’afficher les créations, description, d’un utilisateur ! Si vous ne rentrez aucunes options, cela affichera vos créations !\n\n`' + prefix + 'viewpreuve` : permet d’afficher les preuves qui sont reliées à vos créations ! Comme une preuve est privée pour des raisons de sécurité, seul vous pouvez les voir !\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Graph Bot obligatoirement !**\n\n`' + prefix + 'descript [une description]` : permet d’enregistrer une description de votre profil dans la base de données, elle sera affichée avec vos créations !')
+                .setDescription('`' + prefix + 'viewcrea [@membre, ID d’un utilisateur, rien]` : permet d’afficher les créations, description, d’un utilisateur ! Si vous ne rentrez aucunes options, cela affichera vos créations !\n\n`' + prefix + 'viewpreuve` : permet d’afficher les preuves qui sont reliées à vos créations ! Comme une preuve est privée pour des raisons de sécurité, seul vous pouvez les voir !\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Visual Bot obligatoirement !**\n\n`' + prefix + 'descript [une description]` : permet d’enregistrer une description de votre profil dans la base de données, elle sera affichée avec vos créations !')
                 .setColor('00FF00')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                 reaction.message.reactions.removeAll()
@@ -781,7 +781,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         if (reaction.emoji.name === '3️⃣') {
             reaction.message.edit(new Discord.MessageEmbed()
                 .setTitle('🖼️ Enregistrer/Gérer une création (page 3️⃣)')
-                .setDescription('`' + prefix + 'setadvance [numéro d’une création] [création finalisé]` : permet de remplacer votre ancienne création par une nouvelle version de celle-ci !\n\n(le numéro d’une création s’obtient en tapant !gbviewcrea)\n\n(votre création doit être envoyée dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n⚠️ **La validation de la création saute automatiquement à chaque modification de celles-ci !**\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Graph Bot obligatoirement !**')
+                .setDescription('`' + prefix + 'setadvance [numéro d’une création] [création finalisé]` : permet de remplacer votre ancienne création par une nouvelle version de celle-ci !\n\n(le numéro d’une création s’obtient en tapant !gbviewcrea)\n\n(votre création doit être envoyée dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n⚠️ **La validation de la création saute automatiquement à chaque modification de celles-ci !**\n\n⚠️ **Cette commande doit être tapée dans les messages MP avec Visual Bot obligatoirement !**')
                 .setColor('00FF00')
                 .setFooter(config.version, reaction.message.client.user.avatarURL())).then(msg => {
                 reaction.message.reactions.removeAll()

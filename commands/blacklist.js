@@ -12,7 +12,7 @@ module.exports = {
                     let usersblacklist = db.get('blacklist')
                     if (usersblacklist.includes(message.author.id)) {
                         client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                            .setDescription('✅ **Bonjour, suite à votre débannissement de Graph Bot l\'utilisation de celui-ci vous est maintenant autorisé**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                            .setDescription('✅ **Bonjour, suite à votre débannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant autorisé**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                             .setColor('#FF0000')
                             .setFooter(config.version, client.user.avatarURL()))
                         usersblacklist = usersblacklist.filter((element) => element !== userID)
@@ -24,7 +24,7 @@ module.exports = {
                         message.client.channels.cache.get('797853971162595339').send('Utilisateur à l\'identifiant `' + userID + '` débanni par ' + message.author.tag + ' (`' + message.author.id + '`) ')
                     } else {
                         client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                            .setDescription('🛑 **Bonjour, suite à votre bannissement de Graph Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                            .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                             .setColor('#FF0000')
                             .setFooter(config.version, client.user.avatarURL()))
                         db.push('blacklist', userID)

@@ -23,7 +23,7 @@ module.exports = {
             const logsviewcrea = logs.filter(log => log.cmd === ('viewcrea')).length
             message.channel.send(new Discord.MessageEmbed()
                 .setTitle('🔽 Information relative au bot 🔽')
-                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n\nCommandes tapées aujourd\'hui : **' + logsDay + '**\n\n 📡 Ping 📡 de Graph Bot : **' + client.ws.ping + '**ms\n\n**❤️ MERCI ❤️**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n\nCommandes tapées aujourd\'hui : **' + logsDay + '**\n\n 📡 Ping 📡 de Visual Bot : **' + client.ws.ping + '**ms\n\n**❤️ MERCI ❤️**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                 .addFields(
                     { name: 'créations enregistrées', value: creation + ' créations', inline: true },
                     { name: 'preuves enregistrées', value: preuve + ' preuves', inline: true },
