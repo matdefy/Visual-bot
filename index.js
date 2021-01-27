@@ -689,8 +689,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
         // Système commande help
         let prefix = '!gb'
-        if (db.has('prefix_' + reaction.message.guild.id)) {
-            prefix = db.get('prefix_' + reaction.message.guild.id)
+        if (reaction.message.channel.type !== 'dm') {
+            if (db.has('prefix_' + reaction.message.guild.id)) {
+                prefix = db.get('prefix_' + reaction.message.guild.id)
+            }
         }
         if (reaction.emoji.name === '🤖') {
             reaction.message.edit(new Discord.MessageEmbed()
