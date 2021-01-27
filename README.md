@@ -1,12 +1,12 @@
-# Graph Bot
+# Visual Bot
 
-🎨 Graph Bot est un bot discord spécialisé pour les serveurs de graphisme, il intègre un système de prise de commande, la possibilité d'enregistrer des créations...
+🎨 Visual Bot est un bot discord spécialisé pour les serveurs de graphisme, il intègre un système de prise de commande, la possibilité d'enregistrer des créations...
 
 ## Installation
 
 * Cloner le repository:
 ```sh
-https://github.com/matdefy/Graph-bot
+https://github.com/matdefy/Visual-bot
 ```
 
 * Modifier le fichier de configuration (config.json):
