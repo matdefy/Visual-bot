@@ -1,10 +1,6 @@
 {
-    "token": "XXX",
-    "prefix": "*",
-    "version": "1.7.0",
-    "greeting": {
-        "channel": "749193976937971803",
-        "role": "749194353359978587"
-    },
-    "dsn": ""
+    "token": "Your discord bot token",
+    "prefix": "!vb",
+    "version": "3.0.0",
+    "dsn": "Your link sentry"
 }
