@@ -13,7 +13,7 @@ https://github.com/matdefy/Visual-bot
 ```json
 {
     "token": "Your discord bot token",
-    "prefix": "!gb",
+    "prefix": "!vb",
     "version": "2.2.0",
     "dsn": "Your link sentry"
 }
