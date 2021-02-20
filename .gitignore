@@ -4,6 +4,5 @@ database.json
 database_logs.json
 backupdatabase
 package.json
-eslintrc.js
 yarn.lock
 .eslintrc.js
