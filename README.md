@@ -9,7 +9,7 @@
 https://github.com/matdefy/Visual-bot
 ```
 
-* Modifier le fichier de configuration (config.json):
+* Modifier le fichier de configuration (config.exemple.json):
 ```json
 {
     "token": "Your discord bot token",
