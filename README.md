@@ -14,7 +14,7 @@ https://github.com/matdefy/Visual-bot
 {
     "token": "Your discord bot token",
     "prefix": "!vb",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "dsn": "Your link sentry"
 }
 ```
