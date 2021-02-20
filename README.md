@@ -1,6 +1,6 @@
 # Visual Bot
 
-🎨 Visual Bot est un bot discord spécialisé pour les serveurs de graphisme, il intègre un système de prise de commande, la possibilité d'enregistrer des créations...
+🎨 Visual Bot est un bot discord spécialisé pour les serveurs sur le thème du visuel, il intègre un système de prise de commande, la possibilité d'enregistrer des créations...
 
 ## Installation
 
