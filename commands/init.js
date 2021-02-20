@@ -3,7 +3,7 @@ const config = require('../config.json')
 
 module.exports = {
     run: async (db, message, args, client) => {
-        let prefix = '!gb'
+        let prefix = '!vb'
         if (message.channel.type !== 'dm') {
             if (db.has('prefix_' + message.guild.id)) {
                 prefix = db.get('prefix_' + message.guild.id)
@@ -44,7 +44,7 @@ module.exports = {
                     }).then((channel) => {
                         channel.send(new Discord.MessageEmbed()
                             .setDescription('📮 **Les commandes vont maintenant apparaitres ici**\n\nVeuillez autoriser ce channel aux graphistes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                            .setColor('#00FF00')
+                            .setColor('#FEFEFE')
                             .setFooter(config.version, client.user.avatarURL()))
                         const idchannel = channel.id
                         db.set('channelcmd_' + message.guild.id, idchannel)
@@ -69,7 +69,7 @@ module.exports = {
                     }).then((channel) => {
                         channel.send(new Discord.MessageEmbed()
                             .setDescription('📮 **Pour passer commande taper `' + prefix + 'cmd [description brève et prix alloué à la commande]`**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
+                            .setColor('#FEFEFE')
                             .setFooter(config.version, client.user.avatarURL()))
                         const idchannel = channel.id
                         db.set('channelcmdclient_' + message.guild.id, idchannel)
@@ -123,7 +123,7 @@ module.exports = {
                             db.set('channelcmd_' + message.guild.id, idchannel)
                             channel.send(new Discord.MessageEmbed()
                                 .setDescription('📮 **Les commandes vont maintenant apparaitres ici**\n\nVeuillez autoriser ce channel aux graphistes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                                .setColor('#00FF00')
+                                .setColor('#FEFEFE')
                                 .setFooter(config.version, client.user.avatarURL()))
                             db.set('channelcmd_' + message.guild.id, idchannel)
                         })
@@ -147,8 +147,8 @@ module.exports = {
                             parent: parentid
                         }).then((channel) => {
                             channel.send(new Discord.MessageEmbed()
-                                .setDescription('📮 **Pour passer commande taper `' + prefix + 'cmd [description brève et prix alloué à la commande]`**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                                .setColor('#00FF00')
+                                .setDescription('📮 **Pour passer commande taper `' + prefix + 'cmd [description brève et prix alloué à la commande]` !**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                                .setColor('#FEFEFE')
                                 .setFooter(config.version, client.user.avatarURL()))
                             const idchannel = channel.id
                             db.set('channelcmdclient_' + message.guild.id, idchannel)
@@ -181,8 +181,8 @@ module.exports = {
                         const idchannel = channel.id
                         db.set('channelcmd_' + message.guild.id, idchannel)
                         channel.send(new Discord.MessageEmbed()
-                            .setDescription('📮 **Les commandes vont maintenant apparaitres ici**\n\nVeuillez autoriser ce channel aux graphistes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
+                            .setDescription('📮 **Les commandes vont maintenant apparaitres ici !**\n\nVeuillez autoriser ce channel aux graphistes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                            .setColor('#FEFEFE')
                             .setFooter(config.version, client.user.avatarURL()))
                         db.set('channelcmd_' + message.guild.id, idchannel)
                     })
@@ -205,17 +205,14 @@ module.exports = {
                         parent: parentid
                     }).then((channel) => {
                         channel.send(new Discord.MessageEmbed()
-                            .setDescription('📮 **Pour passer commande taper `' + prefix + 'cmd [description brève et prix alloué à la commande]`**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
+                            .setDescription('📮 **Pour passer commande taper `' + prefix + 'cmd [description brève et prix alloué à la commande]` !**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                            .setColor('#FEFEFE')
                             .setFooter(config.version, client.user.avatarURL()))
                         const idchannel = channel.id
                         db.set('channelcmdclient_' + message.guild.id, idchannel)
                     })
                 }
-                return message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('✅ **Le système de commande viens d\'être reconfiguré**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                    .setColor('#00FF00')
-                    .setFooter(config.version, message.client.user.avatarURL()))
+                return message.channel.send('✅ **Le système de commande viens d\'être reconfiguré !**')
             } else {
                 const off = args[0]
                 if (db.has('catcmd_' + message.guild.id || db.has('channelcmd_' + message.guild.id)) || db.has('channelcmdclient_' + message.guild.id) || off === 'off') {
@@ -231,17 +228,11 @@ module.exports = {
                         client.channels.cache.get(channelclientID).delete()
                         db.delete('channelcmdclient_' + message.guild.id)
                     }
-                    return message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('✅ **Le système de commande a été désactivé**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                        .setColor('#00FF00')
-                        .setFooter(config.version, message.client.user.avatarURL()))
+                    return message.channel.send('✅ **Le système de commande a été désactivé !**')
                 }
             }
         } else {
-            message.channel.send(new Discord.MessageEmbed()
-                .setDescription('🛑 **Vous n\'avez pas les permissions suffisantes**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                .setColor('#FF0000')
-                .setFooter(config.version, message.client.user.avatarURL()))
+            message.channel.send('🛑 **Vous n\'avez pas les permissions suffisantes !**')
         }
     }
 }

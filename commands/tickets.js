@@ -11,8 +11,8 @@ module.exports = {
             const idparent = categorie.id
             message.channel.send({
                 embed: new Discord.MessageEmbed()
-                    .setDescription('📮 **Création ticket ' + descriptcmd + '**\n\n**Pour créer un ticket, cliquer sur la réaction ☑️**\n**Pour fermer le système de ticket, cliquer sur la réaction 🔒**')
-                    .setColor('#00FF00')
+                    .setDescription('📮 **Création ticket ' + descriptcmd + '**\n\n**Pour créer un ticket, cliquer sur la réaction ☑️ !**\n**Pour fermer le système de ticket, cliquer sur la réaction 🔒 (permission de pouvoir gérer le serveur obligatoire)**')
+                    .setColor('#FEFEFE')
                     .setFooter(config.version, message.client.user.avatarURL())
             }).then(msg => {
                 msg.react('☑️')

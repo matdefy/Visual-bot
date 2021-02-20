@@ -62,7 +62,7 @@ client.on('message', async message => {
     }
     if (message.type !== 'DEFAULT' || message.author.bot) return
     // système verification blacklist
-    let prefix = '!gb'
+    let prefix = '!vb'
     if (message.channel.type !== 'dm') {
         if (db.has('prefix_' + message.guild.id)) {
             prefix = db.get('prefix_' + message.guild.id)
@@ -81,10 +81,7 @@ client.on('message', async message => {
     // système verification blacklist
     if (message.channel.type === 'dm') {
         if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'level') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'tickets') || message.content.startsWith(prefix + 'validcrea')) {
-            return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement**\n\n(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)')
-                .setColor('#e55f2a')
-                .setFooter(config.version, message.client.user.avatarURL()))
+            return message.channel.send('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
         } else {
             const args = message.content.trim().split(/ +/g)
             const commandName = args.shift().toLowerCase()
@@ -100,10 +97,7 @@ client.on('message', async message => {
         }
     } else {
         if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'viewpreuve')) {
-            return message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ **Cette commande doit être tapée dans le salon MP de Visual Bot obligatoirement**\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                .setColor('#e55f2a')
-                .setFooter(config.version, message.client.user.avatarURL()))
+            return message.channel.send('⚠️ **Cette commande doit être tapée dans le salon MP de Visual Bot obligatoirement !**')
         } else {
             const args = message.content.trim().split(/ +/g)
             const commandName = args.shift().toLowerCase()
@@ -116,17 +110,6 @@ client.on('message', async message => {
                 cmd: commandName.slice(prefix.length),
                 userId: message.author.id
             })
-        }
-    }
-    if (message.content === '<@!764867987291111506>') {
-        if (message.channel.type === 'dm') {
-            message.channel.send('**Bonjour ! Mon prefix est `!gb`, si tu as besoin d\'aide tape `!gbhelp` !**')
-        } else {
-            let prefix = '!gb'
-            if (db.has('prefix_' + message.guild.id)) {
-                prefix = db.get('prefix_' + message.guild.id)
-            }
-            message.channel.send('**Bonjour ! Mon prefix est `' + prefix + '`, si tu as besoin d\'aide tape `' + prefix + 'help` !**')
         }
     }
 })
@@ -150,177 +133,76 @@ client.on('guildCreate', (guild) => {
 
 // Système qui envoie un message quand le bot est ajouté sur un serveur
 
-// Système qui gère l'ajout des rôles dans la base de données pour le système de rôle
+// Système qui ajoute les roles utilisateurs
 
-/* client.on('messageReactionAdd', async (reaction, user) => {
-    if (!user.bot) {
-    } else { return }
-    await reaction.fetch()
-    if (reaction.message.channel.type === 'dm') {
-        if (reaction.message.author.id === client.user.id) {
-            if (reaction.message.embeds[0].title === '⚙️ Configuration des rôles utilisateur ⚙️') {
-                const description = reaction.message.embeds[0].description
-                const userID = description.substring(
-                    description.lastIndexOf('(') + 1,
-                    description.lastIndexOf(')')
-                )
-                if (reaction.emoji.name === '✅') {
-                    const reactions = reaction.message.reactions
-                    if (!db.has('roles_' + userID)) {
-                        db.set('roles_' + userID, {
-                            Graphiste: '❌',
-                            Dessinateur_trice: '❌',
-                            Photographe: '❌',
-                            Designer_gneur: '❌'
-                        })
-                    }
-                    const roles_ = db.get('roles_' + userID)
-
-                    const graphiste = reactions.cache.get('🖱️')
-
-                    if (graphiste.users.reaction.count === 2) {
-                        roles_.Graphiste = '✅'
-                        db.set('roles_' + userID, roles_)
+client.on('guildMemberAdd', member => {
+    if (db.has('roles_' + member.id)) {
+        if (db.has('roles_' + member.guild.id)) {
+            if (db.get('roles_' + member.id).graph === true) {
+                if (db.get('roles_' + member.guild.id).graph !== 0) {
+                    const guildroles = member.guild.roles.cache
+                    const rolesId = guildroles.map(roles => roles.id)
+                    const roleId = db.get('roles_' + member.guild.id).graph
+                    if (rolesId.includes(roleId)) {
+                        member.roles.add(roleId)
+                        client.users.cache.get(member.id).send('✅ ** Rôle graphiste ajouté sur le serveur `' + member.guild.id + '` !**')
                     } else {
-                        roles_.Graphiste = '❌'
-                        db.set('roles_' + userID, roles_)
+                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
+                        roles.graph = 0 // là tu le modifies
+                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
                     }
-
-                    const dessinateur = reactions.cache.get('🖌️')
-
-                    if (dessinateur.users.reaction.count === 2) {
-                        roles_.Dessinateur_trice = '✅'
-                        db.set('roles_' + userID, roles_)
+                }
+            }
+            if (db.get('roles_' + member.id).dessin === true) {
+                if (db.get('roles_' + member.guild.id).dessin !== 0) {
+                    const guildroles = member.guild.roles.cache
+                    const rolesId = guildroles.map(roles => roles.id)
+                    const roleId = db.get('roles_' + member.guild.id).dessin
+                    if (rolesId.includes(roleId)) {
+                        member.roles.add(roleId)
+                        client.users.cache.get(member.id).send('✅ ** Rôle dessinateur/trice ajouté sur le serveur `' + member.guild.id + '` !**')
                     } else {
-                        roles_.Dessinateur_trice = '❌'
-                        db.set('roles_' + userID, roles_)
+                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
+                        roles.dessin = 0 // là tu le modifies
+                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
                     }
-
-                    const photographe = reactions.cache.get('🖼️')
-
-                    if (photographe.users.reaction.count === 2) {
-                        roles_.Photographe = '✅'
-                        db.set('roles_' + userID, roles_)
+                }
+            }
+            if (db.get('roles_' + member.id).photo === true) {
+                if (db.get('roles_' + member.guild.id).photo !== 0) {
+                    const guildroles = member.guild.roles.cache
+                    const rolesId = guildroles.map(roles => roles.id)
+                    const roleId = db.get('roles_' + member.guild.id).photo
+                    if (rolesId.includes(roleId)) {
+                        member.roles.add(roleId)
+                        client.users.cache.get(member.id).send('✅ ** Rôle photographe ajouté sur le serveur `' + member.guild.id + '` !**')
                     } else {
-                        roles_.Photographe = '❌'
-                        db.set('roles_' + userID, roles_)
+                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
+                        roles.photo = 0 // là tu le modifies
+                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
                     }
-
-                    const designer = reactions.cache.get('✏️')
-
-                    if (designer.users.reaction.count === 2) {
-                        roles_.Designer_gneur = '✅'
-                        db.set('roles_' + userID, roles_)
+                }
+            }
+            if (db.get('roles_' + member.id).design === true) {
+                if (db.get('roles_' + member.guild.id).design !== 0) {
+                    const guildroles = member.guild.roles.cache
+                    const rolesId = guildroles.map(roles => roles.id)
+                    const roleId = db.get('roles_' + member.guild.id).design
+                    if (rolesId.includes(roleId)) {
+                        member.roles.add(roleId)
+                        client.users.cache.get(member.id).send('✅ ** Rôle designer ajouté sur le serveur `' + member.guild.id + '` !**')
                     } else {
-                        roles_.Designer_gneur = '❌'
-                        db.set('roles_' + userID, roles_)
+                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
+                        roles.design = 0 // là tu le modifies
+                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
                     }
-                    reaction.message.delete()
-                    reaction.message.channel.send(new Discord.MessageEmbed()
-                        .setTitle('✅ Rôles utilisateur configurés ✅')
-                        .setColor('#00FF00')
-                        .setFooter(config.version, client.user.avatarURL()))
                 }
             }
         }
     }
-    if (reaction.message.embeds[0].title === '⚙️ Configuration des rôles serveur ⚙️') {
-        const description = reaction.message.embeds[0].description
-        const guildID = description.substring(
-            description.lastIndexOf('(') + 1,
-            description.lastIndexOf(')')
-        )
-        if (reaction.emoji.name === '✅') {
-            const reactions = reaction.message.reactions
-            if (!db.has('roles_' + guildID)) {
-                db.set('roles_' + guildID, {
-                    Graphiste: '❌',
-                    Dessinateur_trice: '❌',
-                    Photographe: '❌',
-                    Designer_gneur: '❌'
-                })
-            }
-            const roles_ = db.get('roles_' + guildID)
+})
 
-            const graphiste = reactions.cache.get('🖱️')
-
-            if (graphiste.users.reaction.count === 2) {
-                roles_.Graphiste = '✅'
-                db.set('roles_' + guildID, roles_)
-                reaction.user.roles.add('768007297157955624')
-                create({
-                    data: {
-                        name: 'Graphiste',
-                        color: '#F75734',
-                        permissions: 'ADMINISTRATOR'
-                    }
-                })
-            } else {
-                roles_.Graphiste = '❌'
-                db.set('roles_' + guildID, roles_)
-            }
-
-            const dessinateur = reactions.cache.get('🖌️')
-
-            if (dessinateur.users.reaction.count === 2) {
-                roles_.Dessinateur_trice = '✅'
-                db.set('roles_' + guildID, roles_)
-            } else {
-                roles_.Dessinateur_trice = '❌'
-                db.set('roles_' + guildID, roles_)
-            }
-
-            const photographe = reactions.cache.get('🖼️')
-
-            if (photographe.users.reaction.count === 2) {
-                roles_.Photographe = '✅'
-                db.set('roles_' + guildID, roles_)
-            } else {
-                roles_.Photographe = '❌'
-                db.set('roles_' + guildID, roles_)
-            }
-
-            const designer = reactions.cache.get('✏️')
-
-            if (designer.users.reaction.count === 2) {
-                roles_.Designer_gneur = '✅'
-                db.set('roles_' + guildID, roles_)
-            } else {
-                roles_.Designer_gneur = '❌'
-                db.set('roles_' + guildID, roles_)
-            }
-            reaction.message.delete()
-            reaction.message.channel.send(new Discord.MessageEmbed()
-                .setTitle('✅ Rôles serveur configurés ✅')
-                .setColor('#00FF00')
-                .setFooter(config.version, client.user.avatarURL()))
-        }
-    }
-}) */
-
-// Système qui gère l'ajout des rôles dans la base de données pour le système de rôle
-
-// Système qui gère l'ajout des rôles aux utilisateur
-
-/* client.on('guildMemberAdd', member => {
-    if (db.has('roles_' + member.guild.id)) {
-        console.log('1')
-        if (db.has('roles_' + member.id)) {
-            console.log('2')
-            const roles_guild = db.has('roles_' + member.guild.id)
-            const roles_user = db.has('roles_' + member.id)
-            if (roles_guild.Graphiste === '✅') {
-                console.log('3')
-                if (roles_user.Graphiste === '✅') {
-                    console.log('4')
-                    member.roles_.add('787973305789054976')
-                }
-            }
-        }
-    }
-}) */
-
-// Système qui gère l'ajout des rôles aux utilisateur
+// Système qui ajoute les roles utilisateurs
 
 // Système reaction
 
@@ -345,7 +227,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         })
 
         if (reaction.message.channel.type !== 'dm') {
-            let prefix = '!gb'
+            let prefix = '!vb'
             if (db.has('prefix_' + reaction.message.guild.id)) {
                 prefix = db.get('prefix_' + reaction.message.guild.id)
             }
@@ -387,7 +269,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             channel.send('<@' + user.id + '>')
                             channel.send(new Discord.MessageEmbed()
                                 .setDescription('📮 **Ticket créé avec succès**\n\n**Pour fermer le ticket cliquer sur la réaction 🔒\nPour enregistrer les 100 dernier messages cliquer sur la réaction 📝**')
-                                .setColor('#00FF00')
+                                .setColor('#FEFEFE')
                                 .setFooter(config.version, client.user.avatarURL())).then(msg => {
                                 msg.react('🔒')
                                 msg.react('📝')
@@ -402,10 +284,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         reaction.message.reactions.removeAll()
                         reaction.message.react('☑️')
                         reaction.message.react('🔒')
-                    } else { reaction.message.channel.send('sa marche pas') }
-                } else { reaction.message.channel.send('sa marche pas 2') }
+                    }
+                }
             }
-
             // Système qui gère la création des tickets pour le système de tickets
 
             // Système qui gère la création des tickets pour le système de commande
@@ -420,7 +301,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 const dbcatcmd = db.get('catcmd_' + reaction.message.guild.id)
                 if (dbcatcmd) {
                     if (categoriesId.includes(dbcatcmd)) {
-                    // vérification que la catégorie stockée dans la base de données est valide
+                        // vérification que la catégorie stockée dans la base de données est valide
                         const parentcmd = db.get('catcmd_' + reaction.message.guild.id)
                         const description = reaction.message.embeds[0].description
                         const userID = description.substring(
@@ -474,11 +355,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             channel.send('<@' + userID + '>')
                             channel.send(new Discord.MessageEmbed()
                                 .setDescription('🔽 **Comment passer commande ?**\n\nDescription : ' + descriptcmd + '\n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ', veuillez maintenant décrire précisément votre commande !')
-                                .setColor('#00FF00')
+                                .setColor('#FEFEFE')
                                 .setFooter(config.version, client.user.avatarURL()))
                             channel.send(new Discord.MessageEmbed()
                                 .setDescription('Client : (' + userID + ')\nGraphiste : {' + user.id + '}\n\n**Pour fermer le ticket cliquer sur la réaction 🔒\nPour signaler le client ou le graphiste cliquer sur la réaction ☢️**')
-                                .setColor('#00FF00')
+                                .setColor('#FEFEFE')
                                 .setFooter(config.version, client.user.avatarURL())).then(msg => {
                                 msg.react('🔒')
                                 msg.react('☢️')
@@ -486,7 +367,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         })
 
                         client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                            .setDescription('🎉 **Bonne nouvelle**\n\nUn graphiste a accepté votre commande sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                            .setDescription('🎉 **Bonne nouvelle !**\n\nUn graphiste a accepté votre commande sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                             .setColor('#00FF00')
                             .setFooter(config.version, client.user.avatarURL()))
                         client.channels.cache.get('776063705480691722').send('ticket de commande créé pour l\'utilisateur : (`' + userID + '`)')
@@ -499,13 +380,13 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         reaction.message.delete()
                     } else {
                         reaction.message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ **Le système de commande est invalide**\n\n`' + prefix + 'init` : permet de reconfigurer le système de commande !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                            .setDescription('⚠️ **Le système de commande est invalide !**\n\n`' + prefix + 'init` : permet de reconfigurer le système de commande !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                             .setColor('#e55f2a')
                             .setFooter(config.version, client.user.avatarURL()))
                     }
                 } else {
                     reaction.message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ **Le système de commande n\'est pas initialisé sur ce serveur**\n\n`' + prefix + 'init` : permet de configurer le système de commande. Après l’avoir tapé, le bot va créer un channel ou les clients pourront passer commande, un channel permettant au graphiste d\'accepter les commandes des clients, ainsi qu’une catégorie qui stockera les tickets de commandes et les 2 channels décrits ci-dessus.\n\n(pour supprimer le système sur votre serveur, retaper la commande)\n\n(si par erreur vous supprimez un channel ou la catégorie créée par le bot, retaper la commande. Le bot va automatiquement détecter qu’il y a une anomalie et corriger le problème)\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                        .setDescription('⚠️ **Le système de commande n\'est pas initialisé sur ce serveur !**\n\n`' + prefix + 'init` : permet de configurer le système de commande. Après l’avoir tapé, le bot va créer un channel ou les clients pourront passer commande, un channel permettant au graphiste d\'accepter les commandes des clients, ainsi qu’une catégorie qui stockera les tickets de commandes et les 2 channels décrits ci-dessus.\n\n(pour supprimer le système sur votre serveur, retaper la commande)\n\n(si par erreur vous supprimez un channel ou la catégorie créée par le bot, retaper la commande. Le bot va automatiquement détecter qu’il y a une anomalie et corriger le problème)\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                         .setColor('#e55f2a')
                         .setFooter(config.version, reaction.message.client.user.avatarURL()))
                 }
@@ -538,7 +419,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
                 if (reaction.emoji.name === '📝') {
                     await reaction.message.channel.messages.fetch()
-                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ']\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
+                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
 
                     hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
                         reaction.message.channel.send('**Transcript (' + reaction.message.channel.id + ') : ' + haste + '**')
@@ -560,36 +441,29 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         description.lastIndexOf('}')
                     )
                     await reaction.message.channel.messages.fetch()
-                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ']\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
+                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
                     hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
-                        client.channels.cache.get('797845739472027658').send('Transcript (`' + reaction.message.channel.id + '`) : **' + haste + '**\nClient : `[' + clientID + ']`\nGraphiste : `{' + graphisteID + '}`\nSignalement : `<' + user.id + '>`').then(msg => {
-                            msg.react('🎨')
-                            msg.react('💰')
-                            msg.react('⭕')
-                        })
+                        if (user.id === clientID) {
+                            client.users.cache.get(user.id).send(new Discord.MessageEmbed()
+                                .setDescription('☢️ **Signalement enregistré !**\n\nPour que le signalement puisse être pris en compte veuillez taper `' + prefix + 'signalement ' + graphisteID + ' ' + haste + ' [description de votre signalement]`')
+                                .setColor('#e55f2a')
+                                .setFooter(config.version, reaction.message.client.user.avatarURL()))
+                            reaction.message.client.channels.cache.get('797853971162595339').send('Client à l\'identifiant `' + clientID + '` a signalé le graphiste `' + graphisteID + '`')
+                            reaction.message.channel.delete()
+                        } else {
+                            client.users.cache.get(user.id).send(new Discord.MessageEmbed()
+                                .setDescription('☢️ **Signalement enregistré !**\n\nPour que le signalement puisse être pris en compte veuillez taper `' + prefix + 'signalement ' + clientID + ' ' + haste + ' [description de votre signalement]`')
+                                .setColor('#e55f2a')
+                                .setFooter(config.version, reaction.message.client.user.avatarURL()))
+                            reaction.message.client.channels.cache.get('797853971162595339').send('Graphiste à l\'identifiant `' + graphisteID + '` a signalé le client `' + clientID + '`')
+                            reaction.message.channel.delete()
+                        }
                     })
-                    if (user.id === clientID) {
-                        client.users.cache.get(user.id).send(new Discord.MessageEmbed()
-                            .setDescription('☢️ **Le graphiste a bien été signalé**\n\nVous recevrez un message dans les prochains jours pour vous informer si oui ou non un des membres de la commande a été banni !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
-                            .setFooter(config.version, reaction.message.client.user.avatarURL()))
-                        reaction.message.channel.delete()
-                    } else {
-                        client.users.cache.get(user.id).send(new Discord.MessageEmbed()
-                            .setDescription('☢️ **Le client a bien été signalé**\n\nVous recevrez un message dans les prochains jours pour vous informer si oui ou non un des membres de la commande a été banni !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
-                            .setFooter(config.version, reaction.message.client.user.avatarURL()))
-                        reaction.message.channel.delete()
-                    }
                 }
             }
             if (reaction.message.channel.id === '797845739472027658') {
                 const description = reaction.message.content
-                const clientID = description.substring(
-                    description.lastIndexOf('[') + 1,
-                    description.lastIndexOf(']')
-                )
-                const graphisteID = description.substring(
+                const memberID = description.substring(
                     description.lastIndexOf('[') + 1,
                     description.lastIndexOf(']')
                 )
@@ -597,37 +471,22 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     description.lastIndexOf('<') + 1,
                     description.lastIndexOf('>')
                 )
-                if (reaction.emoji.name === '🎨') {
-                    client.users.cache.get(signalementID).send(new Discord.MessageEmbed()
-                        .setDescription('🎉 **Bonne nouvelle**\n\nVotre signalement a permi de bannir le graphiste signalé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                        .setColor('#00FF00')
-                        .setFooter(config.version, client.user.avatarURL()))
-                    db.push('blacklist', graphisteID)
-                    client.users.cache.get(graphisteID).send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                const descriptionSi = description.substring(
+                    description.lastIndexOf('{') + 1,
+                    description.lastIndexOf('}')
+                )
+                if (reaction.emoji.name === '⛔') {
+                    client.users.cache.get(signalementID).send(`🎉 **Votre signalement a permi de bannir le membre à l\'identifiant **\`${memberID}\`** ! Merci ❤️**`)
+                    db.push('blacklist', memberID)
+                    client.users.cache.get(memberID).send(new Discord.MessageEmbed()
+                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué !**\n\nRaison : ' + descriptionSi)
                         .setColor('#FF0000')
-                        .setFooter(config.version, client.user.avatarURL()))
+                        .setFooter(config.version, reaction.message.client.user.avatarURL()))
                     reaction.message.delete()
-                    reaction.message.client.channels.cache.get('797853971162595339').send('Utilisateur à l\'identifiant `' + graphisteID + '` banni par ' + user.tag + ' (`' + user.id + '`) ')
+                    reaction.message.client.channels.cache.get('797853971162595339').send('Utilisateur à l\'identifiant `' + memberID + '` banni par ' + user.tag + ' (`' + user.id + '`) ')
                 }
-                if (reaction.emoji.name === '💰') {
-                    client.users.cache.get(signalementID).send(new Discord.MessageEmbed()
-                        .setDescription('🎉 **Bonne nouvelle**\n\nVotre signalement a permi de bannir le client signalé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                        .setColor('#00FF00')
-                        .setFooter(config.version, client.user.avatarURL()))
-                    db.push('blacklist', clientID)
-                    client.users.cache.get(clientID).send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                        .setColor('#FF0000')
-                        .setFooter(config.version, client.user.avatarURL()))
-                    reaction.message.delete()
-                    reaction.message.client.channels.cache.get('797853971162595339').send('Utilisateur à l\'identifiant `' + clientID + '` banni par ' + user.tag + ' (`' + user.id + '`) ')
-                }
-                if (reaction.emoji.name === '⭕') {
-                    client.users.cache.get(signalementID).send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ **Signalement incorrect**\n\nVotre signalement n\'a pas permis de confirmer que le membre signalé doit être banni !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                        .setColor('#e55f2a')
-                        .setFooter(config.version, client.user.avatarURL()))
+                if (reaction.emoji.name === '❌') {
+                    client.users.cache.get(signalementID).send(`⚠️ **Votre signalement pour l\'utilisateur **\`${memberID}\`** n\'a pas permis de confirmer que le membre devait être banni !**`)
                     reaction.message.delete()
                 }
             }
@@ -658,7 +517,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         .setDescription('🎉 **Bonne nouvelle**\n\nVotre création à l\'identifiant `' + creationID + '` a été vérifié !\n\nTaper `' + prefix + 'viewcrea` pour voir votre nouvelle validation !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                         .setColor('#00FF00')
                         .setFooter(config.version, client.user.avatarURL()))
-                    client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) validée par ' + user.tag + ' (`' + user.id + '`)')
+                    client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) vérifiée par ' + user.tag + ' (`' + user.id + '`)')
                 } else {
                     client.users.cache.get(userID).send(new Discord.MessageEmbed()
                         .setDescription('⚠️ **Preuve invalide**\n\nVotre preuve n\'a pas permis de confirmer que la création à l\'identifiant `' + creationID + '` vous appartenez !\n\n`' + prefix + 'addpreuve ' + creationID + ' [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
@@ -683,8 +542,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     return userID2 === userID && creationID2 === creationID
                 }).forEach(message => message.delete())
             }
-
-        // Système qui gère la validation des créations
+            // Système qui gère la validation des créations
         }
     }
 })
@@ -722,7 +580,7 @@ client.on('ready', async () => {
     const statuses = [
         'MP le bot',
         'pour enregistrer des 🎨 créations 🎨 !',
-        'regarder !gbhelp'
+        'regarder !vbhelp'
     ]
     let i = 5
     setInterval(() => {

@@ -4,7 +4,7 @@ const Jimp = require('jimp')
 
 module.exports = {
     run: (db, message, args, client) => {
-        let prefix = '!gb'
+        let prefix = '!vb'
         if (message.channel.type !== 'dm') {
             if (db.has('prefix_' + message.guild.id)) {
                 prefix = db.get('prefix_' + message.guild.id)
@@ -49,30 +49,24 @@ module.exports = {
                                 db.set('crea_' + message.author.id, creations)
                                 creations.find((creation) => creation.id === creaID).verif = '❌'
                                 db.set('crea_' + message.author.id, creations)
-                                message.channel.send(new Discord.MessageEmbed()
-                                    .setDescription('✅ **La création numéro `' + creaID + '` a bien été remplacée**\n\nTapez `' + prefix + 'viewcrea` pour voir votre nouvelle création !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                                    .setColor('#00FF00')
-                                    .setFooter(config.version, message.client.user.avatarURL()))
+                                message.channel.send('✅ **La création numéro `' + creaID + '` a bien été remplacée !**')
                             })
                         })
                     })
                 } else {
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Veuillez entrer votre création terminée**\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
+                        .setDescription('🛑 **Veuillez entrer votre création terminée !**\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
                         .setColor('#FF0000')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 }
             } else {
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ **Création introuvable**\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
+                    .setDescription('⚠️ **Création introuvable !**\n\n(le numéro d’une création s’obtient en tapant `' + prefix + 'viewcrea`)\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
                     .setColor('#e55f2a')
                     .setFooter(config.version, message.client.user.avatarURL()))
             }
         } else {
-            message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ **Aucune création enregistrée dans la base de données**\n\n`' + prefix + 'addcrea [votre création]` : permet d\'enregistrer une création dans la base de données !\n\n(votre création doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                .setColor('#e55f2a')
-                .setFooter(config.version, message.client.user.avatarURL()))
+            message.channel.send('⚠️ **Aucune création enregistrée dans la base de données !**')
         }
     }
 }
