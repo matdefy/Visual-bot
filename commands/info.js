@@ -3,33 +3,87 @@ const config = require('../config.json')
 
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
-        if (dbLogs.has('logs')) {
-            const logs = dbLogs.get('logs')
-            const total = logs.length
-            const creation = dbLogs.get('creation')
-            const preuve = dbLogs.get('preuve')
-            const logsDay = logs.filter(log => log.date >= (Date.now() - 24 * 60 * 60 * 1000)).length
-            const logscmd = logs.filter(log => log.cmd === ('*cmd')).length
-            const logsdescript = logs.filter(log => log.cmd === ('*descript')).length
-            const logshelp = logs.filter(log => log.cmd === ('*help')).length
-            const logsinfo = logs.filter(log => log.cmd === ('*info')).length
-            const logslevel = logs.filter(log => log.cmd === ('*level')).length
-            const logsviewcrea = logs.filter(log => log.cmd === ('*viewcrea')).length
+        let prefix = config.prefix
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
+        if (!args[0]) {
             message.channel.send(new Discord.MessageEmbed()
-                .setTitle('🔽 Information relative aux commandes tapées 🔽')
-                .setDescription('Le nombre de commandes tapées depuis le 13/10/20 est de **' + total + '** commandes ! \n \nCommandes tapées aujourd\'hui : **' + logsDay + '**\n \n**❤️ MERCI ❤️**\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                .addFields(
-                    { name: 'créations enregistrées', value: creation + ' créations', inline: true },
-                    { name: 'preuves enregistrées', value: preuve + ' preuves', inline: true },
-                    { name: 'commande : cmd', value: 'tapées ' + logscmd + ' fois', inline: true },
-                    { name: 'commande : descript', value: 'tapées ' + logsdescript + ' fois', inline: true },
-                    { name: 'commande : help', value: 'tapées ' + logshelp + ' fois', inline: true },
-                    { name: 'commande : info', value: 'tapées ' + logsinfo + ' fois', inline: true },
-                    { name: 'commande : level', value: 'tapées ' + logslevel + ' fois', inline: true },
-                    { name: 'commande : viewcrea', value: 'tapées ' + logsviewcrea + ' fois', inline: true }
-                )
-                .setColor('00FF00')
+                .setDescription(`ℹ️ **informations**\n\n**Pour afficher des informations sur un utilisateur tapez :** \`${prefix}info user [id user, mention user, rien]\`\n\n**Pour afficher des informations sur une commande tapez :** \`${prefix}info cmd [id cmd]\``)
+                .setColor('#FF7B00')
                 .setFooter(config.version, message.client.user.avatarURL()))
+        }
+        if (args[0] === 'cmd') {
+            const cmdID = args[1]
+            if (args[1]) {
+                const cmd = db.get('cmd')
+                const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+                if (cmdid !== undefined) {
+                    const prixcmd = cmdid.prix
+                    const guildOUusercmd = cmdid.guildOUuser
+                    const mdepcmd = cmdid.mdep
+                    const delaicmd = cmdid.delai
+                    const descriptcmd = cmdid.descript
+                    const clientcmd = cmdid.client
+                    const prestatairecmd = cmdid.prestataire
+                    const transcriptcmd = cmdid.transcript
+                    const statuecmd = cmdid.statue
+                    let logo = '📮'
+                    if (statuecmd === 'accepté') {
+                        logo = '📩'
+                    }
+                    if (statuecmd === 'fermé') {
+                        logo = '🔒'
+                    }
+                    if (statuecmd === 'signalé') {
+                        logo = '☢️'
+                    }
+                    message.channel.send(new Discord.MessageEmbed()
+                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**-Transcript : ${transcriptcmd}**\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur ou utilisateur concerné : **\`${guildOUusercmd}\``)
+                        .setColor('#FF7B00')
+                        .setFooter(config.version, message.client.user.avatarURL()))
+                } else {
+                    message.channel.send(`⚠️ **Commande (\`${cmdID}\`) introuvable !**`)
+                }
+            } else {
+                message.channel.send('⚠️ **Veuillez rentrer le numéro d\'une commande !**')
+            }
+        }
+        if (args[0] === 'user') {
+            let user = 0
+            if (message.mentions.users.size === 1) {
+                user = message.mentions.users.first().id
+            } else {
+                if (args[1] > 0) {
+                    user = args[1]
+                } else {
+                    user = message.author.id
+                }
+            }
+            const verifuser = client.users.cache.find((element) => element.id === user)
+            if (verifuser) {
+                const cmd = db.get('cmd')
+                const clientnum = cmd.filter((cmd) => cmd.client === user).length
+                const prestatairenum = cmd.filter((cmd) => cmd.prestataire === user).length
+                const total = clientnum + prestatairenum
+                let logo = '✅'
+                const usersblacklist = db.get('blacklist')
+                if (usersblacklist.includes(user)) {
+                    logo = '☢️'
+                }
+                let statue = '**(membre valide)**'
+                if (logo === '☢️') {
+                    statue = '**(membre banni/e)**'
+                }
+                message.channel.send(new Discord.MessageEmbed()
+                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Nombre de commande participé : **\`${total}\`\n\n**-Statue : **${logo} ${statue}`)
+                    .setColor('#FF7B00')
+                    .setFooter(config.version, message.client.user.avatarURL()))
+            } else {
+                message.channel.send(`⚠️ **Utilisateur (\`${user}\`) inconnu/e !**`)
+            }
         }
     }
 }

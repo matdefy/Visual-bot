@@ -2,77 +2,188 @@ const Discord = require('discord.js')
 const config = require('../config.json')
 
 module.exports = {
-    run: (db, message, args, client, dbLogs) => {
-        const numcmd = args[0]
-        const guild = message.guild.name
-        if (dbLogs.has('channelcmd_' + message.guild.id)) {
-            if (dbLogs.has('catcmd_' + message.guild.id)) {
-                // vérification que le salon stockée dans la base de données est valide
-                const channelID = dbLogs.get('channelcmd_' + message.guild.id)
-                const guildchannels = message.guild.channels.cache.map(channel => channel.id)
-                if (guildchannels.includes(channelID)) {
-                // vérification que le salon stockée dans la base de données est valide
-
-                    // vérification que la catégorie stockée dans la base de données est valide
-                    const guildparents = message.guild.channels.cache
-                    const categoriestout = guildparents.filter((salon) => salon.type === 'category')
-                    const categoriesId = categoriestout.map(categorie => categorie.id)
-                    const dbcatcmd = dbLogs.get('catcmd_' + message.guild.id)
-                    if (categoriesId.includes(dbcatcmd)) {
-                    // vérification que la catégorie stockée dans la base de données est valide
-
-                        if (numcmd < 6) {
-                            const channelCMD = dbLogs.get('channelcmd_' + message.guild.id)
-                            client.channels.cache.get(channelCMD).send({
-                                embed: new Discord.MessageEmbed()
-                                    .setTitle(message.author.id)
-                                    .setDescription('Commande numéro : [' + numcmd + ']\nUtilisateur : ' + message.author.tag + ' (' + message.author.id + ')')
-                                    .setColor('#00FF00')
-                                    .setFooter(config.version, message.client.user.avatarURL())
-                            }).then(msg => {
-                                msg.react('✅')
-                            })
-                            message.channel.send(new Discord.MessageEmbed()
-                                .setTitle('✅ Commande enregistré ✅')
-                                .setDescription('Aller dans les messages privés de Graph Bot pour avoir tous les détails sur votre  📩 commande 📩 !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                                .setColor('00FF00')
-                                .setFooter(config.version, message.client.user.avatarURL()))
-                            message.author.createDM().then(channel => {
-                                channel.send(new Discord.MessageEmbed()
-                                    .setTitle('✅ Commande enregistré ✅')
-                                    .setDescription(`Votre commande au numéro \`${numcmd}\` sur le serveur ${guild} a bien été prise en compte, vous serez notifiée 🔽 ici 🔽 lorsqu'un graphiste vous aura pris en charge !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**`)
-                                    .setColor('00FF00')
-                                    .setFooter(config.version, message.client.user.avatarURL()))
-                            })
+    run: async (db, message, args, client) => {
+        let prefix = config.prefix
+        if (message.channel.type !== 'dm') {
+            if (db.has('prefix_' + message.guild.id)) {
+                prefix = db.get('prefix_' + message.guild.id)
+            }
+        }
+        if (args[0] === 'delete') {
+            const cmdID = args[1]
+            if (args[1]) {
+                const cmd = db.get('cmd')
+                const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+                if (cmdid) {
+                    if (cmdid.client === message.author.id) {
+                        if (cmdid.statue === 'attente') {
+                            cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'annulé'
+                            // Écrire les modifications dans la base de données
+                            db.set('cmd', cmd)
+                            return message.channel.send(`✅ **Commande numéro : \`${cmdID}\` annulée !**`)
                         } else {
-                            message.channel.send(new Discord.MessageEmbed()
-                                .setDescription('⚠️ Le numéro d\'une commande doit être compris entre `1` et `5`, mais pas `' + numcmd + '` ! ⚠️\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                                .setColor('#e55f2a')
-                                .setFooter(config.version, message.client.user.avatarURL()))
+                            return message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut être annulée !**')
                         }
                     } else {
-                        message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ La catégorie stockée dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                            .setColor('#e55f2a')
-                            .setFooter(config.version, message.client.user.avatarURL()))
+                        return message.channel.send(`⚠️ **La commande numéro : \`${cmdID}\` ne vous appartient pas !**`)
                     }
                 } else {
-                    message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ Le salon stocké dans la base de données pour afficher les commandes est invalide ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                        .setColor('#e55f2a')
-                        .setFooter(config.version, message.client.user.avatarURL()))
+                    return message.channel.send(`⚠️ **Commande numéro : \`${cmdID}\` inconnu !**`)
                 }
             } else {
-                message.channel.send(new Discord.MessageEmbed()
-                    .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné la catégorie ou créé les tickets de commandes ! ⚠️\nTapez `*setcatcmd [l\'identifiant d\'une catégorie]` pour ajouter une catégorie dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                    .setColor('#e55f2a')
-                    .setFooter(config.version, message.client.user.avatarURL()))
+                return message.channel.send('⚠️ **Veuillez rentrer le numéro d\'une commande !**')
             }
-        } else {
-            message.channel.send(new Discord.MessageEmbed()
-                .setDescription('⚠️ Le gérant du serveur n\'a pas sélectionné le salon ou afficher les commandes ! ⚠️\nTapez `*setchannelcmd [l\'identifiant d\'un salon]` pour ajouter un salon dans la base de données !\n\n**[Documentation](https://graphbot.gitbook.io/graph-bot/)**')
-                .setColor('#e55f2a')
-                .setFooter(config.version, message.client.user.avatarURL()))
         }
+        const guildOUuser = args[0]
+        let prixcmd = null
+        let mdepcmd = null
+        let delaicmd = null
+        let descriptcmd = null
+        const user = client.users.cache.find((element) => element.id === guildOUuser)
+        const guild = client.guilds.cache.find((element) => element.id === guildOUuser)
+        if (guildOUuser !== undefined) {
+            if (user || guild) {
+            } else {
+                return message.channel.send(`⚠️ **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
+            }
+        }
+        message.channel.send(new Discord.MessageEmbed()
+            .setDescription('📮 **Commande activé ' + message.author.tag + ' !**\n\nVeuillez répondre aux questions envoyées pour finaliser l\'enregistrement de votre commande !')
+            .setColor('FF7B00')
+            .setFooter(config.version, message.client.user.avatarURL()))
+
+        const channelMP = await message.author.createDM()
+        channelMP.send('**Quelle prix souhaitez-vous ? (en euro/s)**')
+        const collector = channelMP.createMessageCollector(
+            m => m.author.id === message.author.id,
+            {
+                time: 120000 // 2 minutes
+            }
+        )
+        collector.on('collect', async msg => {
+            if (!prixcmd) {
+                if (isNaN(msg.content)) {
+                    return channelMP.send('⚠️ **Le prix de votre commande doit être seulement exprimé par un nombre positif !**')
+                }
+                prixcmd = msg.content
+                channelMP.send(`✅ **Le prix de votre commande sera de **\`${prixcmd}€\`** !**`)
+
+                channelMP.send('**Quelle mode de paiement souhaitez-vous ?**')
+                return
+            }
+            if (!mdepcmd) {
+                mdepcmd = msg.content
+                channelMP.send(`✅ **Le mode de paiement pour votre commande sera par **\`${mdepcmd}\`** !**`)
+
+                channelMP.send('**Quelle délai maximum souhaitez-vous ? (en jour/s)**')
+                return
+            }
+            if (!delaicmd) {
+                if (isNaN(msg.content)) {
+                    return channelMP.send('⚠️ **Le délai maximum pour votre commande doit être seulement exprimé par un nombre positif !**')
+                }
+                delaicmd = msg.content
+                channelMP.send(`✅ **Le délai maximum pour votre commande sera de **\`${delaicmd}\`** jour/s !**`)
+                // questionnaire delai
+
+                // questionnaire description
+                channelMP.send('**Quelle est la description de votre commande ? (minimum 15 caractères)**')
+                return
+            }
+            if (!descriptcmd) {
+                // questionnaire description
+                if (msg.content.length > 14) {
+                    descriptcmd = msg.content
+                    channelMP.send(`✅ **La description de votre commande sera : **\`${descriptcmd}\`** !**`)
+                    collector.stop()
+                    let id = 1
+                    if (db.has('cmd')) {
+                        id = db.get('cmd').length + 1
+                    }
+                    if (guildOUuser > 0) {
+                        db.push('cmd', {
+                            id: id,
+                            descript: descriptcmd,
+                            prix: prixcmd,
+                            mdep: mdepcmd,
+                            delai: delaicmd,
+                            guildOUuser: guildOUuser,
+                            client: message.author.id,
+                            prestataire: null,
+                            statue: 'attente',
+                            transcript: null
+                        })
+                        message.author.createDM().then(channel => {
+                            channel.send(new Discord.MessageEmbed()
+                                .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
+                                .setColor('#FF7B00')
+                                .setFooter(config.version, message.client.user.avatarURL()))
+                            channel.send(`**Pour annuler cette commande, tapez : \`${prefix}cmd delete ${id}\`.**`)
+                        })
+                        if (user) {
+                            client.users.cache.get(guildOUuser).send(new Discord.MessageEmbed()
+                                .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
+                                .setColor('#FF7B00')
+                                .setFooter(config.version, client.user.avatarURL())).then((msg) => {
+                                msg.react('📩')
+                            })
+                        }
+                        if (guild) {
+                            const guildchannels = client.guilds.cache.get(guildOUuser).channels.cache
+                            const channelstout = guildchannels.filter((salon) => salon.type === 'text')
+                            const channelsId = channelstout.map(channels => channels.id)
+                            const channelCMD = db.get('channelcmd_' + guildOUuser)
+                            if (channelCMD) {
+                                if (channelsId.includes(channelCMD)) {
+                                    message.client.channels.cache.get(channelCMD).send(new Discord.MessageEmbed()
+                                        .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
+                                        .setColor('#FF7B00')
+                                        .setFooter(config.version, client.user.avatarURL())).then((msg) => {
+                                        msg.react('📩')
+                                    })
+                                } else {
+                                    message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
+                                }
+                            } else {
+                                message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                            }
+                        }
+                    } else {
+                        db.push('cmd', {
+                            id: id,
+                            descript: descriptcmd,
+                            prix: prixcmd,
+                            mdep: mdepcmd,
+                            delai: delaicmd,
+                            guildOUuser: null,
+                            client: message.author.id,
+                            prestataire: null,
+                            statue: 'attente',
+                            transcript: null
+                        })
+                        message.author.createDM().then(channel => {
+                            channel.send(new Discord.MessageEmbed()
+                                .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.tag}>`)
+                                .setColor('#FF7B00')
+                                .setFooter(config.version, message.client.user.avatarURL()))
+                            channel.send(`**Pour annuler cette commande, tapez : \`${prefix}cmd delete ${id}\`.**`)
+                        })
+                        message.client.channels.cache.get('819631330266185819').send(new Discord.MessageEmbed()
+                            .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.tag}>`)
+                            .setColor('#FF7B00')
+                            .setFooter(config.version, client.user.avatarURL())).then((msg) => {
+                            msg.react('📩')
+                        })
+                    }
+                } else {
+                    channelMP.send('⚠️ **La description de votre commande doit faire plus de 15 caractères !**')
+                }
+            }
+        })
+        collector.on('end', (_, raison) => {
+            if (raison === 'time') {
+                channelMP.send('⚠️ **Temps imparti écoulé, votre commande a été désactivé !**')
+            }
+        })
     }
 }
