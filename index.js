@@ -68,7 +68,7 @@ client.on('message', async message => {
             prefix = db.get('prefix_' + message.guild.id)
         }
     }
-    if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'descript') || message.content.startsWith(prefix + 'eval') || message.content.startsWith(prefix + 'filigrane') || message.content.startsWith(prefix + 'help') || message.content.startsWith(prefix + 'info') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'level') || message.content.startsWith(prefix + 'say') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'tickets') || message.content.startsWith(prefix + 'validcrea') || message.content.startsWith(prefix + 'viewcrea') || message.content.startsWith(prefix + 'viewpreuve')) {
+    if (message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'help') || message.content.startsWith(prefix + 'info') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'say') || message.content.startsWith(prefix + 'setprefix')) {
         const usersblacklist = db.get('blacklist')
         if (usersblacklist.includes(message.author.id)) {
             if (message.channel.type !== 'dm') {
@@ -80,24 +80,8 @@ client.on('message', async message => {
     }
     // système verification blacklist
     if (message.channel.type === 'dm') {
-        if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'level') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'tickets') || message.content.startsWith(prefix + 'validcrea')) {
+        if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'setprefix')) {
             return message.channel.send('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
-        } else {
-            const args = message.content.trim().split(/ +/g)
-            const commandName = args.shift().toLowerCase()
-            if (!commandName.startsWith(prefix)) return
-            const command = client.commands.get(commandName.slice(prefix.length))
-            if (!command) return
-            command.run(db, message, args, client, dbLogs)
-            dbLogs.push('logs', {
-                date: Date.now(),
-                cmd: commandName.slice(prefix.length),
-                userId: message.author.id
-            })
-        }
-    } else {
-        if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'viewpreuve')) {
-            return message.channel.send('⚠️ **Cette commande doit être tapée dans le salon MP de Visual Bot obligatoirement !**')
         } else {
             const args = message.content.trim().split(/ +/g)
             const commandName = args.shift().toLowerCase()
@@ -142,7 +126,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     await reaction.fetch()
     if (reaction.message.author.id === client.user.id) {
     // système verification blacklist
-        if (reaction.emoji.name === '📊' || reaction.emoji.name === '🇧' || reaction.emoji.name === '⚙️' || reaction.emoji.name === '🇦' || reaction.emoji.name === '4️⃣' || reaction.emoji.name === '3️⃣' || reaction.emoji.name === '2️⃣' || reaction.emoji.name === '🖼️' || reaction.emoji.name === '1️⃣' || reaction.emoji.name === '💬' || reaction.emoji.name === 'ℹ️' || reaction.emoji.name === '⌨️' || reaction.emoji.name === '☑️' || reaction.emoji.name === '✅' || reaction.emoji.name === '🔒' || reaction.emoji.name === '📝' || reaction.emoji.name === '☢️' || reaction.emoji.name === '🤖') {
+        if (reaction.emoji.name === '📩' || reaction.emoji.name === '🔒' || reaction.emoji.name === '☢️') {
             const usersblacklist = db.get('blacklist')
             if (usersblacklist.includes(user.id)) {
                 return
@@ -300,7 +284,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 }
             } else {
                 client.guilds.cache.get('764869621982691329').channels.create('cmd_' + cmdID, {
-                    parent: '819631253670068234',
+                    parent: '829074299406909481',
                     permissionOverwrites: [
                         {
                             id: '764869621982691329',
@@ -412,7 +396,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         parent: '819631253670068234',
                         permissionOverwrites: [
                             {
-                                id: reaction.message.guild.id,
+                                id: '764869621982691329',
                                 deny: [
                                     'VIEW_CHANNEL',
                                     'ATTACH_FILES'
