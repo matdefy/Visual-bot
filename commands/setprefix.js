@@ -9,7 +9,7 @@ module.exports = {
                 prefix2 = db.get('prefix_' + message.guild.id)
             }
         }
-        if (message.member.hasPermission('KICK_MEMBERS')) {
+        if (message.member.hasPermission('MANAGE_GUILD')) {
             const prefix = args[0]
             if (args[0]) {
                 if (prefix.length < 6) {
@@ -19,10 +19,10 @@ module.exports = {
                     message.channel.send('⚠️ **Le prefix doit faire au maximum 5 caractères !**')
                 }
             } else {
-                message.channel.send('⚠️ **Veuillez entrer un prefix ! !**')
+                message.channel.send('⚠️ **Veuillez entrer un prefix !**')
             }
         } else {
-            message.channel.send('🛑 **Vous n\'avez pas les permissions suffisantes !**')
+            message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
         }
     }
 }

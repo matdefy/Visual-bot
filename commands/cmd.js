@@ -42,9 +42,20 @@ module.exports = {
         const user = client.users.cache.find((element) => element.id === guildOUuser)
         const guild = client.guilds.cache.find((element) => element.id === guildOUuser)
         if (guildOUuser !== undefined) {
-            if (user || guild) {
-            } else {
+            if (!user && !guild) {
                 return message.channel.send(`⚠️ **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
+            }
+            if (guild) {
+                const guildchannels = client.guilds.cache.get(guildOUuser).channels.cache
+                const channelstout = guildchannels.filter((salon) => salon.type === 'text')
+                const channelsId = channelstout.map(channels => channels.id)
+                const channelCMD = db.get('channelcmd_' + guildOUuser)
+                if (!channelCMD) {
+                    return message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                }
+                if (!channelsId.includes(channelCMD)) {
+                    return message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
+                }
             }
         }
         message.channel.send(new Discord.MessageEmbed()
@@ -87,12 +98,12 @@ module.exports = {
                 // questionnaire delai
 
                 // questionnaire description
-                channelMP.send('**Quelle est la description de votre commande ? (minimum 15 caractères)**')
+                channelMP.send('**Quelle est la description de votre commande ? (minimum 15 caractères, maximum 500 caractères)**')
                 return
             }
             if (!descriptcmd) {
                 // questionnaire description
-                if (msg.content.length > 14) {
+                if (msg.content.length > 14 && msg.content.length < 500) {
                     descriptcmd = msg.content
                     channelMP.send(`✅ **La description de votre commande sera : **\`${descriptcmd}\`** !**`)
                     collector.stop()
@@ -115,38 +126,27 @@ module.exports = {
                         })
                         message.author.createDM().then(channel => {
                             channel.send(new Discord.MessageEmbed()
-                                .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
+                                .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou utilisateur concerné : **<@${guildOUuser}>`)
                                 .setColor('#FF7B00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
-                            channel.send(`**Pour annuler cette commande, tapez : \`${prefix}cmd delete ${id}\`.**`)
+                            channel.send(`**Pour annuler cette commande, tapez : **\`${prefix}cmd delete ${id}\`**.**`)
                         })
                         if (user) {
                             client.users.cache.get(guildOUuser).send(new Discord.MessageEmbed()
-                                .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
+                                .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou utilisateur concerné : **<@${guildOUuser}>`)
                                 .setColor('#FF7B00')
                                 .setFooter(config.version, client.user.avatarURL())).then((msg) => {
                                 msg.react('📩')
                             })
                         }
                         if (guild) {
-                            const guildchannels = client.guilds.cache.get(guildOUuser).channels.cache
-                            const channelstout = guildchannels.filter((salon) => salon.type === 'text')
-                            const channelsId = channelstout.map(channels => channels.id)
                             const channelCMD = db.get('channelcmd_' + guildOUuser)
-                            if (channelCMD) {
-                                if (channelsId.includes(channelCMD)) {
-                                    message.client.channels.cache.get(channelCMD).send(new Discord.MessageEmbed()
-                                        .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou Utilisateur concerné : **<@${guildOUuser}>`)
-                                        .setColor('#FF7B00')
-                                        .setFooter(config.version, client.user.avatarURL())).then((msg) => {
-                                        msg.react('📩')
-                                    })
-                                } else {
-                                    message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
-                                }
-                            } else {
-                                message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
-                            }
+                            message.client.channels.cache.get(channelCMD).send(new Discord.MessageEmbed()
+                                .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur ou utilisateur concerné : **<@${guildOUuser}>`)
+                                .setColor('#FF7B00')
+                                .setFooter(config.version, client.user.avatarURL())).then((msg) => {
+                                msg.react('📩')
+                            })
                         }
                     } else {
                         db.push('cmd', {
@@ -166,9 +166,9 @@ module.exports = {
                                 .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.tag}>`)
                                 .setColor('#FF7B00')
                                 .setFooter(config.version, message.client.user.avatarURL()))
-                            channel.send(`**Pour annuler cette commande, tapez : \`${prefix}cmd delete ${id}\`.**`)
+                            channel.send(`**Pour annuler cette commande, tapez : **\`${prefix}cmd delete ${id}\`**.**`)
                         })
-                        message.client.channels.cache.get('819631330266185819').send(new Discord.MessageEmbed()
+                        message.client.channels.cache.get('829074299406909481').send(new Discord.MessageEmbed()
                             .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.tag}>`)
                             .setColor('#FF7B00')
                             .setFooter(config.version, client.user.avatarURL())).then((msg) => {
@@ -176,7 +176,7 @@ module.exports = {
                         })
                     }
                 } else {
-                    channelMP.send('⚠️ **La description de votre commande doit faire plus de 15 caractères !**')
+                    channelMP.send('⚠️ **La description de votre commande doit faire au minimum 15 caractères et au maximum 500 caractères !**')
                 }
             }
         })

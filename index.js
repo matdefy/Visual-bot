@@ -95,6 +95,18 @@ client.on('message', async message => {
                 userId: message.author.id
             })
         }
+    } else {
+        const args = message.content.trim().split(/ +/g)
+        const commandName = args.shift().toLowerCase()
+        if (!commandName.startsWith(prefix)) return
+        const command = client.commands.get(commandName.slice(prefix.length))
+        if (!command) return
+        command.run(db, message, args, client, dbLogs)
+        dbLogs.push('logs', {
+            date: Date.now(),
+            cmd: commandName.slice(prefix.length),
+            userId: message.author.id
+        })
     }
 })
 
@@ -107,13 +119,8 @@ client.on('guildCreate', (guild) => {
     channelInvite.createInvite({
         maxAge: 0
     }).then(invite => {
-        client.channels.cache.get('819631330266185819').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\n**Invitation :** https://discord.gg/` + invite.code)
+        client.channels.cache.get('829404215163224104').send(`**${invite}**`)
     })
-    dbLogs.push('guild', {
-        date: Date.now(),
-        guild: guild.name
-    })
-    console.log(channelInvite)
 })
 
 // Système qui envoie un message quand le bot est ajouté sur un serveur
@@ -165,7 +172,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
             const clientcmd = cmdid.client
             const statuecmd = cmdid.statue
             if (statuecmd === 'annulé') {
-                return client.users.cache.get(clientcmd).send(`⚠️ **Commande numéro : \`${cmdID}\` annulé par le client !**`)
+                reaction.message.delete()
+                return client.users.cache.get(user.id).send(`⚠️ **Commande numéro : \`${cmdID}\` annulé par le client !**`)
             }
             cmd.find((cmd) => cmd.id === parseInt(cmdID)).prestataire = user.id
             // Écrire les modifications dans la base de données
@@ -260,7 +268,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                                     ]
                                 }).then((channel) => {
                                     channel.send(new Discord.MessageEmbed()
-                                        .setDescription(`📮 **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**Pour fermer le ticket, cliquer sur la réaction 🔒\n**Pour signaler un des membres de la commande, cliquer sur la réaction ☢️\n\nBonne commande !**`)
+                                        .setDescription(`📮 **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**Pour fermer le ticket, cliquer sur la réaction 🔒\nPour signaler un des membres de la commande, cliquer sur la réaction ☢️\n\nBonne commande !**`)
                                         .setColor('#FF7B00')
                                         .setFooter(config.version, client.user.avatarURL())).then(msg => {
                                         msg.react('🔒')
@@ -275,16 +283,16 @@ client.on('messageReactionAdd', async (reaction, user) => {
                                 })
                                 reaction.message.delete()
                             } else {
-                                reaction.message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                                reaction.message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
                             }
                         } else {
-                            reaction.message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
+                            reaction.message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
                         }
                     }
                 }
             } else {
                 client.guilds.cache.get('764869621982691329').channels.create('cmd_' + cmdID, {
-                    parent: '829074299406909481',
+                    parent: '819631253670068234',
                     permissionOverwrites: [
                         {
                             id: '764869621982691329',
@@ -333,7 +341,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
         // Système qui gère la fermeture des tickets
         if (reaction.message.channel.type !== 'dm') {
-            if (reaction.message.channel.name.startsWith('cmd_')) {
+            if (reaction.message.channel.name.startsWith('cmd_') && !reaction.message.channel.name.startsWith('cmd_signalement_')) {
                 if (reaction.emoji.name === '🔒') {
                     const description = reaction.message.embeds[0].description
                     const cmdID = description.substring(
@@ -382,6 +390,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     const descriptcmd = cmdid.descript
                     const clientcmd = cmdid.client
                     const prestatairecmd = cmdid.prestataire
+                    let transcriptcmd = cmdid.transcript
                     cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'signalé'
                     // Écrire les modifications dans la base de données
                     db.set('cmd', cmd)
@@ -391,6 +400,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         cmd.find((cmd) => cmd.id === parseInt(cmdID)).transcript = haste
                         // Écrire les modifications dans la base de données
                         db.set('cmd', cmd)
+                        transcriptcmd = haste
                     })
                     client.guilds.cache.get('764869621982691329').channels.create('cmd_signalement_' + cmdID, {
                         parent: '819631253670068234',
@@ -413,16 +423,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             }
                         ]
                     }).then((channel) => {
-                        const cmd = db.get('cmd')
-                        const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
-                        const transcriptcmd = cmdid.transcript
                         channel.send(new Discord.MessageEmbed()
                             .setDescription(`☢️ **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**-Transcript : ${transcriptcmd}**\n\n**Bonjour, veuillez écrire le pourquoi de votre signalement.**`)
                             .setColor('FF7B00')
                             .setFooter(config.version, reaction.message.client.user.avatarURL())).then((msg) => {
                             msg.react('🔒')
                         })
-                        client.users.cache.get(user.id).send(`☢️ **Signalement envoyé avec succès, un ticket vous a été créé : ${channel} !**`)
+                        channel.createInvite({
+                            maxAge: 172800
+                        }).then(invite => {
+                            client.users.cache.get(user.id).send(`☢️ **Signalement envoyé avec succès, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                        })
                         if (user.id === clientcmd) {
                             client.users.cache.get(prestatairecmd).send(`☢️ **Commande (\`${cmdID}\`) signalé par <@${user.id}>, vous recevrez un prochain message vous informant des dispositions prises !**`)
                         }
@@ -436,7 +447,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
             }
             if (reaction.message.channel.name.startsWith('cmd_signalement_')) {
                 if (reaction.emoji.name === '🔒') {
-                    reaction.message.channel.delete()
+                    if (reaction.message.member.hasPermission('MANAGE_GUILD')) {
+                        reaction.message.channel.delete()
+                    } else {
+                        reaction.message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
+                    }
                 }
             }
         }

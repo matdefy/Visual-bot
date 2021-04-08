@@ -9,7 +9,7 @@ module.exports = {
                 prefix = db.get('prefix_' + message.guild.id)
             }
         }
-        if (message.member.hasPermission('KICK_MEMBERS')) {
+        if (message.member.hasPermission('MANAGE_GUILD')) {
             if (!db.has('catcmd_' + message.guild.id) || !db.has('channelcmd_' + message.guild.id) || !db.has('channelcmdclient_' + message.guild.id)) {
                 if (!db.has('catcmd_' + message.guild.id)) {
                     await message.guild.channels.create('commandes', {
@@ -211,22 +211,19 @@ module.exports = {
                 }
                 return message.channel.send('✅ **Système de commande reconfiguré !**')
             } else {
-                const off = args[0]
-                if (db.has('catcmd_' + message.guild.id || db.has('channelcmd_' + message.guild.id)) || db.has('channelcmdclient_' + message.guild.id) || off === 'off') {
-                    if (db.has('catcmd_' + message.guild.id)) {
-                        client.channels.cache.get(dbcatcmd).delete()
-                        db.delete('catcmd_' + message.guild.id)
-                    }
-                    if (db.has('channelcmd_' + message.guild.id)) {
-                        client.channels.cache.get(channelID).delete()
-                        db.delete('channelcmd_' + message.guild.id)
-                    }
-                    if (db.has('channelcmdclient_' + message.guild.id)) {
-                        client.channels.cache.get(channelclientID).delete()
-                        db.delete('channelcmdclient_' + message.guild.id)
-                    }
-                    return message.channel.send('✅ **Système de commande désactivé !**')
+                if (db.has('catcmd_' + message.guild.id)) {
+                    client.channels.cache.get(dbcatcmd).delete()
+                    db.delete('catcmd_' + message.guild.id)
                 }
+                if (db.has('channelcmd_' + message.guild.id)) {
+                    client.channels.cache.get(channelID).delete()
+                    db.delete('channelcmd_' + message.guild.id)
+                }
+                if (db.has('channelcmdclient_' + message.guild.id)) {
+                    client.channels.cache.get(channelclientID).delete()
+                    db.delete('channelcmdclient_' + message.guild.id)
+                }
+                return message.channel.send('✅ **Système de commande désactivé !**')
             }
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')

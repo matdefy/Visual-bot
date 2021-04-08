@@ -40,12 +40,15 @@ module.exports = {
                     if (statuecmd === 'signalé') {
                         logo = '☢️'
                     }
+                    if (statuecmd === 'annulé') {
+                        logo = '🗑️'
+                    }
                     message.channel.send(new Discord.MessageEmbed()
                         .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**-Transcript : ${transcriptcmd}**\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur ou utilisateur concerné : **\`${guildOUusercmd}\``)
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
-                    message.channel.send(`⚠️ **Commande (\`${cmdID}\`) introuvable !**`)
+                    message.channel.send(`⚠️ **Commande : \`${cmdID}\` inconnue !**`)
                 }
             } else {
                 message.channel.send('⚠️ **Veuillez rentrer le numéro d\'une commande !**')
@@ -66,6 +69,8 @@ module.exports = {
             if (verifuser) {
                 const cmd = db.get('cmd')
                 const clientnum = cmd.filter((cmd) => cmd.client === user).length
+                const cmds = cmd.filter((cmd) => cmd.client === user)
+                let cmdids = cmds.map((element) => element.id)
                 const prestatairenum = cmd.filter((cmd) => cmd.prestataire === user).length
                 const total = clientnum + prestatairenum
                 let logo = '✅'
@@ -77,12 +82,17 @@ module.exports = {
                 if (logo === '☢️') {
                     statue = '**(membre banni/e)**'
                 }
+                if (cmdids.length === 0) {
+                    cmdids = '**aucune**'
+                } else {
+                    cmdids = `\`${cmdids.join('\`**,** \`')}\``
+                }
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Nombre de commande participé : **\`${total}\`\n\n**-Statue : **${logo} ${statue}`)
+                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Commande/s participée/s :** ${cmdids}\n\n**-Statue : **${logo} ${statue}`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
-                message.channel.send(`⚠️ **Utilisateur (\`${user}\`) inconnu/e !**`)
+                message.channel.send(`⚠️ **Utilisateur : \`${user}\` inconnu/e !**`)
             }
         }
     }
