@@ -10,17 +10,17 @@ module.exports = {
             }
         }
         if (message.member.hasPermission('MANAGE_GUILD')) {
-            if (!db.has('catcmd_' + message.guild.id) || !db.has('channelcmd_' + message.guild.id) || !db.has('channelcmdclient_' + message.guild.id)) {
-                if (!db.has('catcmd_' + message.guild.id)) {
+            if (!db.has('parent_' + message.guild.id) || !db.has('channelcmd_' + message.guild.id) || !db.has('channelcmdclient_' + message.guild.id)) {
+                if (!db.has('parent_' + message.guild.id)) {
                     await message.guild.channels.create('commandes', {
                         type: 'category'
                     }).then((categorie) => {
                         const idparent = categorie.id
-                        db.set('catcmd_' + message.guild.id, idparent)
+                        db.set('parent_' + message.guild.id, idparent)
                     })
                 }
                 if (!db.has('channelcmd_' + message.guild.id)) {
-                    const parentid = db.get('catcmd_' + message.guild.id)
+                    const parentid = db.get('parent_' + message.guild.id)
                     message.guild.channels.create('📮 commandes clients', {
                         permissionOverwrites: [
                             {
@@ -51,7 +51,7 @@ module.exports = {
                     })
                 }
                 if (!db.has('channelcmdclient_' + message.guild.id)) {
-                    const parentid = db.get('catcmd_' + message.guild.id)
+                    const parentid = db.get('parent_' + message.guild.id)
                     message.guild.channels.create('📮 passer commande', {
                         permissionOverwrites: [
                             {
@@ -80,7 +80,7 @@ module.exports = {
             const guildparents = message.guild.channels.cache
             const categoriestout = guildparents.filter((salon) => salon.type === 'category')
             const categoriesId = categoriestout.map(categorie => categorie.id)
-            const dbcatcmd = db.get('catcmd_' + message.guild.id)
+            const dbcatcmd = db.get('parent_' + message.guild.id)
             const channelID = db.get('channelcmd_' + message.guild.id)
             const channelclientID = db.get('channelcmdclient_' + message.guild.id)
             const guildchannels = message.guild.channels.cache.map(channel => channel.id)
@@ -90,11 +90,11 @@ module.exports = {
                         type: 'category'
                     }).then((categorie) => {
                         const idparent = categorie.id
-                        db.set('catcmd_' + message.guild.id, idparent)
+                        db.set('parent_' + message.guild.id, idparent)
                     })
                     if (guildchannels.includes(channelID)) {
                         client.channels.cache.get(channelID).delete()
-                        const parentid = db.get('catcmd_' + message.guild.id)
+                        const parentid = db.get('parent_' + message.guild.id)
                         await message.guild.channels.create('📮 commandes clients', {
                             permissionOverwrites: [
                                 {
@@ -127,7 +127,7 @@ module.exports = {
                     }
                     if (guildchannels.includes(channelclientID)) {
                         client.channels.cache.get(channelclientID).delete()
-                        const parentid = db.get('catcmd_' + message.guild.id)
+                        const parentid = db.get('parent_' + message.guild.id)
                         message.guild.channels.create('📮 passer commande', {
                             permissionOverwrites: [
                                 {
@@ -153,7 +153,7 @@ module.exports = {
                     }
                 }
                 if (!guildchannels.includes(channelID)) {
-                    const parentid = db.get('catcmd_' + message.guild.id)
+                    const parentid = db.get('parent_' + message.guild.id)
                     await message.guild.channels.create('📮 commandes clients', {
                         permissionOverwrites: [
                             {
@@ -185,7 +185,7 @@ module.exports = {
                     })
                 }
                 if (!guildchannels.includes(channelclientID)) {
-                    const parentid = db.get('catcmd_' + message.guild.id)
+                    const parentid = db.get('parent_' + message.guild.id)
                     message.guild.channels.create('📮 passer commande', {
                         permissionOverwrites: [
                             {
@@ -211,9 +211,9 @@ module.exports = {
                 }
                 return message.channel.send('✅ **Système de commande reconfiguré !**')
             } else {
-                if (db.has('catcmd_' + message.guild.id)) {
+                if (db.has('parent_' + message.guild.id)) {
                     client.channels.cache.get(dbcatcmd).delete()
-                    db.delete('catcmd_' + message.guild.id)
+                    db.delete('parent_' + message.guild.id)
                 }
                 if (db.has('channelcmd_' + message.guild.id)) {
                     client.channels.cache.get(channelID).delete()

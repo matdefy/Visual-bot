@@ -22,13 +22,14 @@ module.exports = {
                 const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
                 if (cmdid !== undefined) {
                     const prixcmd = cmdid.prix
-                    const guildOUusercmd = cmdid.guildOUuser
+                    const prestataireconcernecmd = cmdid.prestataireconcerne
+                    const guildconcernecmd = cmdid.guildconcerne
                     const mdepcmd = cmdid.mdep
                     const delaicmd = cmdid.delai
                     const descriptcmd = cmdid.descript
                     const clientcmd = cmdid.client
-                    const prestatairecmd = cmdid.prestataire
-                    const transcriptcmd = cmdid.transcript
+                    let prestatairecmd = cmdid.prestataire
+                    let transcriptcmd = cmdid.transcript
                     const statuecmd = cmdid.statue
                     let logo = '📮'
                     if (statuecmd === 'accepté') {
@@ -43,8 +44,27 @@ module.exports = {
                     if (statuecmd === 'annulé') {
                         logo = '🗑️'
                     }
+                    if (statuecmd === 'refusé') {
+                        logo = '📪'
+                    }
+                    let infoprestataireconcerne = 'aucun'
+                    if (prestataireconcernecmd) {
+                        infoprestataireconcerne = `<@${prestataireconcernecmd}>`
+                    }
+                    let infoguildconcerne = 'aucun'
+                    if (guildconcernecmd) {
+                        infoguildconcerne = `\`${guildconcernecmd}\``
+                    }
+                    if (prestatairecmd === null) {
+                        prestatairecmd = 'aucun'
+                    } else {
+                        prestatairecmd = `<@${prestatairecmd}>`
+                    }
+                    if (transcriptcmd === null) {
+                        transcriptcmd = 'aucun'
+                    }
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**-Transcript : ${transcriptcmd}**\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur ou utilisateur concerné : **\`${guildOUusercmd}\``)
+                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Transcript : **${transcriptcmd}\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
@@ -69,10 +89,12 @@ module.exports = {
             if (verifuser) {
                 const cmd = db.get('cmd')
                 const clientnum = cmd.filter((cmd) => cmd.client === user).length
-                const cmds = cmd.filter((cmd) => cmd.client === user)
-                let cmdids = cmds.map((element) => element.id)
+                const clientcmds = cmd.filter((cmd) => cmd.client === user)
+                const clientcmdids = clientcmds.map((element) => element.id)
+                const prestatairecmds = cmd.filter((cmd) => cmd.prestataire === user)
+                const prestatairecmdids = prestatairecmds.map((element) => element.id)
                 const prestatairenum = cmd.filter((cmd) => cmd.prestataire === user).length
-                const total = clientnum + prestatairenum
+                let cmds = clientcmdids.concat(prestatairecmdids)
                 let logo = '✅'
                 const usersblacklist = db.get('blacklist')
                 if (usersblacklist.includes(user)) {
@@ -82,13 +104,13 @@ module.exports = {
                 if (logo === '☢️') {
                     statue = '**(membre banni/e)**'
                 }
-                if (cmdids.length === 0) {
-                    cmdids = '**aucune**'
+                if (cmds.length === 0) {
+                    cmds = '**aucune**'
                 } else {
-                    cmdids = `\`${cmdids.join('\`**,** \`')}\``
+                    cmds = `\`${cmds.join('\`**,** \`')}\``
                 }
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Commande/s participée/s :** ${cmdids}\n\n**-Statue : **${logo} ${statue}`)
+                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Commande/s participée/s :** ${cmds}\n\n**-Statue : **${logo} ${statue}`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {

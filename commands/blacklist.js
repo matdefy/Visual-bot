@@ -28,10 +28,7 @@ module.exports = {
                                 .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
-                            message.client.channels.cache.get('797853971162595339').send(new Discord.MessageEmbed()
-                                .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
-                                .setColor('FF7B00')
-                                .setFooter(config.version, client.user.avatarURL()))
+                            message.client.channels.cache.get('829764875626348614').send(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}>\n\n-Raison : **${descriptSi}`)
                         } else {
                             client.users.cache.get(userID).send(new Discord.MessageEmbed()
                                 .setDescription(`☢️ **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué !\n\n-Raison : **${descriptSi}`)
@@ -42,10 +39,7 @@ module.exports = {
                                 .setDescription(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
-                            message.client.channels.cache.get('797853971162595339').send(new Discord.MessageEmbed()
-                                .setDescription(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
-                                .setColor('FF7B00')
-                                .setFooter(config.version, client.user.avatarURL()))
+                            message.client.channels.cache.get('829764875626348614').send(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}>\n\n-Raison : **${descriptSi}`)
                         }
                     } else {
                         message.channel.send('⚠️ **Veuillez rentrer une description de votre dé/bannissement !**')
