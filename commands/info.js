@@ -29,7 +29,6 @@ module.exports = {
                     const descriptcmd = cmdid.descript
                     const clientcmd = cmdid.client
                     let prestatairecmd = cmdid.prestataire
-                    let transcriptcmd = cmdid.transcript
                     const statuecmd = cmdid.statue
                     let logo = '📮'
                     if (statuecmd === 'accepté') {
@@ -60,11 +59,8 @@ module.exports = {
                     } else {
                         prestatairecmd = `<@${prestatairecmd}>`
                     }
-                    if (transcriptcmd === null) {
-                        transcriptcmd = 'aucun'
-                    }
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Transcript : **${transcriptcmd}\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
+                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {

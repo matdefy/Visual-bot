@@ -115,11 +115,12 @@ client.on('message', async message => {
 // Système qui envoie un message quand le bot est ajouté sur un serveur
 
 client.on('guildCreate', (guild) => {
-    const channelInvite = guild.channels.cache.filter((channel) => channel.type !== 'category').first()
-    channelInvite.createInvite({
-        maxAge: 0
-    }).then(invite => {
-        client.channels.cache.get('829404215163224104').send(`**${invite}**`)
+    const user = guild.ownerID
+    client.users.cache.get(user).send(new Discord.MessageEmbed()
+        .setDescription(`❤️ **Installation**\n\nBonjour,\n\nMerci d’avoir ajouter visualOrder à votre serveur !\n\nSi vous avez des questions avec le bot, le **[support](https://discord.gg/sKJbqSW)** sera ravi de pouvoir vous aidez !\n\nL’équipe de visualOrder.\n\n**Pour configurer automatiquement visualOrder sur **\`${guild.name}\`(\`${guild.id}\`)**, cliquez sur la réaction : ❤️**`)
+        .setColor('FF7B00')
+        .setFooter(config.version, client.user.avatarURL())).then((msg) => {
+        msg.react('❤️')
     })
 })
 
@@ -153,6 +154,76 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 prefix = db.get('prefix_' + reaction.message.guild.id)
             }
         }
+
+        // Système qui initialise visualOrder automatiquement
+
+        if (reaction.emoji.name === '❤️') {
+            const description = reaction.message.embeds[0].description
+            const guildid = description.substring(
+                description.lastIndexOf('(\`') + 2,
+                description.lastIndexOf('\`)')
+            )
+            const guild = client.guilds.cache.get(guildid)
+
+            if (db.has('parent_' + guild.id)) {
+                db.delete('parent_' + guild.id)
+            }
+            if (db.has('channelcmd_' + guild.id)) {
+                db.delete('channelcmd_' + guild.id)
+            }
+            if (db.has('channelcmdclient_' + guild.id)) {
+                db.delete('channelcmdclient_' + guild.id)
+            }
+            // création catégorie
+            await guild.channels.create('📨- commandes', {
+                type: 'category'
+            }).then((categorie) => {
+                const idparent = categorie.id
+                db.set('parent_' + guild.id, idparent)
+            })
+            // création catégorie
+            // création commande clients
+            const parentid = db.get('parent_' + guild.id)
+            guild.channels.create('📩 commandes clients', {
+                permissionOverwrites: [
+                    {
+                        id: guild.id,
+                        deny: [
+                            'VIEW_CHANNEL'
+                        ]
+                    }
+                ],
+                type: 'text',
+                parent: parentid
+            }).then((channel) => {
+                channel.send(new Discord.MessageEmbed()
+                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaitres ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
+                    .setColor('#FF7B00')
+                    .setFooter(config.version, client.user.avatarURL()))
+                const idchannel = channel.id
+                db.set('channelcmd_' + guild.id, idchannel)
+            })
+            // création commande clients
+            // création passer commande
+            guild.channels.create('📮 passer commande', {
+                type: 'text',
+                parent: parentid
+            }).then((channel) => {
+                channel.send(new Discord.MessageEmbed()
+                    .setDescription(`📮 **Pour passer commande aux prestataires de ce serveur, taper \`${prefix}cmd ${guild.id}\` !**`)
+                    .setColor('#FF7B00')
+                    .setFooter(config.version, client.user.avatarURL()))
+                const idchannel = channel.id
+                db.set('channelcmdclient_' + guild.id, idchannel)
+            })
+            // création passer commande
+            return reaction.message.channel.send(new Discord.MessageEmbed()
+                .setDescription(`✅ **Système de commande configuré !**\n\nPour finaliser la configuration du bot sur ${guild.name}, la partie **[installation](https://docs.visualorder.fr/installation)** de la documentation vous indiquera la dernière étape à effectuer !\n\n**(n\'hésitez pas à faire un tour complet de la doc pour connaître toutes les fonctionnalités du bot)**`)
+                .setColor('FF7B00')
+                .setFooter(config.version, client.user.avatarURL()))
+        }
+
+        // Système qui initialise visualOrder automatiquement
 
         // Système qui gère la création des tickets pour le système de commande
 
@@ -203,16 +274,13 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     {
                         id: guildid,
                         deny: [
-                            'VIEW_CHANNEL',
-                            'ATTACH_FILES'
+                            'VIEW_CHANNEL'
                         ]
                     },
                     {
                         id: user.id,
                         allow: [
                             'VIEW_CHANNEL',
-                            'ATTACH_FILES',
-                            'MANAGE_CHANNELS',
                             'ATTACH_FILES'
                         ]
                     },
@@ -367,16 +435,13 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             {
                                 id: '764869621982691329',
                                 deny: [
-                                    'VIEW_CHANNEL',
-                                    'ATTACH_FILES'
+                                    'VIEW_CHANNEL'
                                 ]
                             },
                             {
                                 id: user.id,
                                 allow: [
                                     'VIEW_CHANNEL',
-                                    'ATTACH_FILES',
-                                    'MANAGE_CHANNELS',
                                     'ATTACH_FILES'
                                 ]
                             }
@@ -434,6 +499,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 // Système qui gère les sauvegardes de la base de données
 
 const CronJob = require('cron').CronJob
+const { brotliDecompress } = require('zlib')
 const job = new CronJob('0 0 0 * * *', function () {
     const date = new Date()
 
