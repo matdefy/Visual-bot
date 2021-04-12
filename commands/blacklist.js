@@ -19,7 +19,7 @@ module.exports = {
                         let usersblacklist = db.get('blacklist')
                         if (usersblacklist.includes(userID)) {
                             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                                .setDescription(`✅ **Bonjour, suite à votre débannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant autorisé !\n\n-Raison : **${descriptSi}`)
+                                .setDescription(`✅ **Bonjour, suite à votre débannissement de visualOrder l\'utilisation de celui-ci vous est maintenant autorisé !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
                             usersblacklist = usersblacklist.filter((element) => element !== userID)
@@ -28,10 +28,13 @@ module.exports = {
                                 .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
-                            message.client.channels.cache.get('829764875626348614').send(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}>\n\n-Raison : **${descriptSi}`)
+                            message.client.channels.cache.get('829764875626348614').send(new Discord.MessageEmbed()
+                                .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
+                                .setColor('FF7B00')
+                                .setFooter(config.version, client.user.avatarURL()))
                         } else {
                             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                                .setDescription(`☢️ **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué !\n\n-Raison : **${descriptSi}`)
+                                .setDescription(`☢️ **Bonjour, suite à votre bannissement de visualOrder l\'utilisation de celui-ci vous est maintenant bloqué !\n\n-Raison : **${descriptSi}`)
                                 .setColor('#FF0000')
                                 .setFooter(config.version, client.user.avatarURL()))
                             db.push('blacklist', userID)
@@ -39,16 +42,19 @@ module.exports = {
                                 .setDescription(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
-                            message.client.channels.cache.get('829764875626348614').send(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}>\n\n-Raison : **${descriptSi}`)
+                            message.client.channels.cache.get('829764875626348614').send(new Discord.MessageEmbed()
+                                .setDescription(`☢️ **Utilisateur <@${userID}> banni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
+                                .setColor('FF7B00')
+                                .setFooter(config.version, client.user.avatarURL()))
                         }
                     } else {
-                        message.channel.send('⚠️ **Veuillez rentrer une description de votre dé/bannissement !**')
+                        message.channel.send('⚠️ **Veuillez entrer une description de votre dé/bannissement !**')
                     }
                 } else {
                     message.channel.send(`⚠️ **Utilisateur <@${userID}> inconnu/e !**`)
                 }
             } else {
-                message.channel.send('⚠️ **Veuillez rentrer l\'identifiant d\'un utilisateur !**')
+                message.channel.send('⚠️ **Veuillez entrer l\'identifiant d\'un utilisateur !**')
             }
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')

@@ -29,21 +29,21 @@ module.exports = {
                     const descriptcmd = cmdid.descript
                     const clientcmd = cmdid.client
                     let prestatairecmd = cmdid.prestataire
-                    const statuecmd = cmdid.statue
+                    const statutcmd = cmdid.statut
                     let logo = '📮'
-                    if (statuecmd === 'accepté') {
+                    if (statutcmd === 'acceptée') {
                         logo = '📩'
                     }
-                    if (statuecmd === 'fermé') {
+                    if (statutcmd === 'fermée') {
                         logo = '🔒'
                     }
-                    if (statuecmd === 'signalé') {
+                    if (statutcmd === 'signalée') {
                         logo = '☢️'
                     }
-                    if (statuecmd === 'annulé') {
+                    if (statutcmd === 'annulée') {
                         logo = '🗑️'
                     }
-                    if (statuecmd === 'refusé') {
+                    if (statutcmd === 'refusée') {
                         logo = '📪'
                     }
                     let infoprestataireconcerne = 'aucun'
@@ -60,14 +60,14 @@ module.exports = {
                         prestatairecmd = `<@${prestatairecmd}>`
                     }
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Statue : **\`${statuecmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
+                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Statut : **\`${statutcmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
                     message.channel.send(`⚠️ **Commande : \`${cmdID}\` inconnue !**`)
                 }
             } else {
-                message.channel.send('⚠️ **Veuillez rentrer le numéro d\'une commande !**')
+                message.channel.send('⚠️ **Veuillez entrer le numéro d\'une commande !**')
             }
         }
         if (args[0] === 'user') {
@@ -96,9 +96,9 @@ module.exports = {
                 if (usersblacklist.includes(user)) {
                     logo = '☢️'
                 }
-                let statue = '**(membre valide)**'
+                let statut = '**(membre valide)**'
                 if (logo === '☢️') {
-                    statue = '**(membre banni/e)**'
+                    statut = '**(membre banni/e)**'
                 }
                 if (cmds.length === 0) {
                     cmds = '**aucune**'
@@ -106,7 +106,7 @@ module.exports = {
                     cmds = `\`${cmds.join('\`**,** \`')}\``
                 }
                 message.channel.send(new Discord.MessageEmbed()
-                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Commande/s participée/s :** ${cmds}\n\n**-Statue : **${logo} ${statue}`)
+                    .setDescription(`${logo} **Utilisateur <@${user}>**\n\n**-Nombre de fois client : **\`${clientnum}\`\n\n**-Nombre de fois prestataire : **\`${prestatairenum}\`\n\n**-Commande/s participée/s :** ${cmds}\n\n**-Statut : **${logo} ${statut}`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {

@@ -117,7 +117,7 @@ client.on('message', async message => {
 client.on('guildCreate', (guild) => {
     const user = guild.ownerID
     client.users.cache.get(user).send(new Discord.MessageEmbed()
-        .setDescription(`❤️ **Installation**\n\nBonjour,\n\nMerci d’avoir ajouter visualOrder à votre serveur !\n\nSi vous avez des questions avec le bot, le **[support](https://discord.gg/sKJbqSW)** sera ravi de pouvoir vous aidez !\n\nL’équipe de visualOrder.\n\n**Pour configurer automatiquement visualOrder sur **\`${guild.name}\`(\`${guild.id}\`)**, cliquez sur la réaction : ❤️**`)
+        .setDescription(`❤️ **Installation**\n\nBonjour,\n\nMerci d’avoir ajouté visualOrder à votre serveur !\n\nSi vous avez des questions avec le bot, le **[support](https://discord.gg/sKJbqSW)** sera ravi de pouvoir vous aidez !\n\nL’équipe de visualOrder.\n\n**Pour configurer automatiquement visualOrder sur **\`${guild.name}\`(\`${guild.id}\`)**, cliquez sur la réaction : ❤️**`)
         .setColor('FF7B00')
         .setFooter(config.version, client.user.avatarURL())).then((msg) => {
         msg.react('❤️')
@@ -197,7 +197,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 parent: parentid
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaitres ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
+                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaître ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL()))
                 const idchannel = channel.id
@@ -210,7 +210,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 parent: parentid
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription(`📮 **Pour passer commande aux prestataires de ce serveur, taper \`${prefix}cmd ${guild.id}\` !**`)
+                    .setDescription(`📮 **Pour passer commande aux prestataires de ce serveur, tapez \`${prefix}cmd ${guild.id}\` !**`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL()))
                 const idchannel = channel.id
@@ -246,7 +246,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             // Écrire les modifications dans la base de données
             db.set('cmd', cmd)
             const prestatairecmd = cmdid.prestataire
-            cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'accepté'
+            cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'acceptée'
             // Écrire les modifications dans la base de données
             db.set('cmd', cmd)
             const guild = client.guilds.cache.find((element) => element.id === guildconcernecmd)
@@ -294,7 +294,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 ]
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription(`📮 **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**Pour fermer le ticket, le client __et__ le prestataire doivent cliquer sur la réaction 🔒\n\nPour signaler un des membres de la commande, cliquer sur la réaction ☢️\n\nBonne commande !**`)
+                    .setDescription(`📮 **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**Pour fermer le ticket, le client __et__ le prestataire doivent cliquer sur la réaction 🔒\n\nPour signaler un des membres de la commande, cliquez sur la réaction ☢️\n\nBonne commande !**`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL())).then(msg => {
                     msg.react('🔒')
@@ -303,13 +303,13 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 channel.createInvite({
                     maxAge: 172800
                 }).then(invite => {
-                    client.users.cache.get(clientcmd).send(`📩 **Commande (\`${cmdID}\`) accepté, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
-                    client.users.cache.get(user.id).send(`📩 **Commande (\`${cmdID}\`) accepté, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                    client.users.cache.get(clientcmd).send(`📩 **Commande (\`${cmdID}\`) acceptée, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                    client.users.cache.get(user.id).send(`📩 **Commande (\`${cmdID}\`) acceptée, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
                 })
                 cmd.find((cmd) => cmd.id === parseInt(cmdID)).channel = channel.id
                 // Écrire les modifications dans la base de données
                 db.set('cmd', cmd)
-                client.channels.cache.get('829764751084748811').send(`📩 **Commande (\`${cmdID}\`) accepté**`)
+                client.channels.cache.get('829764751084748811').send(`📩 **Commande (\`${cmdID}\`) acceptée**`)
             })
             reaction.message.delete()
         }
@@ -326,8 +326,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
             )
             const cmd = db.get('cmd')
             const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
-            if (cmdid.statue === 'attente') {
-                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'annulé'
+            if (cmdid.statut === 'attente') {
+                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'annulée'
                 // Écrire les modifications dans la base de données
                 db.set('cmd', cmd)
                 const channelmessagecmd = cmdid.channelmessage
@@ -336,7 +336,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
                 return reaction.message.channel.send(`🗑️ **Commande numéro : \`${cmdID}\` annulée !**`)
             } else {
-                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut être annulée !**')
+                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut-être annulée !**')
             }
         }
 
@@ -352,8 +352,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
             )
             const cmd = db.get('cmd')
             const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
-            if (cmdid.statue === 'attente') {
-                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'refusé'
+            if (cmdid.statut === 'attente') {
+                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'refusée'
                 // Écrire les modifications dans la base de données
                 db.set('cmd', cmd)
                 const channelmessagecmd = cmdid.channelmessage
@@ -362,7 +362,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
                 client.users.cache.get(cmdid.client).send(`📪 **Commande numéro : \`${cmdID}\` refusée !**`)
             } else {
-                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut être refusée !**')
+                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut-être refusée !**')
             }
         }
 
@@ -383,7 +383,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     const prestatairecmd = cmdid.prestataire
                     const verifReact = reaction.users.cache.map((element) => element.id)
                     if (verifReact.includes(clientcmd) && verifReact.includes(prestatairecmd)) {
-                        cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'fermé'
+                        cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'fermée'
                         // Écrire les modifications dans la base de données
                         db.set('cmd', cmd)
                         reaction.message.channel.messages.fetch()
@@ -394,9 +394,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             db.set('cmd', cmd)
                         })
                         reaction.message.channel.delete()
-                        client.users.cache.get(clientcmd).send(`🔒 **Commande (\`${cmdID}\`) fermé avec succès !**`)
-                        client.users.cache.get(prestatairecmd).send(`🔒 **Commande (\`${cmdID}\`) fermé avec succès !**`)
-                        client.channels.cache.get('829764790812672070').send(`🔒 **Commande (\`${cmdID}\`) fermé**`)
+                        client.users.cache.get(clientcmd).send(`🔒 **Commande (\`${cmdID}\`) fermée avec succès !**`)
+                        client.users.cache.get(prestatairecmd).send(`🔒 **Commande (\`${cmdID}\`) fermée avec succès !**`)
+                        client.channels.cache.get('829764790812672070').send(`🔒 **Commande (\`${cmdID}\`) fermée**`)
                     }
                 }
 
@@ -419,7 +419,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                     const clientcmd = cmdid.client
                     const prestatairecmd = cmdid.prestataire
                     let transcriptcmd = cmdid.transcript
-                    cmd.find((cmd) => cmd.id === parseInt(cmdID)).statue = 'signalé'
+                    cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'signalée'
                     // Écrire les modifications dans la base de données
                     db.set('cmd', cmd)
                     const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content} ${c.embeds}`).join('\n\n')
@@ -459,12 +459,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             client.users.cache.get(user.id).send(`☢️ **Signalement envoyé avec succès, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
                         })
                         if (user.id === clientcmd) {
-                            client.users.cache.get(prestatairecmd).send(`☢️ **Commande (\`${cmdID}\`) signalé par <@${user.id}>, vous recevrez un prochain message vous informant des dispositions prises !**`)
+                            client.users.cache.get(prestatairecmd).send(`☢️ **Commande (\`${cmdID}\`) signalée par <@${user.id}>. Vous recevrez un prochain message vous informant des sanctions prises !**`)
                         }
                         if (user.id === prestatairecmd) {
-                            client.users.cache.get(clientcmd).send(`☢️ **Commande (\`${cmdID}\`) signalé par <@${user.id}>, vous recevrez un prochain message vous informant des dispositions prises !**`)
+                            client.users.cache.get(clientcmd).send(`☢️ **Commande (\`${cmdID}\`) signalée par <@${user.id}>. Vous recevrez un prochain message vous informant des sanctions prises !**`)
                         }
-                        client.channels.cache.get('829764837625954315').send(`☢️ **Commande (\`${cmdID}\`) signalé**`)
+                        client.channels.cache.get('829764837625954315').send(`☢️ **Commande (\`${cmdID}\`) signalée**`)
                     })
                     reaction.message.channel.delete()
                 }

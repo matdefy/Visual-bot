@@ -41,12 +41,12 @@ module.exports = {
             }
         }
         message.channel.send(new Discord.MessageEmbed()
-            .setDescription('📮 **Commande activé ' + message.author.tag + ' !**\n\nVeuillez répondre aux questions envoyées pour finaliser l\'enregistrement de votre commande !')
+            .setDescription('📮 **Commande activée ' + message.author.tag + ' !**\n\nVeuillez répondre aux questions envoyées pour finaliser l\'enregistrement de votre commande !')
             .setColor('FF7B00')
             .setFooter(config.version, message.client.user.avatarURL()))
 
         const channelMP = await message.author.createDM()
-        channelMP.send('**Quelle prix souhaitez-vous ? (en euro/s)**')
+        channelMP.send('**Quel prix souhaitez-vous ? (en euro/s)**')
         const collector = channelMP.createMessageCollector(
             m => m.author.id === message.author.id,
             {
@@ -61,14 +61,14 @@ module.exports = {
                 prixcmd = msg.content
                 channelMP.send(`✅ **Le prix de votre commande sera de **\`${prixcmd}€\`** !**`)
 
-                channelMP.send('**Quelle mode de paiement souhaitez-vous ?**')
+                channelMP.send('**Quel mode de paiement souhaitez-vous ?**')
                 return
             }
             if (!mdepcmd) {
                 mdepcmd = msg.content
                 channelMP.send(`✅ **Le mode de paiement pour votre commande sera par **\`${mdepcmd}\`** !**`)
 
-                channelMP.send('**Quelle délai maximum souhaitez-vous ? (en jour/s)**')
+                channelMP.send('**Quel délai maximum souhaitez-vous ? (en jour/s)**')
                 return
             }
             if (!delaicmd) {
@@ -104,7 +104,7 @@ module.exports = {
                         prestataireconcerne: prestataireconcerne,
                         client: message.author.id,
                         prestataire: null,
-                        statue: 'attente',
+                        statut: 'attente',
                         transcript: null,
                         message: null,
                         channelmessage: null
@@ -119,7 +119,7 @@ module.exports = {
                     }
                     message.author.createDM().then(channel => {
                         channel.send(new Discord.MessageEmbed()
-                            .setDescription(`📮 **Commande (\`${id}\`) enregistré !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}\n\n**Pour annuler cette commande, cliquer sur la réaction 🗑️.**`)
+                            .setDescription(`📮 **Commande (\`${id}\`) enregistrée !**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}\n\n**Pour annuler cette commande, cliquez sur la réaction 🗑️.**`)
                             .setColor('#FF7B00')
                             .setFooter(config.version, message.client.user.avatarURL())).then((msg) => {
                             msg.react('🗑️')
@@ -127,7 +127,7 @@ module.exports = {
                     })
                     if (user) {
                         client.users.cache.get(prestataireconcerne).send(new Discord.MessageEmbed()
-                            .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}\n\n**Pour refuser la commande, cliquer sur la réaction : 📪.**`)
+                            .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}\n\n**Pour refuser la commande, cliquez sur la réaction : 📪.**`)
                             .setColor('#FF7B00')
                             .setFooter(config.version, client.user.avatarURL())).then((msg) => {
                             msg.react('📩')
@@ -139,7 +139,7 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistré**`)
+                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                     if (guild) {
                         const channelCMD = db.get('channelcmd_' + guildconcerne)
@@ -155,7 +155,7 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistré**`)
+                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                     if (!user && !guild) {
                         message.client.channels.cache.get('829659496564523020').send(new Discord.MessageEmbed()
@@ -170,16 +170,16 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistré**`)
+                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                 } else {
-                    channelMP.send('⚠️ **La description de votre commande doit faire au minimum 15 caractères et au maximum 500 caractères !**')
+                    channelMP.send('⚠️ **La description de votre commande doit comporter au minimum 15 caractères et au maximum 500 caractères !**')
                 }
             }
         })
         collector.on('end', (_, raison) => {
             if (raison === 'time') {
-                channelMP.send('⚠️ **Temps imparti écoulé, votre commande a été désactivé !**')
+                channelMP.send('⚠️ **Temps imparti écoulé, votre commande a été désactivée !**')
             }
         })
     }

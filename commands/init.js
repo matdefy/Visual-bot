@@ -82,7 +82,7 @@ module.exports = {
                 parent: parentid
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaitres ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
+                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaître ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL()))
                 const idchannel = channel.id
@@ -93,7 +93,7 @@ module.exports = {
                 parent: parentid
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription(`📮 **Pour passer commande aux prestataires de ce serveur, taper \`${prefix}cmd ${message.guild.id}\` !**`)
+                    .setDescription(`📮 **Pour passer commande aux prestataires de ce serveur, tapez \`${prefix}cmd ${message.guild.id}\` !**`)
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL()))
                 const idchannel = channel.id

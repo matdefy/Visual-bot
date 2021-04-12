@@ -14,7 +14,7 @@ module.exports = {
             if (args[0]) {
                 if (prefix.length < 6) {
                     db.set('prefix_' + message.guild.id, prefix)
-                    message.channel.send('✅ **Le prefix pour le serveur ' + message.guild.name + ' et maintenant **`' + prefix + '`** !**')
+                    message.channel.send(`✅ **Le prefix pour le serveur \`${message.guild.name}\` et maintenant **\`${prefix}\`** !**`)
                 } else {
                     message.channel.send('⚠️ **Le prefix doit faire au maximum 5 caractères !**')
                 }

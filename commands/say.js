@@ -8,7 +8,7 @@ module.exports = {
                 message.delete()
                 message.channel.send(message.content.trim().slice(`${config.prefix}say`.length))
             } else {
-                message.channel.send('⚠️ **Veuiller entrer du texte !**')
+                message.channel.send('⚠️ **Veuillez entrer du texte !**')
             }
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
