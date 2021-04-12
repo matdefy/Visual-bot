@@ -44,7 +44,7 @@ module.exports = {
                         client.channels.cache.get(channelclientID).delete()
                         db.delete('channelcmdclient_' + message.guild.id)
                     }
-                    return message.channel.send('✅ **Système de commande désactivé !**')
+                    return message.channel.send('<:white_check_mark_visualOrder:831103841680097280> **Système de commande désactivé !**')
                 }
             }
 
@@ -76,6 +76,12 @@ module.exports = {
                         deny: [
                             'VIEW_CHANNEL'
                         ]
+                    },
+                    {
+                        id: client.user.id,
+                        allow: [
+                            'VIEW_CHANNEL'
+                        ]
                     }
                 ],
                 type: 'text',
@@ -101,7 +107,7 @@ module.exports = {
             })
 
             // configuration
-            message.channel.send('✅ **Système de commande configuré !**')
+            message.channel.send('<:white_check_mark_visualOrder:831103841680097280> **Système de commande configuré !**')
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
         }

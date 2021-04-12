@@ -21,7 +21,7 @@ module.exports = {
         const guild = client.guilds.cache.find((element) => element.id === guildOUuser)
         if (guildOUuser !== undefined) {
             if (!user && !guild) {
-                return message.channel.send(`⚠️ **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
+                return message.channel.send(`<:warning_visualOrder:831154426034913310> **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
             }
             if (user) {
                 prestataireconcerne = args[0]
@@ -33,10 +33,10 @@ module.exports = {
                 const channelsId = channelstout.map(channels => channels.id)
                 const channelCMD = db.get('channelcmd_' + guildconcerne)
                 if (!channelCMD) {
-                    return message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                    return message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
                 }
                 if (!channelsId.includes(channelCMD)) {
-                    return message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
+                    return message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande est invalide sur le serveur sélectionné !**')
                 }
             }
         }
@@ -56,27 +56,27 @@ module.exports = {
         collector.on('collect', async msg => {
             if (!prixcmd) {
                 if (isNaN(msg.content)) {
-                    return channelMP.send('⚠️ **Le prix de votre commande doit être seulement exprimé par un nombre positif !**')
+                    return channelMP.send('<:warning_visualOrder:831154426034913310> **Le prix de votre commande doit être seulement exprimé par un nombre positif !**')
                 }
                 prixcmd = msg.content
-                channelMP.send(`✅ **Le prix de votre commande sera de **\`${prixcmd}€\`** !**`)
+                channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **Le prix de votre commande sera de **\`${prixcmd}€\`** !**`)
 
                 channelMP.send('**Quel mode de paiement souhaitez-vous ?**')
                 return
             }
             if (!mdepcmd) {
                 mdepcmd = msg.content
-                channelMP.send(`✅ **Le mode de paiement pour votre commande sera par **\`${mdepcmd}\`** !**`)
+                channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **Le mode de paiement pour votre commande sera par **\`${mdepcmd}\`** !**`)
 
                 channelMP.send('**Quel délai maximum souhaitez-vous ? (en jour/s)**')
                 return
             }
             if (!delaicmd) {
                 if (isNaN(msg.content)) {
-                    return channelMP.send('⚠️ **Le délai maximum pour votre commande doit être seulement exprimé par un nombre positif !**')
+                    return channelMP.send('<:warning_visualOrder:831154426034913310> **Le délai maximum pour votre commande doit être seulement exprimé par un nombre positif !**')
                 }
                 delaicmd = msg.content
-                channelMP.send(`✅ **Le délai maximum pour votre commande sera de **\`${delaicmd}\`** jour/s !**`)
+                channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **Le délai maximum pour votre commande sera de **\`${delaicmd}\`** jour/s !**`)
                 // questionnaire delai
 
                 // questionnaire description
@@ -87,7 +87,7 @@ module.exports = {
                 // questionnaire description
                 if (msg.content.length > 14 && msg.content.length < 500) {
                     descriptcmd = msg.content
-                    channelMP.send(`✅ **La description de votre commande sera : **\`${descriptcmd}\`** !**`)
+                    channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **La description de votre commande sera : **\`${descriptcmd}\`** !**`)
                     collector.stop()
                     const cmd = db.get('cmd')
                     let id = 1
@@ -173,13 +173,13 @@ module.exports = {
                         message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                 } else {
-                    channelMP.send('⚠️ **La description de votre commande doit comporter au minimum 15 caractères et au maximum 500 caractères !**')
+                    channelMP.send('<:warning_visualOrder:831154426034913310> **La description de votre commande doit comporter au minimum 15 caractères et au maximum 500 caractères !**')
                 }
             }
         })
         collector.on('end', (_, raison) => {
             if (raison === 'time') {
-                channelMP.send('⚠️ **Temps imparti écoulé, votre commande a été désactivée !**')
+                channelMP.send('<:warning_visualOrder:831154426034913310> **Temps imparti écoulé, votre commande a été désactivée !**')
             }
         })
     }

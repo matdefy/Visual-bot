@@ -64,10 +64,10 @@ module.exports = {
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
-                    message.channel.send(`⚠️ **Commande : \`${cmdID}\` inconnue !**`)
+                    message.channel.send(`<:warning_visualOrder:831154426034913310> **Commande : \`${cmdID}\` inconnue !**`)
                 }
             } else {
-                message.channel.send('⚠️ **Veuillez entrer le numéro d\'une commande !**')
+                message.channel.send('<:warning_visualOrder:831154426034913310> **Veuillez entrer le numéro d\'une commande !**')
             }
         }
         if (args[0] === 'user') {
@@ -91,7 +91,7 @@ module.exports = {
                 const prestatairecmdids = prestatairecmds.map((element) => element.id)
                 const prestatairenum = cmd.filter((cmd) => cmd.prestataire === user).length
                 let cmds = clientcmdids.concat(prestatairecmdids)
-                let logo = '✅'
+                let logo = '<:white_check_mark_visualOrder:831103841680097280>'
                 const usersblacklist = db.get('blacklist')
                 if (usersblacklist.includes(user)) {
                     logo = '☢️'
@@ -110,7 +110,7 @@ module.exports = {
                     .setColor('#FF7B00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
-                message.channel.send(`⚠️ **Utilisateur : \`${user}\` inconnu/e !**`)
+                message.channel.send(`<:warning_visualOrder:831154426034913310> **Utilisateur : \`${user}\` inconnu/e !**`)
             }
         }
     }

@@ -81,7 +81,7 @@ client.on('message', async message => {
     // système verification blacklist
     if (message.channel.type === 'dm') {
         if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'setprefix')) {
-            return message.channel.send('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
+            return message.channel.send('<:warning_visualOrder:831154426034913310> **Cette commande doit être tapée sur un serveur obligatoirement !**')
         } else {
             const args = message.content.trim().split(/ +/g)
             const commandName = args.shift().toLowerCase()
@@ -191,6 +191,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         deny: [
                             'VIEW_CHANNEL'
                         ]
+                    },
+                    {
+                        id: client.user.id,
+                        allow: [
+                            'VIEW_CHANNEL'
+                        ]
                     }
                 ],
                 type: 'text',
@@ -218,7 +224,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             })
             // création passer commande
             return reaction.message.channel.send(new Discord.MessageEmbed()
-                .setDescription(`✅ **Système de commande configuré !**\n\nPour finaliser la configuration du bot sur ${guild.name}, la partie **[installation](https://docs.visualorder.fr/installation)** de la documentation vous indiquera la dernière étape à effectuer !\n\n**(n\'hésitez pas à faire un tour complet de la doc pour connaître toutes les fonctionnalités du bot)**`)
+                .setDescription(`<:white_check_mark_visualOrder:831103841680097280> **Système de commande configuré !**\n\nPour finaliser la configuration du bot sur ${guild.name}, la partie **[installation](https://docs.visualorder.fr/installation)** de la documentation vous indiquera la dernière étape à effectuer !\n\n**(n\'hésitez pas à faire un tour complet de la doc pour connaître toutes les fonctionnalités du bot)**`)
                 .setColor('FF7B00')
                 .setFooter(config.version, client.user.avatarURL()))
         }
@@ -262,10 +268,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         guildid = guildconcernecmd
                         parentid = parentsCMD
                     } else {
-                        reaction.message.channel.send('⚠️ **Le système de commande est invalide sur le serveur sélectionné !**')
+                        reaction.message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande est invalide sur le serveur sélectionné !**')
                     }
                 } else {
-                    reaction.message.channel.send('⚠️ **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                    reaction.message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
                 }
             }
             client.guilds.cache.get(guildid).channels.create('cmd_' + cmdID, {
@@ -336,7 +342,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
                 return reaction.message.channel.send(`🗑️ **Commande numéro : \`${cmdID}\` annulée !**`)
             } else {
-                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut-être annulée !**')
+                return reaction.message.channel.send('<:warning_visualOrder:831154426034913310> **Seulement une commande qui n\'a pas encore été acceptée peut-être annulée !**')
             }
         }
 
@@ -362,7 +368,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
                 client.users.cache.get(cmdid.client).send(`📪 **Commande numéro : \`${cmdID}\` refusée !**`)
             } else {
-                return reaction.message.channel.send('⚠️ **Seulement une commande qui n\'a pas encore été acceptée peut-être refusée !**')
+                return reaction.message.channel.send('<:warning_visualOrder:831154426034913310> **Seulement une commande qui n\'a pas encore été acceptée peut-être refusée !**')
             }
         }
 

@@ -19,17 +19,17 @@ module.exports = {
                         let usersblacklist = db.get('blacklist')
                         if (usersblacklist.includes(userID)) {
                             client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                                .setDescription(`✅ **Bonjour, suite à votre débannissement de visualOrder l\'utilisation de celui-ci vous est maintenant autorisé !\n\n-Raison : **${descriptSi}`)
+                                .setDescription(`<:white_check_mark_visualOrder:831103841680097280> **Bonjour, suite à votre débannissement de visualOrder l\'utilisation de celui-ci vous est maintenant autorisé !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
                             usersblacklist = usersblacklist.filter((element) => element !== userID)
                             db.set('blacklist', usersblacklist)
                             message.channel.send(new Discord.MessageEmbed()
-                                .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
+                                .setDescription(`<:white_check_mark_visualOrder:831103841680097280> **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
                             message.client.channels.cache.get('829764875626348614').send(new Discord.MessageEmbed()
-                                .setDescription(`✅ **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
+                                .setDescription(`<:white_check_mark_visualOrder:831103841680097280> **Utilisateur <@${userID}> débanni par <@${message.author.id}> !\n\n-Raison : **${descriptSi}`)
                                 .setColor('FF7B00')
                                 .setFooter(config.version, client.user.avatarURL()))
                         } else {
@@ -48,13 +48,13 @@ module.exports = {
                                 .setFooter(config.version, client.user.avatarURL()))
                         }
                     } else {
-                        message.channel.send('⚠️ **Veuillez entrer une description de votre dé/bannissement !**')
+                        message.channel.send('<:warning_visualOrder:831154426034913310> **Veuillez entrer une description de votre dé/bannissement !**')
                     }
                 } else {
-                    message.channel.send(`⚠️ **Utilisateur <@${userID}> inconnu/e !**`)
+                    message.channel.send(`<:warning_visualOrder:831154426034913310> **Utilisateur <@${userID}> inconnu/e !**`)
                 }
             } else {
-                message.channel.send('⚠️ **Veuillez entrer l\'identifiant d\'un utilisateur !**')
+                message.channel.send('<:warning_visualOrder:831154426034913310> **Veuillez entrer l\'identifiant d\'un utilisateur !**')
             }
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
