@@ -292,7 +292,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 const messagecmd = cmdid.message
                 await client.channels.cache.get(channelmessagecmd).messages.fetch()
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
-                client.channels.cache.get('831576495071428670').send(`🗑️ **Commande numéro : \`${cmdID}\` annulée !**`)
+                client.channels.cache.get('831576495071428670').send(`🗑️ **Commande (\`${cmdID}\`) annulée !**`)
                 reaction.message.channel.send(`🗑️ **Commande numéro : \`${cmdID}\` annulée !**`)
             } else {
                 return reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Seulement une commande qui n\'a pas encore été acceptée peut-être annulée !**')
@@ -320,7 +320,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 await client.channels.cache.get(channelmessagecmd).messages.fetch()
                 client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
                 client.users.cache.get(cmdid.client).send(`📪 **Commande numéro : \`${cmdID}\` refusée !**`)
-                client.channels.cache.get('831576495071428670').send(`📪 **Commande numéro : \`${cmdID}\` refusée !**`)
+                client.channels.cache.get('831576495071428670').send(`📪 **Commande (\`${cmdID}\`) refusée !**`)
             } else {
                 return reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Seulement une commande qui n\'a pas encore été acceptée peut-être refusée !**')
             }
