@@ -21,7 +21,7 @@ module.exports = {
         const guild = client.guilds.cache.find((element) => element.id === guildOUuser)
         if (guildOUuser !== undefined) {
             if (!user && !guild) {
-                return message.channel.send(`<:warning_visualOrder:831154426034913310> **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
+                return message.channel.send(`<:warning_visualorder:831550961625464832> **Utilisateur ou serveur avec l\'identifiant : \`${guildOUuser}\` inconnu !**`)
             }
             if (user) {
                 prestataireconcerne = args[0]
@@ -33,15 +33,15 @@ module.exports = {
                 const channelsId = channelstout.map(channels => channels.id)
                 const channelCMD = db.get('channelcmd_' + guildconcerne)
                 if (!channelCMD) {
-                    return message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
+                    return message.channel.send('<:warning_visualorder:831550961625464832> **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
                 }
                 if (!channelsId.includes(channelCMD)) {
-                    return message.channel.send('<:warning_visualOrder:831154426034913310> **Le système de commande est invalide sur le serveur sélectionné !**')
+                    return message.channel.send('<:warning_visualorder:831550961625464832> **Le système de commande est invalide sur le serveur sélectionné !**')
                 }
             }
         }
         message.channel.send(new Discord.MessageEmbed()
-            .setDescription('📮 **Commande activée ' + message.author.tag + ' !**\n\nVeuillez répondre aux questions envoyées pour finaliser l\'enregistrement de votre commande !')
+            .setDescription(`📮 **Commande activée <@${message.author.id}> !**\n\nVeuillez répondre aux questions envoyées en message privé pour finaliser l\'enregistrement de votre commande.`)
             .setColor('FF7B00')
             .setFooter(config.version, message.client.user.avatarURL()))
 
@@ -56,7 +56,7 @@ module.exports = {
         collector.on('collect', async msg => {
             if (!prixcmd) {
                 if (isNaN(msg.content)) {
-                    return channelMP.send('<:warning_visualOrder:831154426034913310> **Le prix de votre commande doit être seulement exprimé par un nombre positif !**')
+                    return channelMP.send('<:warning_visualorder:831550961625464832> **Le prix de votre commande doit être seulement exprimé par un nombre positif !**')
                 }
                 prixcmd = msg.content
                 channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **Le prix de votre commande sera de **\`${prixcmd}€\`** !**`)
@@ -73,7 +73,7 @@ module.exports = {
             }
             if (!delaicmd) {
                 if (isNaN(msg.content)) {
-                    return channelMP.send('<:warning_visualOrder:831154426034913310> **Le délai maximum pour votre commande doit être seulement exprimé par un nombre positif !**')
+                    return channelMP.send('<:warning_visualorder:831550961625464832> **Le délai maximum pour votre commande doit être seulement exprimé par un nombre positif !**')
                 }
                 delaicmd = msg.content
                 channelMP.send(`<:white_check_mark_visualOrder:831103841680097280> **Le délai maximum pour votre commande sera de **\`${delaicmd}\`** jour/s !**`)
@@ -139,7 +139,7 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
+                        message.client.channels.cache.get('829720129351712790').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                     if (guild) {
                         const channelCMD = db.get('channelcmd_' + guildconcerne)
@@ -155,11 +155,11 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
+                        message.client.channels.cache.get('829720129351712790').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                     if (!user && !guild) {
-                        message.client.channels.cache.get('829659496564523020').send(new Discord.MessageEmbed()
-                            .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.tag}>`)
+                        message.client.channels.cache.get('829698688288292884').send(new Discord.MessageEmbed()
+                            .setDescription(`📮 **Commande (\`${id}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${message.author.id}>`)
                             .setColor('#FF7B00')
                             .setFooter(config.version, client.user.avatarURL())).then((msg) => {
                             msg.react('📩')
@@ -170,16 +170,16 @@ module.exports = {
                             // Écrire les modifications dans la base de données
                             db.set('cmd', cmd)
                         })
-                        message.client.channels.cache.get('829764704183255050').send(`📮 **Commande (\`${id}\`) enregistrée**`)
+                        message.client.channels.cache.get('829720129351712790').send(`📮 **Commande (\`${id}\`) enregistrée**`)
                     }
                 } else {
-                    channelMP.send('<:warning_visualOrder:831154426034913310> **La description de votre commande doit comporter au minimum 15 caractères et au maximum 500 caractères !**')
+                    channelMP.send('<:warning_visualorder:831550961625464832> **La description de votre commande doit comporter au minimum 15 caractères et au maximum 500 caractères !**')
                 }
             }
         })
         collector.on('end', (_, raison) => {
             if (raison === 'time') {
-                channelMP.send('<:warning_visualOrder:831154426034913310> **Temps imparti écoulé, votre commande a été désactivée !**')
+                channelMP.send('<:warning_visualorder:831550961625464832> **Temps imparti écoulé, votre commande a été désactivée !**')
             }
         })
     }

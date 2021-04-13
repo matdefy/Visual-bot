@@ -14,12 +14,12 @@ module.exports = {
             if (args[0]) {
                 if (prefix.length < 6) {
                     db.set('prefix_' + message.guild.id, prefix)
-                    message.channel.send(`<:white_check_mark_visualOrder:831103841680097280> **Le prefix pour le serveur \`${message.guild.name}\` et maintenant **\`${prefix}\`** !**`)
+                    message.channel.send(`<:white_check_mark_visualorder:831550961763614731> **Le prefix pour le serveur \`${message.guild.name}\` et maintenant **\`${prefix}\`** !**`)
                 } else {
-                    message.channel.send('<:warning_visualOrder:831154426034913310> **Le prefix doit faire au maximum 5 caractères !**')
+                    message.channel.send('<:warning_visualorder:831550961625464832> **Le prefix doit faire au maximum 5 caractères !**')
                 }
             } else {
-                message.channel.send('<:warning_visualOrder:831154426034913310> **Veuillez entrer un prefix !**')
+                message.channel.send('<:warning_visualorder:831550961625464832> **Veuillez entrer un prefix !**')
             }
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')

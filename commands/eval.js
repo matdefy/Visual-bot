@@ -1,6 +1,6 @@
 module.exports = {
     run: (db, message, args, client, dbLogs) => {
-        if (message.author.id === '364481003479105537' || message.author.id === '422820341791064085') {
+        if (message.author.id === '364481003479105537') {
             const content = message.content
                 .split(' ')
                 .slice(1)

@@ -44,7 +44,7 @@ module.exports = {
                         client.channels.cache.get(channelclientID).delete()
                         db.delete('channelcmdclient_' + message.guild.id)
                     }
-                    return message.channel.send('<:white_check_mark_visualOrder:831103841680097280> **Système de commande désactivé !**')
+                    return message.channel.send('<:white_check_mark_visualorder:831550961763614731> **Système de commande désactivé !**')
                 }
             }
 
@@ -69,7 +69,7 @@ module.exports = {
                 db.set('parent_' + message.guild.id, idparent)
             })
             const parentid = db.get('parent_' + message.guild.id)
-            message.guild.channels.create('📩 commandes clients', {
+            await message.guild.channels.create('📩 commandes clients', {
                 permissionOverwrites: [
                     {
                         id: message.guild.id,
@@ -88,13 +88,13 @@ module.exports = {
                 parent: parentid
             }).then((channel) => {
                 channel.send(new Discord.MessageEmbed()
-                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaître ici !**\n\nVeuillez autoriser ce channel aux personnes compétentes seulement pour éviter que des personnes non qualifiées puissent prendre des commandes')
+                    .setDescription('📩 **Les commandes pour ce serveur vont maintenant apparaître ici !**\n\nVeuillez **autoriser ce channel seulement aux prestataires** pour éviter que des personnes non qualifiées puissent prendre des commandes.')
                     .setColor('#FF7B00')
                     .setFooter(config.version, client.user.avatarURL()))
                 const idchannel = channel.id
                 db.set('channelcmd_' + message.guild.id, idchannel)
             })
-            message.guild.channels.create('📮 passer commande', {
+            await message.guild.channels.create('📮 passer commande', {
                 type: 'text',
                 parent: parentid
             }).then((channel) => {
@@ -107,7 +107,8 @@ module.exports = {
             })
 
             // configuration
-            message.channel.send('<:white_check_mark_visualOrder:831103841680097280> **Système de commande configuré !**')
+            const channelcmdid = db.get('channelcmd_' + message.guild.id)
+            message.channel.send(`<:white_check_mark_visualorder:831550961763614731> **Système de commande presque opérationnel, rendez-vous sur <#${channelcmdid}> pour finaliser la configuration !**`)
         } else {
             message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
         }

@@ -28,8 +28,10 @@ module.exports = {
                     const delaicmd = cmdid.delai
                     const descriptcmd = cmdid.descript
                     const clientcmd = cmdid.client
+                    const transcriptcmd = cmdid.transcript
                     let prestatairecmd = cmdid.prestataire
                     const statutcmd = cmdid.statut
+                    let transcriptview = ''
                     let logo = '📮'
                     if (statutcmd === 'acceptée') {
                         logo = '📩'
@@ -59,15 +61,18 @@ module.exports = {
                     } else {
                         prestatairecmd = `<@${prestatairecmd}>`
                     }
+                    if (message.guild.id === '747834737527226542' && message.member.hasPermission('BAN_MEMBERS')) {
+                        transcriptview = `\n\n**-Transcript : ${transcriptcmd}**`
+                    }
                     message.channel.send(new Discord.MessageEmbed()
-                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Statut : **\`${statutcmd}\`\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
+                        .setDescription(`${logo} **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **${prestatairecmd}\n\n**-Statut : **\`${statutcmd}\`${transcriptview}\n\n**-Serveur concerné : **${infoguildconcerne}\n\n**-Prestataire concerné : **${infoprestataireconcerne}`)
                         .setColor('#FF7B00')
                         .setFooter(config.version, message.client.user.avatarURL()))
                 } else {
-                    message.channel.send(`<:warning_visualOrder:831154426034913310> **Commande : \`${cmdID}\` inconnue !**`)
+                    message.channel.send(`<:warning_visualorder:831550961625464832> **Commande : \`${cmdID}\` inconnue !**`)
                 }
             } else {
-                message.channel.send('<:warning_visualOrder:831154426034913310> **Veuillez entrer le numéro d\'une commande !**')
+                message.channel.send('<:warning_visualorder:831550961625464832> **Veuillez entrer le numéro d\'une commande !**')
             }
         }
         if (args[0] === 'user') {
@@ -91,7 +96,7 @@ module.exports = {
                 const prestatairecmdids = prestatairecmds.map((element) => element.id)
                 const prestatairenum = cmd.filter((cmd) => cmd.prestataire === user).length
                 let cmds = clientcmdids.concat(prestatairecmdids)
-                let logo = '<:white_check_mark_visualOrder:831103841680097280>'
+                let logo = '<:white_check_mark_visualorder:831550961763614731>'
                 const usersblacklist = db.get('blacklist')
                 if (usersblacklist.includes(user)) {
                     logo = '☢️'
@@ -110,7 +115,7 @@ module.exports = {
                     .setColor('#FF7B00')
                     .setFooter(config.version, message.client.user.avatarURL()))
             } else {
-                message.channel.send(`<:warning_visualOrder:831154426034913310> **Utilisateur : \`${user}\` inconnu/e !**`)
+                message.channel.send(`<:warning_visualorder:831550961625464832> **Utilisateur : \`${user}\` inconnu/e !**`)
             }
         }
     }

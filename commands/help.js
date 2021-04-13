@@ -13,7 +13,7 @@ module.exports = {
             message.channel.send('💬 **Commande help envoyée en message privé !**')
         }
         client.users.cache.get(message.author.id).send(new Discord.MessageEmbed()
-            .setDescription('ℹ️ **Commande help**\n\n**- Fonctionnalités** et **commandes** du bot : **https://docs.visualorder.fr**\n\n**- Ajouter** visualOrder : **https://add.visualorder.fr**\n\n**-** Besoin d’aide ? Une question ? Le **support/serveur principal** est disponible ici : **https://discord.gg/sKJbqSW**\n\n**-** Le **statut du bot** est visible sur : **https://status.visualorder.fr**\n\n**Bonne utilisation !**')
+            .setDescription('📖 **- Fonctionnalités** et **commandes** du bot : **https://docs.visualorder.fr**\n\n<:add_visualorder:831550961662427196> **- Ajouter** visualOrder : **https://add.visualorder.fr**\n\n🆘 **-** **Besoin d’aide ?** Le **support** est disponible ici : **https://discord.gg/sKJbqSW**\n\n📩 **-** Rejoindre le **serveur principal** : **https://discord.gg/sKJbqSW**\n\n<:white_check_mark_visualorder:831550961763614731> **-** Le **statut du bot** est visible sur : **https://status.visualorder.fr**\n\n**Bonne utilisation !**')
             .setColor('FF7B00')
             .setFooter(config.version, client.user.avatarURL()))
     }
