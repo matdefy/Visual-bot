@@ -3,3 +3,6 @@ config.json
 database.json
 database_logs.json
 backupdatabase
+package.json
+yarn.lock
+.eslintrc.js
