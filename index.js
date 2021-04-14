@@ -17,23 +17,6 @@ Sentry.init({
     dsn: config.dsn
 })
 
-/* const express = require('express')
-const app = express()
-const port =
-
-app.get('/', (req, res) => {
-    res.send(`<html>
-    <head></head>
-    <body>
-        <font size=""><font face="FreeMono, monospace">Un système de prise de commande intelligent, un enregistrement de création, Visual Bot est fait pour vous ! Utilisé sur ${client.guilds.cache.size} serveurs actuellement !</font></font>
-    </body>
-</html>`)
-})
-
-app.listen(port, () => {
-    console.log(`GraphBot écoute le web sur le port ${port}`)
-}) */
-
 // Système qui gère les commandes dans le dossier
 
 fs.readdir('./commands', (err, files) => {
@@ -61,14 +44,14 @@ client.on('message', async message => {
         }
     }
     if (message.type !== 'DEFAULT' || message.author.bot) return
-    // système verification blacklist
-    let prefix = '!vb'
+    let prefix = config.prefix
     if (message.channel.type !== 'dm') {
         if (db.has('prefix_' + message.guild.id)) {
             prefix = db.get('prefix_' + message.guild.id)
         }
     }
-    if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'descript') || message.content.startsWith(prefix + 'eval') || message.content.startsWith(prefix + 'filigrane') || message.content.startsWith(prefix + 'help') || message.content.startsWith(prefix + 'info') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'level') || message.content.startsWith(prefix + 'say') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'tickets') || message.content.startsWith(prefix + 'validcrea') || message.content.startsWith(prefix + 'viewcrea') || message.content.startsWith(prefix + 'viewpreuve')) {
+    if (message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'help') || message.content.startsWith(prefix + 'info') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'say') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'eval') || message.content.startsWith(prefix + 'maj')) {
+        // système verification blacklist
         const usersblacklist = db.get('blacklist')
         if (usersblacklist.includes(message.author.id)) {
             if (message.channel.type !== 'dm') {
@@ -77,11 +60,38 @@ client.on('message', async message => {
                 return
             }
         }
+        // système verification blacklist
+
+        // système activation/desactivation mise à jour
+        if (message.content.startsWith(prefix + 'maj') && message.author.id === '364481003479105537') {
+            const maj = db.get('maj')
+            if (maj === true) {
+                db.set('maj', false)
+                return message.channel.send('🧪 **Système de mise à jour désactivé !**')
+            }
+            if (maj === false) {
+                db.set('maj', true)
+                return message.channel.send('🧪 **Système de mise à jour activé !**')
+            }
+        }
+        // système activation/desactivation mise à jour
+
+        // système mise à jour
+        const maj = db.get('maj')
+        if (maj === true) {
+            return message.channel.send('🧪 **Suite à une mise à jour imminente, l\'utilisation de visualOrder est bloqué pour une durée maximale de 5 minutes.**').then((msg) => {
+                msg.delete({ timeout: 10000 })
+                if (message.channel.type !== 'dm') {
+                    message.delete({ timeout: 10000 })
+                }
+            })
+        }
+        // système mise à jour
     }
     // système verification blacklist
     if (message.channel.type === 'dm') {
-        if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'cmd') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'level') || message.content.startsWith(prefix + 'setprefix') || message.content.startsWith(prefix + 'tickets') || message.content.startsWith(prefix + 'validcrea')) {
-            return message.channel.send('⚠️ **Cette commande doit être tapée sur un serveur obligatoirement !**')
+        if (message.content.startsWith(prefix + 'blacklist') || message.content.startsWith(prefix + 'init') || message.content.startsWith(prefix + 'setprefix')) {
+            return message.channel.send('<:warning_visualorder:831550961625464832> **Cette commande doit être tapée sur un serveur obligatoirement !**')
         } else {
             const args = message.content.trim().split(/ +/g)
             const commandName = args.shift().toLowerCase()
@@ -96,21 +106,17 @@ client.on('message', async message => {
             })
         }
     } else {
-        if (message.content.startsWith(prefix + 'addcrea') || message.content.startsWith(prefix + 'addpreuve') || message.content.startsWith(prefix + 'setadvance') || message.content.startsWith(prefix + 'viewpreuve')) {
-            return message.channel.send('⚠️ **Cette commande doit être tapée dans le salon MP de Visual Bot obligatoirement !**')
-        } else {
-            const args = message.content.trim().split(/ +/g)
-            const commandName = args.shift().toLowerCase()
-            if (!commandName.startsWith(prefix)) return
-            const command = client.commands.get(commandName.slice(prefix.length))
-            if (!command) return
-            command.run(db, message, args, client, dbLogs)
-            dbLogs.push('logs', {
-                date: Date.now(),
-                cmd: commandName.slice(prefix.length),
-                userId: message.author.id
-            })
-        }
+        const args = message.content.trim().split(/ +/g)
+        const commandName = args.shift().toLowerCase()
+        if (!commandName.startsWith(prefix)) return
+        const command = client.commands.get(commandName.slice(prefix.length))
+        if (!command) return
+        command.run(db, message, args, client, dbLogs)
+        dbLogs.push('logs', {
+            date: Date.now(),
+            cmd: commandName.slice(prefix.length),
+            userId: message.author.id
+        })
     }
 })
 
@@ -119,90 +125,26 @@ client.on('message', async message => {
 // Système qui envoie un message quand le bot est ajouté sur un serveur
 
 client.on('guildCreate', (guild) => {
-    const channelInvite = guild.channels.cache.filter((channel) => channel.type !== 'category').first()
-    channelInvite.createInvite({
-        maxAge: 0
-    }).then(invite => {
-        client.channels.cache.get('749985660181544980').send(`Le bot est sur le serveur ${guild.name}, avec ${guild.memberCount} membres ! **❤️Merci❤️**\n\n**Invitation :** https://discord.gg/` + invite.code)
-    })
-    dbLogs.push('guild', {
-        date: Date.now(),
-        guild: guild.name
-    })
+    const user = guild.ownerID
+    client.users.cache.get(user).send(new Discord.MessageEmbed()
+        .setDescription('**Bonjour,\n\nmerci d’avoir ajouté VisualOrder ! ❤️\n\nSi vous souhaitez configurer le système de commande pour réjouir tous les clients et prestataires de votre serveur **(calcul effectué par notre équipe)**. Il vous suffit de taper **`-init`** dans un de ses salons.\n\nEt si une question vous vient, le [support](https://discord.gg/sKJbqSW) sera ravi de pouvoir vous aidez !\n\nN’oubliez pas de lire la [documentation](https://docs.visualorder.fr) dans son intégralité pour comprendre toutes les fonctionnalités du bot !\n\nL’équipe de visualOrder.**')
+        .setColor('FF7B00')
+        .setFooter(config.version, client.user.avatarURL()))
 })
 
-// Système qui envoie un message quand le bot est ajouté sur un serveur
-
-// Système qui ajoute les roles utilisateurs
-
-client.on('guildMemberAdd', member => {
-    if (db.has('roles_' + member.id)) {
-        if (db.has('roles_' + member.guild.id)) {
-            if (db.get('roles_' + member.id).graph === true) {
-                if (db.get('roles_' + member.guild.id).graph !== 0) {
-                    const guildroles = member.guild.roles.cache
-                    const rolesId = guildroles.map(roles => roles.id)
-                    const roleId = db.get('roles_' + member.guild.id).graph
-                    if (rolesId.includes(roleId)) {
-                        member.roles.add(roleId)
-                        client.users.cache.get(member.id).send('✅ ** Rôle graphiste ajouté sur le serveur `' + member.guild.id + '` !**')
-                    } else {
-                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
-                        roles.graph = 0 // là tu le modifies
-                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
-                    }
-                }
-            }
-            if (db.get('roles_' + member.id).dessin === true) {
-                if (db.get('roles_' + member.guild.id).dessin !== 0) {
-                    const guildroles = member.guild.roles.cache
-                    const rolesId = guildroles.map(roles => roles.id)
-                    const roleId = db.get('roles_' + member.guild.id).dessin
-                    if (rolesId.includes(roleId)) {
-                        member.roles.add(roleId)
-                        client.users.cache.get(member.id).send('✅ ** Rôle dessinateur/trice ajouté sur le serveur `' + member.guild.id + '` !**')
-                    } else {
-                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
-                        roles.dessin = 0 // là tu le modifies
-                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
-                    }
-                }
-            }
-            if (db.get('roles_' + member.id).photo === true) {
-                if (db.get('roles_' + member.guild.id).photo !== 0) {
-                    const guildroles = member.guild.roles.cache
-                    const rolesId = guildroles.map(roles => roles.id)
-                    const roleId = db.get('roles_' + member.guild.id).photo
-                    if (rolesId.includes(roleId)) {
-                        member.roles.add(roleId)
-                        client.users.cache.get(member.id).send('✅ ** Rôle photographe ajouté sur le serveur `' + member.guild.id + '` !**')
-                    } else {
-                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
-                        roles.photo = 0 // là tu le modifies
-                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
-                    }
-                }
-            }
-            if (db.get('roles_' + member.id).design === true) {
-                if (db.get('roles_' + member.guild.id).design !== 0) {
-                    const guildroles = member.guild.roles.cache
-                    const rolesId = guildroles.map(roles => roles.id)
-                    const roleId = db.get('roles_' + member.guild.id).design
-                    if (rolesId.includes(roleId)) {
-                        member.roles.add(roleId)
-                        client.users.cache.get(member.id).send('✅ ** Rôle designer ajouté sur le serveur `' + member.guild.id + '` !**')
-                    } else {
-                        const roles = db.get(`roles_${member.guild.id}`) // là tu récupères l'objet
-                        roles.design = 0 // là tu le modifies
-                        db.set(`roles_${member.guild.id}`, roles) // là tu le sauvegardes
-                    }
-                }
-            }
-        }
+client.on('guildDelete', (guild) => {
+    if (db.has('parent_' + guild.id)) {
+        db.delete('parent_' + guild.id)
+    }
+    if (db.has('channelcmd_' + guild.id)) {
+        db.delete('channelcmd_' + guild.id)
+    }
+    if (db.has('channelcmdclient_' + guild.id)) {
+        db.delete('channelcmdclient_' + guild.id)
     }
 })
 
-// Système qui ajoute les roles utilisateurs
+// Système qui envoie un message quand le bot est ajouté sur un serveur
 
 // Système reaction
 
@@ -211,338 +153,303 @@ client.on('messageReactionAdd', async (reaction, user) => {
     } else { return }
     await reaction.fetch()
     if (reaction.message.author.id === client.user.id) {
-    // système verification blacklist
-        if (reaction.emoji.name === '📊' || reaction.emoji.name === '🇧' || reaction.emoji.name === '⚙️' || reaction.emoji.name === '🇦' || reaction.emoji.name === '4️⃣' || reaction.emoji.name === '3️⃣' || reaction.emoji.name === '2️⃣' || reaction.emoji.name === '🖼️' || reaction.emoji.name === '1️⃣' || reaction.emoji.name === '💬' || reaction.emoji.name === 'ℹ️' || reaction.emoji.name === '⌨️' || reaction.emoji.name === '☑️' || reaction.emoji.name === '✅' || reaction.emoji.name === '🔒' || reaction.emoji.name === '📝' || reaction.emoji.name === '☢️' || reaction.emoji.name === '🤖') {
+        if (reaction.emoji.name === '📩' || reaction.emoji.name === '🔒' || reaction.emoji.name === '🗑️' || reaction.emoji.name === '☢️' || reaction.emoji.name === '📪') {
+            // système verification blacklist
             const usersblacklist = db.get('blacklist')
             if (usersblacklist.includes(user.id)) {
                 return
             }
-        }
-        // système verification blacklist
+            // système verification blacklist
 
+            // système mise à jour
+            const maj = db.get('maj')
+            if (maj === true) {
+                return reaction.message.channel.send('🧪 **Suite à une mise à jour imminente, l\'utilisation de visualOrder est bloqué pour une durée maximale de 5 minutes.**').then((msg) => {
+                    msg.delete({ timeout: 10000 })
+                })
+            }
+            // système mise à jour
+        }
         dbLogs.push('reaction', {
             date: Date.now(),
             reaction: reaction.emoji.name,
             user: user.id
         })
 
+        let prefix = config.prefix
         if (reaction.message.channel.type !== 'dm') {
-            let prefix = '!vb'
             if (db.has('prefix_' + reaction.message.guild.id)) {
                 prefix = db.get('prefix_' + reaction.message.guild.id)
             }
+        }
 
-            // Système qui gère la création des tickets pour le système de tickets
-            if (reaction.emoji.name === '☑️' && reaction.message.guild.id !== '775274490723827712') {
-                if (db.has('parentticket_' + reaction.message.guild.id)) {
-                    const parentsidguild = db.get('parentticket_' + reaction.message.guild.id)
-                    if (parentsidguild.find((message) => message.urlmessage === reaction.message.url)) {
-                        const parentid = parentsidguild.find((message) => message.urlmessage === reaction.message.url).idparent
-                        reaction.message.guild.channels.create('ticket-' + user.id, {
-                            parent: parentid,
-                            permissionOverwrites: [
-                                {
-                                    id: reaction.message.guild.id,
-                                    deny: [
-                                        'VIEW_CHANNEL',
-                                        'ATTACH_FILES'
-                                    ]
-                                },
-                                {
-                                    id: user.id,
-                                    allow: [
-                                        'VIEW_CHANNEL',
-                                        'ATTACH_FILES'
-                                    ]
-                                },
-                                {
-                                    id: '747833110376218624',
-                                    allow: [
-                                        'VIEW_CHANNEL',
-                                        'ADD_REACTIONS',
-                                        'MANAGE_CHANNELS',
-                                        'ATTACH_FILES'
-                                    ]
-                                }
-                            ]
-                        }).then((channel) => {
-                            channel.send('<@' + user.id + '>')
-                            channel.send(new Discord.MessageEmbed()
-                                .setDescription('📮 **Ticket créé avec succès**\n\n**Pour fermer le ticket cliquer sur la réaction 🔒\nPour enregistrer les 100 dernier messages cliquer sur la réaction 📝**')
-                                .setColor('#FEFEFE')
-                                .setFooter(config.version, client.user.avatarURL())).then(msg => {
-                                msg.react('🔒')
-                                msg.react('📝')
-                            })
-                        })
-                        client.channels.cache.get('776063705480691722').send('ticket créé pour l\'utilisateur : (`' + user.id + '`)')
-                        dbLogs.push('tickets', {
-                            date: Date.now(),
-                            userId: user.id,
-                            guild: reaction.message.guild.id
-                        })
-                        reaction.message.reactions.removeAll()
-                        reaction.message.react('☑️')
-                        reaction.message.react('🔒')
-                    }
-                }
-            }
-            // Système qui gère la création des tickets pour le système de tickets
+        // Système qui gère la création des tickets pour le système de commande
 
-            // Système qui gère la création des tickets pour le système de commande
-
-            if (reaction.emoji.name === '✅' && reaction.message.guild.id !== '775274490723827712') {
-                const channelID = db.get('channelcmd_' + reaction.message.guild.id)
-                if (reaction.message.channel.id !== channelID) return
-                // vérification que la catégorie stockée dans la base de données est valide
-                const guildparents = reaction.message.guild.channels.cache
-                const categoriestout = guildparents.filter((salon) => salon.type === 'category')
-                const categoriesId = categoriestout.map(categorie => categorie.id)
-                const dbcatcmd = db.get('catcmd_' + reaction.message.guild.id)
-                if (dbcatcmd) {
-                    if (categoriesId.includes(dbcatcmd)) {
-                        // vérification que la catégorie stockée dans la base de données est valide
-                        const parentcmd = db.get('catcmd_' + reaction.message.guild.id)
-                        const description = reaction.message.embeds[0].description
-                        const userID = description.substring(
-                            description.lastIndexOf('(') + 1,
-                            description.lastIndexOf(')')
-                        )
-                        const commandID = description.substring(
-                            description.lastIndexOf('[') + 1,
-                            description.lastIndexOf(']')
-                        )
-                        const descriptcmd = description.substring(
-                            description.lastIndexOf('<') + 1,
-                            description.lastIndexOf('>')
-                        )
-                        const guild = reaction.message.guild
-                        reaction.message.guild.channels.create('ticket-' + userID, {
-                            parent: parentcmd,
-                            permissionOverwrites: [
-                                {
-                                    id: reaction.message.guild.id,
-                                    deny: [
-                                        'VIEW_CHANNEL',
-                                        'ATTACH_FILES'
-                                    ]
-                                },
-                                {
-                                    id: user.id,
-                                    allow: [
-                                        'VIEW_CHANNEL',
-                                        'ATTACH_FILES'
-                                    ]
-                                },
-                                {
-                                    id: userID,
-                                    allow: [
-                                        'VIEW_CHANNEL',
-                                        'ATTACH_FILES'
-                                    ]
-                                },
-                                {
-                                    id: '747833110376218624',
-                                    allow: [
-                                        'VIEW_CHANNEL',
-                                        'ADD_REACTIONS',
-                                        'MANAGE_CHANNELS',
-                                        'ATTACH_FILES'
-                                    ]
-                                }
-                            ]
-                        }).then((channel) => {
-                            channel.send('<@' + userID + '>')
-                            channel.send(new Discord.MessageEmbed()
-                                .setDescription('🔽 **Comment passer commande ?**\n\nDescription : ' + descriptcmd + '\n\nMerci d\'avoir créé un ticket de commande sur ' + guild.name + ', veuillez maintenant décrire précisément votre commande !')
-                                .setColor('#FEFEFE')
-                                .setFooter(config.version, client.user.avatarURL()))
-                            channel.send(new Discord.MessageEmbed()
-                                .setDescription('Client : (' + userID + ')\nGraphiste : {' + user.id + '}\n\n**Pour fermer le ticket cliquer sur la réaction 🔒\nPour signaler le client ou le graphiste cliquer sur la réaction ☢️**')
-                                .setColor('#FEFEFE')
-                                .setFooter(config.version, client.user.avatarURL())).then(msg => {
-                                msg.react('🔒')
-                                msg.react('☢️')
-                            })
-                        })
-
-                        client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                            .setDescription('🎉 **Bonne nouvelle !**\n\nUn graphiste a accepté votre commande sur le serveur ' + guild.name + ', un ticket vous a été créé !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                            .setColor('#00FF00')
-                            .setFooter(config.version, client.user.avatarURL()))
-                        client.channels.cache.get('776063705480691722').send('ticket de commande créé pour l\'utilisateur : (`' + userID + '`)')
-                        dbLogs.push('cmd', {
-                            date: Date.now(),
-                            cmd: commandID,
-                            userId: userID,
-                            guild: guild.id
-                        })
-                        reaction.message.delete()
+        if (reaction.emoji.name === '📩') {
+            const description = reaction.message.embeds[0].description
+            const cmdID = description.substring(
+                description.lastIndexOf('(\`') + 2,
+                description.lastIndexOf('\`)')
+            )
+            const cmd = db.get('cmd')
+            const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+            const prestataireconcernecmd = cmdid.prestataireconcerne
+            const guildconcernecmd = cmdid.guildconcerne
+            const prixcmd = cmdid.prix
+            const mdepcmd = cmdid.mdep
+            const delaicmd = cmdid.delai
+            const descriptcmd = cmdid.descript
+            const clientcmd = cmdid.client
+            cmd.find((cmd) => cmd.id === parseInt(cmdID)).prestataire = user.id
+            // Écrire les modifications dans la base de données
+            db.set('cmd', cmd)
+            const prestatairecmd = cmdid.prestataire
+            cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'acceptée'
+            // Écrire les modifications dans la base de données
+            db.set('cmd', cmd)
+            const guild = client.guilds.cache.find((element) => element.id === guildconcernecmd)
+            let guildid = '747834737527226542'
+            let parentid = '829698482419662868'
+            if (guild) {
+                const guildparents = client.guilds.cache.get(guildconcernecmd).channels.cache
+                const parentstout = guildparents.filter((salon) => salon.type === 'category')
+                const parentsId = parentstout.map(parents => parents.id)
+                const parentsCMD = db.get('parent_' + guildconcernecmd)
+                if (parentsCMD) {
+                    if (parentsId.includes(parentsCMD)) {
+                        guildid = guildconcernecmd
+                        parentid = parentsCMD
                     } else {
-                        reaction.message.channel.send(new Discord.MessageEmbed()
-                            .setDescription('⚠️ **Le système de commande est invalide !**\n\n`' + prefix + 'init` : permet de reconfigurer le système de commande !\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                            .setColor('#e55f2a')
-                            .setFooter(config.version, client.user.avatarURL()))
+                        reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Le système de commande est invalide sur le serveur sélectionné !**')
                     }
                 } else {
-                    reaction.message.channel.send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ **Le système de commande n\'est pas initialisé sur ce serveur !**\n\n`' + prefix + 'init` : permet de configurer le système de commande. Après l’avoir tapé, le bot va créer un channel ou les clients pourront passer commande, un channel permettant au graphiste d\'accepter les commandes des clients, ainsi qu’une catégorie qui stockera les tickets de commandes et les 2 channels décrits ci-dessus.\n\n(pour supprimer le système sur votre serveur, retaper la commande)\n\n(si par erreur vous supprimez un channel ou la catégorie créée par le bot, retaper la commande. Le bot va automatiquement détecter qu’il y a une anomalie et corriger le problème)\n\n⚠️ **Permission de pouvoir gérer le serveur obligatoire !**\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                        .setColor('#e55f2a')
-                        .setFooter(config.version, reaction.message.client.user.avatarURL()))
+                    reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Le système de commande n\'est pas initialisé sur le serveur sélectionné !**')
                 }
             }
+            await client.guilds.cache.get(guildid).channels.create('cmd_' + cmdID, {
+                parent: parentid,
+                permissionOverwrites: [
+                    {
+                        id: guildid,
+                        deny: [
+                            'VIEW_CHANNEL'
+                        ]
+                    },
+                    {
+                        id: user.id,
+                        allow: [
+                            'VIEW_CHANNEL',
+                            'ATTACH_FILES'
+                        ]
+                    },
+                    {
+                        id: clientcmd,
+                        allow: [
+                            'VIEW_CHANNEL',
+                            'ATTACH_FILES'
+                        ]
+                    }
+                ]
+            }).then((channel) => {
+                channel.send(new Discord.MessageEmbed()
+                    .setDescription(`📮 **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**Pour fermer le ticket, le client __et__ le prestataire doivent cliquer sur la réaction 🔒\n\nPour signaler un des membres de la commande, cliquez sur la réaction ☢️\n\nBonne commande !**`)
+                    .setColor('#FF7B00')
+                    .setFooter(config.version, client.user.avatarURL())).then(msg => {
+                    msg.react('🔒')
+                    msg.react('☢️')
+                })
+                channel.createInvite({
+                    maxAge: 172800
+                }).then(invite => {
+                    client.users.cache.get(clientcmd).send(`📩 **Commande (\`${cmdID}\`) acceptée, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                    client.users.cache.get(user.id).send(`📩 **Commande (\`${cmdID}\`) acceptée, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                })
+                cmd.find((cmd) => cmd.id === parseInt(cmdID)).channel = channel.id
+                // Écrire les modifications dans la base de données
+                db.set('cmd', cmd)
+                client.channels.cache.get('829720467622592552').send(`📩 **Commande (\`${cmdID}\`) acceptée**`)
+            })
+            reaction.message.delete()
+        }
 
-            // Système qui gère la création des tickets pour le système de commande
+        // Système qui gère la création des tickets pour le système de commande
 
-            // Système qui gère la fermeture des tickets manuels
+        // Système qui gère l'annulation de commande
 
-            if (reaction.emoji.name === '🔒' && !reaction.message.channel.name.startsWith('ticket-')) {
-                const nouveauTableau = db.get('parentticket_' + reaction.message.guild.id).filter((element) => element.urlmessage !== reaction.message.url)
-                const idparent = db.get('parentticket_' + reaction.message.guild.id).filter((element) => element.urlmessage === reaction.message.url)
-                reaction.message.delete()
-                const idparentgood = idparent.map((element) => element.idparent)
-                client.channels.cache.get(idparentgood.toString()).delete()
-                db.set('parentticket_' + reaction.message.guild.id, nouveauTableau)
+        if (reaction.emoji.name === '🗑️') {
+            const description = reaction.message.embeds[0].description
+            const cmdID = description.substring(
+                description.lastIndexOf('(\`') + 2,
+                description.lastIndexOf('\`)')
+            )
+            const cmd = db.get('cmd')
+            const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+            if (cmdid.statut === 'attente') {
+                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'annulée'
+                // Écrire les modifications dans la base de données
+                db.set('cmd', cmd)
+                const channelmessagecmd = cmdid.channelmessage
+                const messagecmd = cmdid.message
+                await client.channels.cache.get(channelmessagecmd).messages.fetch()
+                client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
+                client.channels.cache.get('831576495071428670').send(`🗑️ **Commande (\`${cmdID}\`) annulée !**`)
+                reaction.message.channel.send(`🗑️ **Commande numéro : \`${cmdID}\` annulée !**`)
+            } else {
+                return reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Seulement une commande qui n\'a pas encore été acceptée peut-être annulée !**')
             }
+        }
 
-            // Système qui gère la fermeture des tickets manuels
+        // Système qui gère l'annulation de commande
 
-            // Système qui gère la fermeture des tickets
-            if (reaction.message.channel.name.startsWith('ticket-')) {
+        // Système qui gère le refus des commandes
+
+        if (reaction.emoji.name === '📪') {
+            const description = reaction.message.embeds[0].description
+            const cmdID = description.substring(
+                description.lastIndexOf('(\`') + 2,
+                description.lastIndexOf('\`)')
+            )
+            const cmd = db.get('cmd')
+            const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+            if (cmdid.statut === 'attente') {
+                cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'refusée'
+                // Écrire les modifications dans la base de données
+                db.set('cmd', cmd)
+                const channelmessagecmd = cmdid.channelmessage
+                const messagecmd = cmdid.message
+                await client.channels.cache.get(channelmessagecmd).messages.fetch()
+                client.channels.cache.get(channelmessagecmd).messages.cache.get(messagecmd).delete()
+                client.users.cache.get(cmdid.client).send(`📪 **Commande numéro : \`${cmdID}\` refusée !**`)
+                client.channels.cache.get('831576495071428670').send(`📪 **Commande (\`${cmdID}\`) refusée !**`)
+            } else {
+                return reaction.message.channel.send('<:warning_visualorder:831550961625464832> **Seulement une commande qui n\'a pas encore été acceptée peut-être refusée !**')
+            }
+        }
+
+        // Système qui gère le refus des commandes
+
+        // Système qui gère la fermeture des tickets
+        if (reaction.message.channel.type !== 'dm') {
+            if (reaction.message.channel.name.startsWith('cmd_') && !reaction.message.channel.name.startsWith('cmd_signalement_')) {
                 if (reaction.emoji.name === '🔒') {
-                    reaction.message.channel.delete()
+                    const description = reaction.message.embeds[0].description
+                    const cmdID = description.substring(
+                        description.lastIndexOf('(\`') + 2,
+                        description.lastIndexOf('\`)')
+                    )
+                    const cmd = db.get('cmd')
+                    const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+                    const clientcmd = cmdid.client
+                    const prestatairecmd = cmdid.prestataire
+                    const verifReact = reaction.users.cache.map((element) => element.id)
+                    if (verifReact.includes(clientcmd) && verifReact.includes(prestatairecmd)) {
+                        cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'fermée'
+                        // Écrire les modifications dans la base de données
+                        db.set('cmd', cmd)
+                        reaction.message.channel.messages.fetch()
+                        const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content} ${c.embeds}`).join('\n\n')
+                        hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
+                            cmd.find((cmd) => cmd.id === parseInt(cmdID)).transcript = haste
+                            // Écrire les modifications dans la base de données
+                            db.set('cmd', cmd)
+                        })
+                        reaction.message.channel.delete()
+                        client.users.cache.get(clientcmd).send(`🔒 **Commande (\`${cmdID}\`) fermée avec succès !**`)
+                        client.users.cache.get(prestatairecmd).send(`🔒 **Commande (\`${cmdID}\`) fermée avec succès !**`)
+                        client.channels.cache.get('829720721407737906').send(`🔒 **Commande (\`${cmdID}\`) fermée**`)
+                    }
                 }
 
                 // Système qui gère la fermeture des tickets
-
-                // Système qui gère l'enregistrement des tickets
-
-                if (reaction.emoji.name === '📝') {
-                    await reaction.message.channel.messages.fetch()
-                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
-
-                    hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
-                        reaction.message.channel.send('**Transcript (' + reaction.message.channel.id + ') : ' + haste + '**')
-                    })
-                }
-
-                // Système qui gère l'enregistrement des tickets
 
                 // Système qui gère le signalement des membres
 
                 if (reaction.emoji.name === '☢️') {
                     const description = reaction.message.embeds[0].description
-                    const clientID = description.substring(
-                        description.lastIndexOf('(') + 1,
-                        description.lastIndexOf(')')
+                    const cmdID = description.substring(
+                        description.lastIndexOf('(\`') + 2,
+                        description.lastIndexOf('\`)')
                     )
-                    const graphisteID = description.substring(
-                        description.lastIndexOf('{') + 1,
-                        description.lastIndexOf('}')
-                    )
-                    await reaction.message.channel.messages.fetch()
-                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content}`).join('\n\n')
+                    const cmd = db.get('cmd')
+                    const cmdid = cmd.find((cmd) => cmd.id === parseInt(cmdID))
+                    const prixcmd = cmdid.prix
+                    const mdepcmd = cmdid.mdep
+                    const delaicmd = cmdid.delai
+                    const descriptcmd = cmdid.descript
+                    const clientcmd = cmdid.client
+                    const prestatairecmd = cmdid.prestataire
+                    let transcriptcmd = cmdid.transcript
+                    cmd.find((cmd) => cmd.id === parseInt(cmdID)).statut = 'signalée'
+                    // Écrire les modifications dans la base de données
+                    db.set('cmd', cmd)
+                    const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content} ${c.embeds}`).join('\n\n')
                     hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
-                        if (user.id === clientID) {
-                            client.users.cache.get(user.id).send(new Discord.MessageEmbed()
-                                .setDescription('☢️ **Signalement enregistré !**\n\nPour que le signalement puisse être pris en compte veuillez taper `' + prefix + 'signalement ' + graphisteID + ' ' + haste + ' [description de votre signalement]`')
-                                .setColor('#e55f2a')
-                                .setFooter(config.version, reaction.message.client.user.avatarURL()))
-                            reaction.message.client.channels.cache.get('797853971162595339').send('Client à l\'identifiant `' + clientID + '` a signalé le graphiste `' + graphisteID + '`')
-                            reaction.message.channel.delete()
-                        } else {
-                            client.users.cache.get(user.id).send(new Discord.MessageEmbed()
-                                .setDescription('☢️ **Signalement enregistré !**\n\nPour que le signalement puisse être pris en compte veuillez taper `' + prefix + 'signalement ' + clientID + ' ' + haste + ' [description de votre signalement]`')
-                                .setColor('#e55f2a')
-                                .setFooter(config.version, reaction.message.client.user.avatarURL()))
-                            reaction.message.client.channels.cache.get('797853971162595339').send('Graphiste à l\'identifiant `' + graphisteID + '` a signalé le client `' + clientID + '`')
-                            reaction.message.channel.delete()
-                        }
+                        cmd.find((cmd) => cmd.id === parseInt(cmdID)).transcript = haste
+                        // Écrire les modifications dans la base de données
+                        db.set('cmd', cmd)
+                        transcriptcmd = haste
                     })
+                    await client.guilds.cache.get('747834737527226542').channels.create('cmd_signalement_' + cmdID, {
+                        parent: '829721638458622053',
+                        permissionOverwrites: [
+                            {
+                                id: '747834737527226542',
+                                deny: [
+                                    'VIEW_CHANNEL'
+                                ]
+                            },
+                            {
+                                id: user.id,
+                                allow: [
+                                    'VIEW_CHANNEL',
+                                    'ATTACH_FILES'
+                                ]
+                            }
+                        ]
+                    }).then((channel) => {
+                        channel.send(new Discord.MessageEmbed()
+                            .setDescription(`☢️ **Commande (\`${cmdID}\`)**\n\n**-Description : **\`${descriptcmd}\`\n\n**-Prix : **\`${prixcmd}€\`\n\n**-Mode de paiement : **\`${mdepcmd}\`\n\n**-Délai : **\`${delaicmd} jour/s\`\n\n**-Client : **<@${clientcmd}>\n\n**-Prestataire : **<@${prestatairecmd}>\n\n**-Transcript : ${transcriptcmd}**\n\n**Bonjour, veuillez écrire le pourquoi de votre signalement.**`)
+                            .setColor('FF7B00')
+                            .setFooter(config.version, reaction.message.client.user.avatarURL())).then((msg) => {
+                            msg.react('🔒')
+                        })
+                        channel.createInvite({
+                            maxAge: 172800
+                        }).then(invite => {
+                            client.users.cache.get(user.id).send(`☢️ **Signalement envoyé avec succès, cliquez sur l'invitation pour rejoindre le ticket : ${invite} !**`)
+                        })
+                        if (user.id === clientcmd) {
+                            client.users.cache.get(prestatairecmd).send(`☢️ **Commande (\`${cmdID}\`) signalée par <@${user.id}>. Vous recevrez un prochain message vous informant des sanctions prises !**`)
+                        }
+                        if (user.id === prestatairecmd) {
+                            client.users.cache.get(clientcmd).send(`☢️ **Commande (\`${cmdID}\`) signalée par <@${user.id}>. Vous recevrez un prochain message vous informant des sanctions prises !**`)
+                        }
+                        client.channels.cache.get('829720820216627316').send(`☢️ **Commande (\`${cmdID}\`) signalée**`)
+                    })
+                    reaction.message.channel.delete()
+                }
+
+                // Système qui gère le signalement des membres
+            }
+            if (reaction.message.channel.name.startsWith('cmd_signalement_')) {
+                if (reaction.emoji.name === '🔒') {
+                    if (reaction.message.member.hasPermission('MANAGE_GUILD')) {
+                        const description = reaction.message.embeds[0].description
+                        const cmdID = description.substring(
+                            description.lastIndexOf('(\`') + 2,
+                            description.lastIndexOf('\`)')
+                        )
+                        reaction.message.channel.messages.fetch()
+                        const content = '[Transcript messages channel : ' + reaction.message.channel.id + ' / serveur : ' + reaction.message.guild.id + ' / membres : ' + reaction.message.channel.members.array().map((member) => member.id) + ' ]\n\n' + reaction.message.channel.messages.cache.map((c) => `${c.author.tag} (${c.author.id}) : ${c.content} ${c.embeds}`).join('\n\n')
+                        hastebin(content, { url: 'https://hastebin.androz2091.fr/', extension: 'txt' }).then(haste => {
+                            client.channels.cache.get('829744823836868660').send(`☢️ **Ticket signalement pour commande (\`${cmdID}\`) fermé par <@${user.id}> / transcript : ${haste}**`)
+                        })
+                        reaction.message.channel.delete()
+                    } else {
+                        reaction.message.channel.send('⛔ **Vous n\'avez pas les permissions suffisantes !**')
+                    }
                 }
             }
-            if (reaction.message.channel.id === '797845739472027658') {
-                const description = reaction.message.content
-                const memberID = description.substring(
-                    description.lastIndexOf('[') + 1,
-                    description.lastIndexOf(']')
-                )
-                const signalementID = description.substring(
-                    description.lastIndexOf('<') + 1,
-                    description.lastIndexOf('>')
-                )
-                const descriptionSi = description.substring(
-                    description.lastIndexOf('{') + 1,
-                    description.lastIndexOf('}')
-                )
-                if (reaction.emoji.name === '⛔') {
-                    client.users.cache.get(signalementID).send(`🎉 **Votre signalement a permi de bannir le membre à l\'identifiant **\`${memberID}\`** ! Merci ❤️**`)
-                    db.push('blacklist', memberID)
-                    client.users.cache.get(memberID).send(new Discord.MessageEmbed()
-                        .setDescription('🛑 **Bonjour, suite à votre bannissement de Visual Bot l\'utilisation de celui-ci vous est maintenant bloqué !**\n\nRaison : ' + descriptionSi)
-                        .setColor('#FF0000')
-                        .setFooter(config.version, reaction.message.client.user.avatarURL()))
-                    reaction.message.delete()
-                    reaction.message.client.channels.cache.get('797853971162595339').send('Utilisateur à l\'identifiant `' + memberID + '` banni par ' + user.tag + ' (`' + user.id + '`) ')
-                }
-                if (reaction.emoji.name === '❌') {
-                    client.users.cache.get(signalementID).send(`⚠️ **Votre signalement pour l\'utilisateur **\`${memberID}\`** n\'a pas permis de confirmer que le membre devait être banni !**`)
-                    reaction.message.delete()
-                }
-            }
-
-            // Système qui gère le signalement des membres
-
-            // Système qui gère la validation des créations
-
-            if (reaction.message.channel.id === '775274490723827715') {
-                const description = reaction.message.embeds[0].description
-                const userID = description.substring(
-                    description.lastIndexOf('(') + 1,
-                    description.lastIndexOf(')')
-                )
-                const creationID = description.substring(
-                    description.lastIndexOf('[') + 1,
-                    description.lastIndexOf(']')
-                )
-                const lienpreuveID = description.substring(
-                    description.indexOf('-') + 1,
-                    description.lastIndexOf('-')
-                )
-                if (reaction.emoji.name === '✅') {
-                    const creations = db.get('crea_' + userID)
-                    creations.find((creation) => creation.id === parseInt(creationID)).verif = '✅'
-                    db.set('crea_' + userID, creations)
-                    client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                        .setDescription('🎉 **Bonne nouvelle**\n\nVotre création à l\'identifiant `' + creationID + '` a été vérifié !\n\nTaper `' + prefix + 'viewcrea` pour voir votre nouvelle validation !\n\n**(Pour obtenir de l\'aide, taper `' + prefix + 'help` !)**')
-                        .setColor('#00FF00')
-                        .setFooter(config.version, client.user.avatarURL()))
-                    client.channels.cache.get('775411371189862410').send('Création numéro ' + creationID + ' de l\'utilisateur (`' + userID + '`) vérifiée par ' + user.tag + ' (`' + user.id + '`)')
-                } else {
-                    client.users.cache.get(userID).send(new Discord.MessageEmbed()
-                        .setDescription('⚠️ **Preuve invalide**\n\nVotre preuve n\'a pas permis de confirmer que la création à l\'identifiant `' + creationID + '` vous appartenez !\n\n`' + prefix + 'addpreuve ' + creationID + ' [votre preuve]` : permet d’enregistrer une preuve dans la base de données, une preuve est un screen du projet (photoshop, gimp, etc…) de la création ou l’on peut voir les calques, elle est relié au numéro de la création entré dans la commande !\n\n(votre preuve doit être envoyer dans le même message que la commande, mais en pièce jointe (le + situé à gauche de la zone d’écriture))\n\n**(Pour obtenir de l\'aide, une **[documentation](https://graphbot.gitbook.io/graph-bot/)** est disponible !)**')
-                        .setColor('#e55f2a')
-                        .setFooter(config.version, client.user.avatarURL()))
-                    // ici on récupère toutes les preuves de l'utilisateur et on garde que celles ou preuve.url n'est pas égal à celle qu'on veut enlever
-                    const preuvedb = db.get('pr_' + userID).filter((preuve) => preuve.url !== lienpreuveID)
-                    // on met à jour la db
-                    db.set('pr_' + userID, preuvedb)
-                }
-                reaction.message.channel.messages.cache.filter(message => {
-                    if (message.embeds.length === 0) return false
-                    const description2 = message.embeds[0].description
-                    const userID2 = description2.substring(
-                        description2.lastIndexOf('(') + 1,
-                        description2.lastIndexOf(')')
-                    )
-                    const creationID2 = description2.substring(
-                        description2.lastIndexOf('[') + 1,
-                        description2.lastIndexOf(']')
-                    )
-                    return userID2 === userID && creationID2 === creationID
-                }).forEach(message => message.delete())
-            }
-            // Système qui gère la validation des créations
         }
     }
 })
@@ -552,6 +459,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 // Système qui gère les sauvegardes de la base de données
 
 const CronJob = require('cron').CronJob
+const { brotliDecompress } = require('zlib')
 const job = new CronJob('0 0 0 * * *', function () {
     const date = new Date()
 
@@ -564,8 +472,6 @@ job.start()
 // Système activé lors du démarrage du bot
 
 client.on('ready', async () => {
-    client.channels.cache.get('775274490723827715').messages.fetch()
-
     Object.keys(dbLogs.data).forEach(element => {
         if (element.startsWith('channelcmd_')) {
             const channelID = dbLogs.data[element]
@@ -577,16 +483,7 @@ client.on('ready', async () => {
 
     // Système qui gère le jeu du bot
 
-    const statuses = [
-        'MP le bot',
-        'pour enregistrer des 🎨 créations 🎨 !',
-        'regarder !vbhelp'
-    ]
-    let i = 5
-    setInterval(() => {
-        client.user.setActivity(statuses[i], { type: 'PLAYING' })
-        i = ++i % statuses.length
-    }, 20 * 1000)
+    client.user.setActivity('visualorder.fr / -help', { type: 'PLAYING' })
 
     // Système qui gère le jeu du bot
 
